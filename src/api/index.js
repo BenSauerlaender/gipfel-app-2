@@ -11,6 +11,13 @@ const api = axios.create({
   }
 })
 
+export const getClimbers = () => api.get('/api/climbers')
+export const getRoutes = () => api.get('/api/routes')
+export const getAscents = () => api.get('/api/ascents')
+export const getSummits = () => api.get('/api/summits')
+
+
+
 // Request interceptor
 api.interceptors.request.use(
   async (config) => {

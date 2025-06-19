@@ -48,7 +48,8 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view v-if="isLoaded" />
+      <q-inner-loading v-else showing label="Loading..." label-color="primary" color="primary" class="big-loading" />
     </q-page-container>
   </q-layout>
 </template>
@@ -58,9 +59,33 @@ import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'
+import { useClimberStore } from 'src/stores/climber'
+import { useRouteStore } from 'src/stores/route'
+import { useAscentStore } from 'src/stores/ascent'
+import { useSummitStore } from 'src/stores/summit'
 
+const climberStore = useClimberStore()
+const routeStore = useRouteStore()
+const ascentStore = useAscentStore()
+const summitStore = useSummitStore()
 const userStore = useUserStore()
 const router = useRouter()
+
+const isLoaded = ref(false)
+
+  climberStore.loadClimbers().then(() => {
+    console.log('climbers loaded')
+    ascentStore.loadAscents().then(() => {
+      console.log('ascents loaded')
+      routeStore.loadRoutes().then(() => {
+        console.log('routes loaded')
+        summitStore.loadSummits().then(() => {
+          console.log('summits loaded')
+          isLoaded.value = true
+        })
+      })
+    })
+  })
 
 const linksList = [
   {
@@ -125,3 +150,25 @@ function handleLogout() {
   })
 }
 </script>
+
+<style scoped>
+.big-loading {
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 1000;
+}
+.big-loading .q-inner-loading__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.big-loading .q-spinner {
+  width: 80px !important;
+  height: 80px !important;
+}
+.big-loading .q-inner-loading__label {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 24px;
+}
+</style>
