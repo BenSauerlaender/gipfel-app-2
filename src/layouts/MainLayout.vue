@@ -15,7 +15,15 @@
           Quasar App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn round flat icon="more_vert">
+            <q-menu auto-close :offset="[110, 0]">
+              <q-list style="min-width: 150px">
+                <q-item clickable @click="handleLogout">
+                  <q-item-section>Logout</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -28,7 +36,7 @@
         <q-item-label
           header
         >
-          Essential Links
+          Menu
         </q-item-label>
 
         <EssentialLink
@@ -48,8 +56,19 @@
 <script setup>
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import { useUserStore } from 'src/stores/user'
+import { useRouter } from 'vue-router'
+
+const userStore = useUserStore()
+const router = useRouter()
 
 const linksList = [
+  {
+    title: 'Timeline',
+    caption: 'Alle Begehungen',
+    icon: 'timeline',
+    link: '/timeline'
+  },
   {
     title: 'Docs',
     caption: 'quasar.dev',
@@ -98,5 +117,11 @@ const leftDrawerOpen = ref(false)
 
 function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+function handleLogout() {
+  userStore.logout().then(() => {
+    router.push('/login')
+  })
 }
 </script>

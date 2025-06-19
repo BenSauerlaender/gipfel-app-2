@@ -1,6 +1,7 @@
 import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
+import { useUserStore } from 'src/stores/user'
 
 /*
  * If not building with SSR mode, you can
@@ -24,6 +25,20 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
+  })
+
+
+  Router.beforeEach(async (to) => {
+    const userStore = useUserStore()
+    if(userStore.loggedIn == false && to.path !== '/login') {
+      const res = await userStore.refreshAccessToken()
+      if(res == false) {
+        return '/login'
+      }
+    }
+    if (to.path === '/login' && userStore.loggedIn == true) {
+      return '/'
+    }
   })
 
   return Router
