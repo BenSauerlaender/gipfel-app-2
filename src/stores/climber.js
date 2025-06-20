@@ -9,22 +9,19 @@ export const useClimberStore = defineStore('climber', {
   }),
 
   getters: {
-    isClimbersLoaded() {
-      return this.climbers.length > 0
+    isClimbersLoaded(state) {
+      return state.climbers.length > 0
+    },
+    getClimberById(state) {
+      return (id) => state.climbers.find(c => c._id === id)
+    },
+    getClimberIds(state) {
+      return state.climbers.map(c => c._id)
     }
   },
 
   actions: {
-    getClimberById(id) {
-      return this.climbers.find(c => c._id === id)
-    },
-
-    getClimberIds() {
-      return this.climbers.map(c => c._id)
-    },
-
     async loadClimbers() {
-      const response = await getClimbers()
       function seededHash(str) {
         let hash = 0
         for (let i = 0; i < str.length; i++) {
@@ -33,6 +30,8 @@ export const useClimberStore = defineStore('climber', {
         }
         return Math.abs(hash)
       }
+
+      const response = await getClimbers()
       this.climbers = response.data.map(climber => {
         const hash = seededHash(climber.firstName + climber.lastName)
         climber.color = colors[hash % colors.length]

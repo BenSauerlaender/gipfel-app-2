@@ -7,8 +7,11 @@ export const useSummitStore = defineStore('summit', {
   }),
 
   getters: {
-    isSummitsLoaded() {
-      return this.summits.length > 0
+    isSummitsLoaded(state) {
+      return state.summits.length > 0
+    },
+    getSummitById(state) {
+      return (id) => state.summits.find(s => s._id === id)
     },
   },
 
@@ -17,9 +20,5 @@ export const useSummitStore = defineStore('summit', {
       const response = await getSummits()
       this.summits = response.data
     },
-    getSummitById(id) {
-      return this.summits.find(summit => summit._id === id)
-    }
-
   }
 }) 

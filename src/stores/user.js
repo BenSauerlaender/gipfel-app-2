@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', {
   }),
 
   getters: {
-    isTokenExpired: (state) => {
+    isTokenExpired(state) {
       if (!state.accessToken) return true
       try {
         const payload = JSON.parse(atob(state.accessToken.split('.')[1]))
@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    shouldRefreshToken: (state) => {
+    shouldRefreshToken(state) {
       if (!state.accessToken) return false
       try {
         const payload = JSON.parse(atob(state.accessToken.split('.')[1]))

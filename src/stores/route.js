@@ -7,8 +7,11 @@ export const useRouteStore = defineStore('route', {
   }),
 
   getters: {
-    isRoutesLoaded() {
-      return this.routes.length > 0
+    isRoutesLoaded(state) {
+      return state.routes.length > 0
+    },
+    getRouteById(state) {
+      return (id) => state.routes.find(r => r._id === id)
     },
   },
 
@@ -17,9 +20,5 @@ export const useRouteStore = defineStore('route', {
       const response = await getRoutes()
       this.routes = response.data
     },
-    getRouteById(id) {
-      return this.routes.find(route => route._id === id)
-    }
-
   }
 }) 
