@@ -1,9 +1,9 @@
 <template>
   <b>{{ route.summit.name }}</b>, {{ route.name }} 
-  <q-chip v-if="route.unsecure" outline color="blue-7" text-color="white">!</q-chip>
-  <q-chip v-if="route.stars == 1" outline color="blue-7" text-color="white"><q-icon name="star"/></q-chip>
-  <q-chip v-if="route.stars == 2" outline color="blue-7" text-color="white"><q-icon name="star"/><q-icon name="star"/></q-chip>
-  <q-chip outline color="undefined" :style="{color: gradeColor}" text-color="white">
+  <q-chip v-if="route.unsecure" color="undefined" outline :style="{color: unsecureColor}" text-color="white">!</q-chip>
+  <q-chip v-if="route.stars == 1" color="undefined" outline :style="{color: starsColor}" text-color="white"><q-icon name="star"/></q-chip>
+  <q-chip v-if="route.stars == 2" color="undefined" outline :style="{color: starsColor}" text-color="white"><q-icon name="star"/><q-icon name="star"/></q-chip>
+  <q-chip color="undefined" outline :style="{color: gradeColor}">
     <b>{{ gradeString }}</b>
   </q-chip>
 </template>
@@ -19,6 +19,10 @@ const props = defineProps({
   route: {
     type: Object,
     required: true
+  },
+  color: {
+    type: String,
+    required: false,
   }
 })
 
@@ -58,6 +62,8 @@ const SCALA = {
 const route = props.route
 
 const gradeColor = ref('red')
+const starsColor = ref('#3706e8')
+const unsecureColor = ref('#3706e8')
 const gradeString = ref('?')
 
 if(route.difficulty.jump) {
@@ -67,6 +73,11 @@ if(route.difficulty.jump) {
   gradeColor.value = SCALA[route.difficulty.normal]
   gradeString.value = route.difficulty.normal
 } 
+if(props.color) {
+  gradeColor.value = props.color
+  starsColor.value = props.color
+  unsecureColor.value = props.color
+}
 </script>
 
 <style scoped>

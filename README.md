@@ -38,3 +38,12 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+
+
+# TODO
+## Timeline
+- show firstTime Summit
+- show firstTime Route
+- show grade with/without support correctly
+- add tooltip for more information (summit, route, grade, climber, ...)
+

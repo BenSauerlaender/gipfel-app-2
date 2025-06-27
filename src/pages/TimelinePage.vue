@@ -23,12 +23,15 @@ const climberStore = useClimberStore()
 const ascentStore = useAscentStore()
 
 const ascents = ascentStore.ascents.map(ascent => {
-  const route = routeStore.getRouteById(ascent.route)
-  const summit = summitStore.getSummitById(route.summit)
-  ascent.route = { ...route, summit }
-  ascent.leadClimber = climberStore.getClimberById(ascent.leadClimber)
-  ascent.climbers = ascent.climbers.map(climber => climberStore.getClimberById(climber))
-  return ascent
+  const ascentObj = {...ascent}
+  const route = {...routeStore.getRouteById(ascent.route)}
+  const summit = {...summitStore.getSummitById(route.summit)}
+  ascentObj.route = { ...route, summit }
+  ascentObj.leadClimber = {...climberStore.getClimberById(ascent.leadClimber)}
+  ascentObj.climbers = ascent.climbers.map(climber => {
+    return { ...climberStore.getClimberById(climber.climber), isAborted: climber.isAborted }
+  })
+  return ascentObj
 })
 const trips = groupAscentsIntoTrips(ascents)
 console.log(trips)
@@ -45,7 +48,7 @@ function groupAscentsIntoTrips(ascents) {
       return grouped
     }, {})
 
-  const sortedDays = Object.keys(ascentsByDay).sort()
+  const sortedDays = Object.keys(ascentsByDay).sort().reverse()
   let trips = []
   let currentTrip = []
   let lastDayDate = null
@@ -55,7 +58,7 @@ function groupAscentsIntoTrips(ascents) {
     const currentDayDate = new Date(dayString)
     if (
       lastDayDate &&
-      (currentDayDate - lastDayDate) / (1000 * 60 * 60 * 24) > 2 // more than 1 off day
+      (lastDayDate - currentDayDate) / (1000 * 60 * 60 * 24) > 2 // more than 1 off day
     ) {
       if (currentTrip.length) trips.push(currentTrip)
       currentTrip = []
