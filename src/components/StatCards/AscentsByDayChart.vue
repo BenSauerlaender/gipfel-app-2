@@ -16,14 +16,14 @@
 <script setup>
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
-import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
+import { Chart, CategoryScale, LinearScale, TimeScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { useAscentStore } from 'src/stores/ascent'
 import 'chartjs-adapter-date-fns'
 import { de } from 'date-fns/locale'
 
 const ascentStore = useAscentStore()
 
-Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
+Chart.register(CategoryScale, LinearScale,TimeScale, BarElement, Tooltip, Legend)
 
 const props = defineProps({
   ascentIDs: {
