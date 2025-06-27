@@ -1,17 +1,16 @@
 <template>
-  <div>
-    <!-- <ClimberAvatar v-for="climberId in climberIds" :key="climberId" :climberId="climberId" size="80px" class="q-mr-sm" highlight=true /> -->
-  </div>
-  <div class="timeline-wrapper q-px-lg q-py-md">
-    <q-timeline color="secondary" layout="dense" side="right">
-      <TimelineTripEntry v-for="trip in trips" :key="trip.tripName" :trip="trip" />
-    </q-timeline>
+  <div class="page-container">
+    <div class="space"></div>
+    <div class="row justify-center">
+      <q-timeline color="secondary" layout="dense" side="right" class="col-10">
+        <TimelineTripEntry v-for="trip in trips" :key="trip.tripName" :trip="trip" />
+      </q-timeline>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useAscentStore } from 'src/stores/ascent'
-//import ClimberAvatar from 'src/components/ClimberAvatar.vue'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 import { useRouteStore } from 'src/stores/route'
 import { useSummitStore } from 'src/stores/summit'
@@ -22,17 +21,7 @@ const summitStore = useSummitStore()
 const climberStore = useClimberStore()
 const ascentStore = useAscentStore()
 
-const ascents = ascentStore.ascents.map(ascent => {
-  const ascentObj = {...ascent}
-  const route = {...routeStore.getRouteById(ascent.route)}
-  const summit = {...summitStore.getSummitById(route.summit)}
-  ascentObj.route = { ...route, summit }
-  ascentObj.leadClimber = {...climberStore.getClimberById(ascent.leadClimber)}
-  ascentObj.climbers = ascent.climbers.map(climber => {
-    return { ...climberStore.getClimberById(climber.climber), isAborted: climber.isAborted }
-  })
-  return ascentObj
-})
+const ascents = ascentStore.getAscentsPopulated
 const trips = groupAscentsIntoTrips(ascents)
 console.log(trips)
 
@@ -79,8 +68,12 @@ function groupAscentsIntoTrips(ascents) {
 </script>
 
 <style scoped>
-.timeline-wrapper {
-  max-width: 800px;
-  margin: 120px auto 0 auto;
+.space {
+  height: 80px;
+}
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
 }
 </style> 

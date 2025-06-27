@@ -13,8 +13,7 @@
           <span v-if="ascent.isSolo === true || ascent.isTopRope === true">
             <span v-for="(c, idx) in ascent.climbers" :key="c._id" >
               <span :class="'climber ' + (c.isAborted ? 'aborted' : '')">
-              {{ c.isAborted ? '(' + c.firstName + ')' : c.firstName}}
-              </span>
+              {{ c.isAborted ? '(' + c.firstName + ')' : c.firstName}}</span>
               <span v-if="idx < ascent.climbers.length - 1">, </span>
             </span>
             <span v-if="ascent.isSolo === true" class="solo-hint"> (solo)</span>
@@ -23,8 +22,9 @@
           <span v-else-if="ascent.leadClimber !== null" >
             <span class="lead-climber">{{ ascent.leadClimber.firstName }}</span>
             <q-icon name="chevron_right" />
-            <span v-for="(c, idx) in otherClimbers(ascent)" :key="c._id" :class="c.isAborted ? 'aborted' : ''">
-              {{ c.isAborted ? '(' + c.firstName + ')' : c.firstName}}
+            <span v-for="(c, idx) in otherClimbers(ascent)" :key="c._id">
+              <span :class="'climber ' + (c.isAborted ? 'aborted' : '')">
+              {{ c.isAborted ? '(' + c.firstName + ')' : c.firstName}}</span>
               <span v-if="idx < otherClimbers(ascent).length - 1">, </span>
             </span>
           </span>

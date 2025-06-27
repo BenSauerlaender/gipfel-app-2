@@ -95,6 +95,12 @@ const linksList = [
     link: '/timeline'
   },
   {
+    title: 'Stats',
+    caption: 'Stats',
+    icon: 'bar_chart',
+    link: '/stats'
+  },
+  {
     title: 'Docs',
     caption: 'quasar.dev',
     icon: 'school',
