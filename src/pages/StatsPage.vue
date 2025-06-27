@@ -29,7 +29,6 @@
   import { useClimberStore } from 'src/stores/climber'
   import { useAscentStore } from 'src/stores/ascent'
   import { getRouteGrade } from 'src/helper/route'
-  import TestChart from 'src/components/TestChart.vue'
   const routeStore = useRouteStore()
   const summitStore = useSummitStore()
   const ascentStore = useAscentStore()
