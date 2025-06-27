@@ -31,7 +31,10 @@ export const useAscentStore = defineStore('ascent', {
     },
     isAscentsLoaded() {
       return this.ascents.length > 0
-    }
+    },
+    getAscentById() {
+      return (id) => this.ascents.find(ascent => ascent._id === id)
+    },
   },
 
   actions: {
