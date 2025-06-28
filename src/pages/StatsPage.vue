@@ -14,6 +14,12 @@
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
           <AscentsByDayChart :ascentIDs="ascents.map(ascent => ascent._id)" />
         </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <TopSummitsChart :ascentIDs="ascents.map(ascent => ascent._id)" />
+        </div>
+        <div class="col-12 col-sm-12 col-md-8 col-lg-6">
+          <TopClimbersChart :ascentIDs="ascents.map(ascent => ascent._id)" />
+        </div>
       </div>
     </div>
     </div>
@@ -24,6 +30,8 @@
   import RoutesByGradeChart from 'src/components/StatCards/RoutesByGradeChart.vue'
   import SummitsByRegionChart from 'src/components/StatCards/SummitsByRegionChart.vue'
   import AscentsByDayChart from 'src/components/StatCards/AscentsByDayChart.vue'
+  import TopSummitsChart from 'src/components/StatCards/TopSummitsChart.vue'
+  import TopClimbersChart from 'src/components/StatCards/TopClimbersChart.vue'
   import { useRouteStore } from 'src/stores/route'
   import { useSummitStore } from 'src/stores/summit'
   import { useClimberStore } from 'src/stores/climber'
