@@ -15,7 +15,7 @@ export const getClimbers = () => api.get('/api/climbers')
 export const getRoutes = () => api.get('/api/routes')
 export const getAscents = () => api.get('/api/ascents')
 export const getSummits = () => api.get('/api/summits')
-
+export const getRegions = () => api.get('/api/regions')
 
 
 // Request interceptor

@@ -1,4 +1,7 @@
 import { defineStore } from 'pinia'
+import { useDataStore } from 'src/stores/dataStore'
+
+const dataStore = useDataStore()
 
 export const useFilterStore = defineStore('filter', {
   state: () => ({
@@ -10,8 +13,10 @@ export const useFilterStore = defineStore('filter', {
         selected: [],
         mode: 'or'
       },
-      summit: {
-        selected: null
+      route: {
+        region: null,
+        summit: null,
+        route: null
       }
     }
   }),

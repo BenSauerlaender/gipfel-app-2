@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getAscents, getClimbers, getRoutes, getSummits } from 'src/api'
+import { getAscents, getClimbers, getRoutes, getSummits, getRegions } from 'src/api'
 import { useFilterStore } from 'src/stores/filterStore'
 
 const colors = ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'grey', 'blue-grey']
@@ -10,6 +10,7 @@ export const useDataStore = defineStore('data', {
     climbers: [], // Array of climber objects
     routes: [], // Array of route objects
     summits: [], // Array of summit objects
+    regions: [], // Array of region objects
     trips: [],
     isLoaded: false
   }),
@@ -45,6 +46,16 @@ export const useDataStore = defineStore('data', {
             if (filterStore.filters.climbers.mode === 'not' && 
                 filterStore.filters.climbers.selected.some(climber => ascent.climbers.filter(isAllowed).some(c => c._id === climber))) { 
                     return false 
+            }
+            return true
+        })
+        .filter(ascent => {
+            if(filterStore.filters.route.route !== null){
+                return ascent.route._id === filterStore.filters.route.route
+            }else if(filterStore.filters.route.summit !== null){
+                return ascent.route.summit._id === filterStore.filters.route.summit
+            }else if(filterStore.filters.route.region !== null){
+                return ascent.route.summit.region._id === filterStore.filters.route.region
             }
             return true
         })
@@ -91,16 +102,22 @@ export const useDataStore = defineStore('data', {
 
       const startTime = new Date().getTime()
       // Load data from API
-      const [ascentsResponse, climbersResponse, routesResponse, summitsResponse] = await Promise.all([
+      const [ascentsResponse, climbersResponse, routesResponse, summitsResponse, regionsResponse] = await Promise.all([
         getAscents(),
         getClimbers(),
         getRoutes(),
-        getSummits()
+        getSummits(),
+        getRegions()
       ])
       console.log('Data Download time: ', new Date().getTime() - startTime, 'ms')
       const startTime2 = new Date().getTime()
 
-      this.summits = summitsResponse.data
+      this.regions = regionsResponse.data
+
+      this.summits = summitsResponse.data.map(summit => {
+        summit.region = this.regions.find(region => region._id === summit.region)
+        return summit
+      })
 
       // Populate routes with summits
       this.routes = routesResponse.data.map(route => {
