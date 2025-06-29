@@ -1,7 +1,7 @@
 <template>
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ sortedSummits[0][1] }}</div>
+              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ sortedSummits[0][1].total }}</div>
               <div class="text-h6 text-grey-9">Begehungen auf den {{ sortedSummits[0][0] }}</div>
             </q-card-section>
   
@@ -20,6 +20,7 @@ import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from '
 import { useAscentStore } from 'src/stores/ascent'
 import { useRouteStore } from 'src/stores/route'
 import { useSummitStore } from 'src/stores/summit'
+import { SCALA, getGradeColor } from 'src/helper/route'
 
 const ascentStore = useAscentStore()
 const summitStore = useSummitStore()
@@ -39,51 +40,75 @@ const sortedSummits = computed(() => {
   // Count ascents per summit
   const summitCounts = {}
   ascents.forEach(ascent => {
-    const summitId = routeStore.getRouteById(ascent.route).summit
+    const route = routeStore.getRouteById(ascent.route)
+    const summitId = route.summit
     const summit = summitStore.getSummitById(summitId)
     if (summit) {
       const summitName = summit.name || 'Unknown Summit'
-      summitCounts[summitName] = (summitCounts[summitName] || 0) + 1
+      if (!summitCounts[summitName]) {
+        summitCounts[summitName] = {}
+      }
+      const grade = route.difficulty.normal
+      summitCounts[summitName][grade] = (summitCounts[summitName][grade] || 0) + 1
+      summitCounts[summitName].total = (summitCounts[summitName].total || 0) + 1
     }
   })
   
   // Sort by count and get top 10
   return Object.entries(summitCounts)
-    .sort(([,a], [,b]) => b - a)
+    .sort(([,a], [,b]) => b.total - a.total)
     .slice(0, 10)
 })
 
 const chartData = computed(() => {
   
   const labels = sortedSummits.value.map(([name]) => name)
-  const data = sortedSummits.value.map(([,count]) => count)
+  const data = sortedSummits.value.map(([,data]) => data.total)
+
+  const datasets = SCALA.map(grade => {
+    if (sortedSummits.value.some(([, data]) => Object.keys(data).includes(grade))) {
+      return {
+        label: grade,
+        data: sortedSummits.value.map(([, data]) => data[grade] || 0),
+        backgroundColor: getGradeColor(grade),
+        stack: 'Stack 0',
+        borderWidth: 1,
+        borderColor: '#fff',
+        borderRadius: 4
+      }
+    }
+  }).filter(dataset => dataset !== undefined)
+
   
   return {
     labels: labels,
-    datasets: [{
-      label: 'Begehungen',
-      data: data,
-      backgroundColor: '#36A2EB',
-      borderWidth: 1,
-      borderColor: '#fff',
-      borderRadius: 4
-    }]
+    datasets: datasets
   }
 })
 
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  },
   plugins: {
     legend: {
       display: false
     },
     tooltip: {
       callbacks: {
-        label: (context) => {
-          return `${context.parsed.y} Begehungen`
-        }
+        footer: (tooltipItems) => {
+        let total = 0;
+        tooltipItems.forEach(function(tooltipItem) {
+            total += tooltipItem.parsed.y;
+        });
+        return 'Gesamt: ' + total ;
       }
+    },
+    filter: (tooltipItem, data) => {
+    return tooltipItem.parsed.y > 0
     }
   },
   scales: {
@@ -91,14 +116,17 @@ const chartOptions = {
       ticks: {
         maxRotation: 45,
         minRotation: 0
-      }
+      },
+      stacked: true
     },
     y: {
       beginAtZero: true,
       ticks: {
         stepSize: 1
-      }
+      },
+      stacked: true
     }
   }
+}
 }
 </script> 
