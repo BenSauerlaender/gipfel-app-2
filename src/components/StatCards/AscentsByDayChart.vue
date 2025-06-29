@@ -17,11 +17,11 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, TimeScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useAscentStore } from 'src/stores/ascent'
+import { useDataStore } from 'src/stores/dataStore'
 import 'chartjs-adapter-date-fns'
 import { de } from 'date-fns/locale'
 
-const ascentStore = useAscentStore()
+const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale,TimeScale, BarElement, Tooltip, Legend)
 
@@ -74,11 +74,11 @@ function groupAscentsIntoTrips(ascents) {
   })
 }
 const trips = computed(() => {
-  const ascents = props.ascentIDs.map(id => ascentStore.getAscentById(id))
+  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
   return groupAscentsIntoTrips(ascents)
 })
 const chartData = computed(() => {
-  const ascents = props.ascentIDs.map(id => ascentStore.getAscentById(id))
+  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
 
   // Get date range from last ascent to today
   const lastAscentDate = new Date(Math.max(...ascents.map(a => new Date(a.date))))

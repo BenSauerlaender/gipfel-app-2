@@ -17,14 +17,10 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useAscentStore } from 'src/stores/ascent'
-import { useRouteStore } from 'src/stores/route'
-import { useSummitStore } from 'src/stores/summit'
+import { useDataStore } from 'src/stores/dataStore'
 import { SCALA, getGradeColor } from 'src/helper/route'
 
-const ascentStore = useAscentStore()
-const summitStore = useSummitStore()
-const routeStore = useRouteStore()
+const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -35,14 +31,14 @@ const props = defineProps({
   }
 })
 const sortedSummits = computed(() => {
-  const ascents = props.ascentIDs.map(id => ascentStore.getAscentById(id))
+  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
   
   // Count ascents per summit
   const summitCounts = {}
   ascents.forEach(ascent => {
-    const route = routeStore.getRouteById(ascent.route)
+    const route = dataStore.getRouteById(ascent.route)
     const summitId = route.summit
-    const summit = summitStore.getSummitById(summitId)
+    const summit = dataStore.getSummitById(summitId)
     if (summit) {
       const summitName = summit.name || 'Unknown Summit'
       if (!summitCounts[summitName]) {

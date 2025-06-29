@@ -59,33 +59,18 @@ import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'
-import { useClimberStore } from 'src/stores/climber'
-import { useRouteStore } from 'src/stores/route'
-import { useAscentStore } from 'src/stores/ascent'
-import { useSummitStore } from 'src/stores/summit'
+import { useDataStore } from 'src/stores/dataStore'
 
-const climberStore = useClimberStore()
-const routeStore = useRouteStore()
-const ascentStore = useAscentStore()
-const summitStore = useSummitStore()
+const dataStore = useDataStore()
 const userStore = useUserStore()
 const router = useRouter()
 
 const isLoaded = ref(false)
 
-  climberStore.loadClimbers().then(() => {
-    console.log('climbers loaded')
-    ascentStore.loadAscents().then(() => {
-      console.log('ascents loaded')
-      routeStore.loadRoutes().then(() => {
-        console.log('routes loaded')
-        summitStore.loadSummits().then(() => {
-          console.log('summits loaded')
-          isLoaded.value = true
-        })
-      })
-    })
-  })
+dataStore.loadAllData().then(() => {
+  console.log('all data loaded')
+  isLoaded.value = true
+})
 
 const linksList = [
   {

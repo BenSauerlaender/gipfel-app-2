@@ -7,7 +7,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useClimberStore } from 'src/stores/climber'
+import { useDataStore } from 'src/stores/dataStore'
 
 const props = defineProps({
   climberId: String,
@@ -21,8 +21,8 @@ const props = defineProps({
   }
 })
 
-const climberStore = useClimberStore()
-const climber = climberStore.getClimberById(props.climberId)
+const dataStore = useDataStore()
+const climber = dataStore.getClimberById(props.climberId)
 const shortName = climber.shortName
 const color = climber.color
 

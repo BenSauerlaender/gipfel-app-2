@@ -17,11 +17,9 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useAscentStore } from 'src/stores/ascent'
-import { useClimberStore } from 'src/stores/climber'
+import { useDataStore } from 'src/stores/dataStore'
 
-const ascentStore = useAscentStore()
-const climberStore = useClimberStore()
+const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -33,7 +31,7 @@ const props = defineProps({
 })
 
 const sortedClimbers = computed(() => {
-  const ascents = props.ascentIDs.map(id => ascentStore.getAscentById(id))
+  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
   
   // Count ascents per climber by type
   const climberStats = {}
@@ -58,7 +56,7 @@ const sortedClimbers = computed(() => {
   })
     
   Object.keys(climberStats).forEach(key => {
-    climberStats[key].name = climberStore.getClimberById(key).firstName 
+    climberStats[key].name = dataStore.getClimberById(key).firstName 
   })
   console.log(climberStats)
   

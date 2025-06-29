@@ -17,9 +17,9 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useSummitStore } from 'src/stores/summit'
+import { useDataStore } from 'src/stores/dataStore'
 
-const summitStore = useSummitStore()
+const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -31,7 +31,7 @@ const props = defineProps({
 })
 
 const chartData = computed(() => {
-  const summits = props.summitIDs.map(id => summitStore.getSummitById(id))
+  const summits = props.summitIDs.map(id => dataStore.getSummitById(id))
   
   // Group summits by region
   const regionCounts = {}

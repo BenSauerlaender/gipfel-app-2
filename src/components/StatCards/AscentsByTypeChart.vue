@@ -17,11 +17,11 @@
 import { computed } from 'vue'
 import { Doughnut } from 'vue-chartjs'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
-import { useAscentStore } from 'src/stores/ascent'
+import { useDataStore } from 'src/stores/dataStore'
 
 Chart.register(ArcElement, Tooltip, Legend)
 
-const ascentStore = useAscentStore()
+const dataStore = useDataStore()
 
 const props = defineProps({
   ascentIDs: {
@@ -31,7 +31,7 @@ const props = defineProps({
 })
 
 const chartData = computed(() => {
-  const ascents = props.ascentIDs.map(id => ascentStore.getAscentById(id))
+  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
   const leadCount = ascents.filter(ascent => !ascent.isSolo && !ascent.isTopRope && ascent.leadClimber).length
   const soloCount = ascents.filter(ascent => ascent.isSolo).length
   const topRopeCount = ascents.filter(ascent => ascent.isTopRope).length

@@ -10,18 +10,12 @@
 </template>
 
 <script setup>
-import { useAscentStore } from 'src/stores/ascent'
+import { useDataStore } from 'src/stores/dataStore'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
-import { useRouteStore } from 'src/stores/route'
-import { useSummitStore } from 'src/stores/summit'
-import { useClimberStore } from 'src/stores/climber'
 
-const routeStore = useRouteStore()
-const summitStore = useSummitStore()
-const climberStore = useClimberStore()
-const ascentStore = useAscentStore()
+const dataStore = useDataStore()
 
-const ascents = ascentStore.getAscentsPopulated
+const ascents = dataStore.getAscentsPopulated
 const trips = groupAscentsIntoTrips(ascents)
 console.log(trips)
 

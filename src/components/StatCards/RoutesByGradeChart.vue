@@ -17,11 +17,10 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useRouteStore } from 'src/stores/route'
+import { useDataStore } from 'src/stores/dataStore'
 import { getRouteGrade, getGradeColor, SCALA } from 'src/helper/route'
 
-const routeStore = useRouteStore()
-
+const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -33,7 +32,7 @@ const props = defineProps({
 })
 
 const chartData = computed(() => {
-  const routes = props.routeIDs.map(id => routeStore.getRouteById(id))
+  const routes = props.routeIDs.map(id => dataStore.getRouteById(id))
   let labels = SCALA
   let data = labels.map(label => 0)
   routes.map(route => getRouteGrade(route)).forEach(grade => {

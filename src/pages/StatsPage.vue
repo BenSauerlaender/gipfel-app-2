@@ -32,18 +32,14 @@
   import AscentsByDayChart from 'src/components/StatCards/AscentsByDayChart.vue'
   import TopSummitsChart from 'src/components/StatCards/TopSummitsChart.vue'
   import TopClimbersChart from 'src/components/StatCards/TopClimbersChart.vue'
-  import { useRouteStore } from 'src/stores/route'
-  import { useSummitStore } from 'src/stores/summit'
-  import { useClimberStore } from 'src/stores/climber'
-  import { useAscentStore } from 'src/stores/ascent'
+  import { useDataStore } from 'src/stores/dataStore'
   import { getRouteGrade } from 'src/helper/route'
-  const routeStore = useRouteStore()
-  const summitStore = useSummitStore()
-  const ascentStore = useAscentStore()
 
-  const ascents = ascentStore.ascents.filter(ascent => ascent.isAborted === false)
+  const dataStore = useDataStore()
+
+  const ascents = dataStore.ascents.filter(ascent => ascent.isAborted === false)
   const uniqueRouteIDs = [...new Set(ascents.map(ascent => ascent.route))]
-  const uniqueSummitIDs = [...new Set(uniqueRouteIDs.map(routeID => routeStore.getRouteById(routeID).summit))]
+  const uniqueSummitIDs = [...new Set(uniqueRouteIDs.map(routeID => dataStore.getRouteById(routeID).summit))]
   </script>
   
   <style scoped>
