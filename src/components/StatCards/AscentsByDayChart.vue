@@ -1,7 +1,7 @@
 <template>
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ trips.reduce((acc, trip) => acc + trip.days.length, 0) }}</div>
+              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ props.trips.reduce((acc, trip) => acc + trip.days.length, 0) }}</div>
               <div class="text-h6 text-grey-9">Tage am Fels</div>
             </q-card-section>
   
@@ -28,11 +28,15 @@ const props = defineProps({
     required: true,
   }
 })
-const trips = props.trips
 
 const chartData = computed(() => {
+  if (props.trips.length === 0) {
+    return {
+      datasets: []
+    }
+  }
   // Get date range from last ascent to today
-  const lastAscentDate = new Date(trips[0].days[0].name)
+  const lastAscentDate = new Date(props.trips[0].days[0].name)
   const today = new Date()
   
   // Generate all dates from last ascent to today
@@ -43,7 +47,7 @@ const chartData = computed(() => {
     currentDate.setDate(currentDate.getDate() + 1)
   }
 
-  const data = trips.map(trip => {
+  const data = props.trips.map(trip => {
     return {
       x: trip.days[0].name,
       y: trip.days.reduce((acc, day) => acc + day.ascents.length, 0),

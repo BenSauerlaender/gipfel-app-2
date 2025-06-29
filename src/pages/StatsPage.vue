@@ -3,7 +3,7 @@
      <div>
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <AscentsByTypeChart :ascents="ascents" />
+          <AscentsByTypeChart :ascents="filteredAscents" />
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
           <RoutesByGradeChart :routes="uniqueRoutes" />
@@ -12,13 +12,13 @@
           <SummitsByRegionChart :summits="uniqueSummits" />
         </div>
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-          <AscentsByDayChart :trips="trips" />
+          <AscentsByDayChart :trips="filteredPopulatedTrips" />
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <TopSummitsChart :ascents="ascents" />
+          <TopSummitsChart :ascents="filteredAscents" />
         </div>
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-          <TopClimbersChart :ascents="ascents" />
+          <TopClimbersChart :ascents="filteredAscents" />
         </div>
       </div>
     </div>
@@ -33,14 +33,14 @@
   import TopSummitsChart from 'src/components/StatCards/TopSummitsChart.vue'
   import TopClimbersChart from 'src/components/StatCards/TopClimbersChart.vue'
   import { useDataStore } from 'src/stores/dataStore'
-  import { getRouteGrade } from 'src/helper/route'
+  import { storeToRefs } from 'pinia'
+  import { computed } from 'vue'
 
   const dataStore = useDataStore()
 
-  const ascents = dataStore.getFilteredAscents
-  const trips = dataStore.getFilteredPopulatedTrips
-  const uniqueSummits = [...new Set(ascents.map(ascent => ascent.route.summit))]
-  const uniqueRoutes = [...new Set(ascents.map(ascent => ascent.route))]
+  const {filteredAscents, filteredPopulatedTrips} = storeToRefs(dataStore)
+  const uniqueSummits = computed(() => [...new Set(filteredAscents.value.map(ascent => ascent.route.summit))])
+  const uniqueRoutes = computed(() => [...new Set(filteredAscents.value.map(ascent => ascent.route))])
   </script>
   
   <style scoped>

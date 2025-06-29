@@ -51,7 +51,9 @@
       <router-view v-if="isLoaded" />
       <q-inner-loading v-else showing label="Loading..." label-color="primary" color="primary" class="big-loading" />
       <!-- Bottom Panel Component -->
-      <BottomPanel />
+      <BottomPanel v-if="isLoaded">
+        <FilterOptions />
+      </BottomPanel>
     </q-page-container>
 
   </q-layout>
@@ -61,6 +63,7 @@
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import BottomPanel from 'components/BottomPanel.vue'
+import FilterOptions from 'components/FilterOptions.vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'
 import { useDataStore } from 'src/stores/dataStore'
@@ -165,5 +168,10 @@ function handleLogout() {
   font-size: 2rem;
   font-weight: bold;
   margin-top: 24px;
+}
+
+/* Add bottom padding to ensure content can scroll past the bottom panel */
+:deep(.q-page-container) {
+  padding-bottom: 600px; /* Maximum height of the bottom panel */
 }
 </style>

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getAscents, getClimbers, getRoutes, getSummits } from 'src/api'
+import { useFilterStore } from 'src/stores/filterStore'
 
 const colors = ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'grey', 'blue-grey']
 
@@ -14,10 +15,26 @@ export const useDataStore = defineStore('data', {
   }),
   
   getters: {
-    getFilteredAscents(state) {
-        return state.ascents.filter(ascent => ascent.isAborted === false)
+    filteredAscents(state) {
+        const filterStore = useFilterStore()
+        return state.ascents.filter(ascent => {
+            let allow = true
+            if (!filterStore.filters.ascents.allowedTypes.includes('aborted') && ascent.isAborted) {
+                return false
+            }
+            if (!filterStore.filters.ascents.allowedTypes.includes('solo') && ascent.isSolo) {
+                return false
+            }
+            if (!filterStore.filters.ascents.allowedTypes.includes('topRope') && ascent.isTopRope) {
+                return false
+            }
+            if (!filterStore.filters.ascents.allowedTypes.includes('lead') && ascent.leadClimber) {
+                return false
+            }
+            return true
+        })
     },
-    getPopulatedTrips(state) {
+    populatedTrips(state) {
       return state.trips.map(trip => {
         return {
              ...trip, 
@@ -30,14 +47,14 @@ export const useDataStore = defineStore('data', {
         }
       })
     },
-    getFilteredPopulatedTrips(state) {
+    filteredPopulatedTrips(state) {
       return state.trips.map(trip => {
         return {
              ...trip, 
              days: trip.days.map(day => { 
                 return {
                     ...day, 
-                    ascents: day.ascents.map(id =>  state.getFilteredAscents.find(a => a._id === id)).filter(ascent => ascent !== undefined)
+                    ascents: day.ascents.map(id =>  state.filteredAscents.find(a => a._id === id)).filter(ascent => ascent !== undefined)
                 } 
             }).filter(day => day.ascents.length > 0)
         }

@@ -11,12 +11,14 @@
 
 <script setup>
 import { useDataStore } from 'src/stores/dataStore'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 
 const dataStore = useDataStore()
+const {filteredPopulatedTrips} = storeToRefs(dataStore)
 
-const trips = dataStore.getPopulatedTrips.reverse()
-console.log(trips)
+const trips = computed(() => [...filteredPopulatedTrips.value].reverse())
 
 </script>
 

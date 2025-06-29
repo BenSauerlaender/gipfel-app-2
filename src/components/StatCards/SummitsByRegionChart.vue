@@ -28,6 +28,11 @@ const props = defineProps({
 })
 
 const chartData = computed(() => {
+  if (props.summits.length === 0) {
+    return {
+      datasets: []
+    }
+  }
   const summits = props.summits
   
   // Group summits by region

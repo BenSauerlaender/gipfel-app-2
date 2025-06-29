@@ -1,8 +1,8 @@
 <template>
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ sortedClimbers[0][1].total }}</div>
-              <div class="text-h6 text-grey-9">Begehungen von {{ sortedClimbers[0][1].name }}</div>
+              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ (ascents.length > 0) ? sortedClimbers[0][1].total : 0 }}</div>
+              <div class="text-h6 text-grey-9">Begehungen von {{ (ascents.length > 0) ? sortedClimbers[0][1].name : 'Niemand' }}</div>
             </q-card-section>
   
             <q-separator />
@@ -67,6 +67,11 @@ const sortedClimbers = computed(() => {
 })
 
 const chartData = computed(() => {
+  if (sortedClimbers.value.length === 0) {
+    return {
+      datasets: []
+    }
+  }
   const labels = sortedClimbers.value.map(([,stats]) => stats.name)
   
   return {

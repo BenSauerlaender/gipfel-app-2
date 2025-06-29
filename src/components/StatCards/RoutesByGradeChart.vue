@@ -29,6 +29,11 @@ const props = defineProps({
 })
 
 const chartData = computed(() => {
+  if (props.routes.length === 0) {
+    return {
+      datasets: []
+    }
+  }
   const routes = props.routes
   let labels = SCALA
   let data = labels.map(label => 0)

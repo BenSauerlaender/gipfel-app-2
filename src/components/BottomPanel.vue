@@ -75,11 +75,11 @@ const panelStyle = computed(() => ({
 }))
 
 //colapse panel when page changes using Router
-router.beforeEach((to, from, next) => {
-  isExpanded.value = false
-  panelHeight.value = minHeight
-  next()
-})
+//router.beforeEach((to, from, next) => {
+  //isExpanded.value = false
+  //panelHeight.value = minHeight
+  //next()
+//})
 
 function startResize(event) {
   event.preventDefault()

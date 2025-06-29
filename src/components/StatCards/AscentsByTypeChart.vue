@@ -1,7 +1,7 @@
 <template>
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ ascents.length }}</div>
+              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ props.ascents.length }}</div>
               <div class="text-h6 text-grey-9">Begehungen</div>
             </q-card-section>
   
@@ -26,15 +26,20 @@ const props = defineProps({
     required: true,
   }
 })
-const ascents = props.ascents
 
 const chartData = computed(() => {
-  const leadCount = ascents.filter(ascent => !ascent.isSolo && !ascent.isTopRope && ascent.leadClimber).length
-  const soloCount = ascents.filter(ascent => ascent.isSolo).length
-  const topRopeCount = ascents.filter(ascent => ascent.isTopRope).length
+  if (props.ascents.length === 0) {
+    return {
+      labels: [],
+      datasets: []
+    }
+  }
+  const leadCount = props.ascents.filter(ascent => !ascent.isSolo && !ascent.isTopRope && ascent.leadClimber).length
+  const soloCount = props.ascents.filter(ascent => ascent.isSolo).length
+  const topRopeCount = props.ascents.filter(ascent => ascent.isTopRope).length
 
   return {
-    labels: ['Vorstieg', 'Solo', 'von oben gesichert'],
+    labels: ['Klassisch', 'Solo', 'von oben gesichert'],
     datasets: [
       {
         data: [leadCount, soloCount, topRopeCount],
