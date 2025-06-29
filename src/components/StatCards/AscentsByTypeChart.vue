@@ -1,7 +1,7 @@
 <template>
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ ascentIDs.length }}</div>
+              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ ascents.length }}</div>
               <div class="text-h6 text-grey-9">Begehungen</div>
             </q-card-section>
   
@@ -17,25 +17,21 @@
 import { computed } from 'vue'
 import { Doughnut } from 'vue-chartjs'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
-import { useDataStore } from 'src/stores/dataStore'
 
 Chart.register(ArcElement, Tooltip, Legend)
 
-const dataStore = useDataStore()
-
 const props = defineProps({
-  ascentIDs: {
+  ascents: {
     type: Array,
     required: true,
   }
 })
+const ascents = props.ascents
 
 const chartData = computed(() => {
-  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
   const leadCount = ascents.filter(ascent => !ascent.isSolo && !ascent.isTopRope && ascent.leadClimber).length
   const soloCount = ascents.filter(ascent => ascent.isSolo).length
   const topRopeCount = ascents.filter(ascent => ascent.isTopRope).length
-  const otherCount = ascents.length - leadCount - soloCount - topRopeCount
 
   return {
     labels: ['Vorstieg', 'Solo', 'von oben gesichert'],

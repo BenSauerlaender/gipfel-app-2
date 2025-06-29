@@ -17,34 +17,29 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useDataStore } from 'src/stores/dataStore'
 import { SCALA, getGradeColor } from 'src/helper/route'
-
-const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
 const props = defineProps({
-  ascentIDs: {
+  ascents: {
     type: Array,
     required: true,
   }
 })
 const sortedSummits = computed(() => {
-  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
+  const ascents = props.ascents
   
   // Count ascents per summit
   const summitCounts = {}
   ascents.forEach(ascent => {
-    const route = dataStore.getRouteById(ascent.route)
-    const summitId = route.summit
-    const summit = dataStore.getSummitById(summitId)
+    const summit = ascent.route.summit
     if (summit) {
       const summitName = summit.name || 'Unknown Summit'
       if (!summitCounts[summitName]) {
         summitCounts[summitName] = {}
       }
-      const grade = route.difficulty.normal
+      const grade = ascent.route.difficulty.normal
       summitCounts[summitName][grade] = (summitCounts[summitName][grade] || 0) + 1
       summitCounts[summitName].total = (summitCounts[summitName].total || 0) + 1
     }

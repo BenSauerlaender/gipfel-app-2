@@ -8,79 +8,46 @@ export const useDataStore = defineStore('data', {
     ascents: [], // Array of ascent objects
     climbers: [], // Array of climber objects
     routes: [], // Array of route objects
-    summits: [] // Array of summit objects
+    summits: [], // Array of summit objects
+    trips: [],
+    isLoaded: false
   }),
   
   getters: {
-    // Ascents getters
-    getAscentsForTimeline() {
-      // This getter was empty in the original ascent store
+    getFilteredAscents(state) {
+        return state.ascents.filter(ascent => ascent.isAborted === false)
     },
-    getAscentsPopulated(state) {
-      return state.ascents.map(ascent => {
-        const ascentObj = {...ascent}
-        const route = {...this.getRouteById(ascent.route)}
-        const summit = {...this.getSummitById(route.summit)}
-        ascentObj.route = { ...route, summit }
-        ascentObj.leadClimber = {...this.getClimberById(ascent.leadClimber)}
-        ascentObj.climbers = ascent.climbers.map(climber => {
-          return { ...this.getClimberById(climber.climber), isAborted: climber.isAborted }
-        })
-        return ascentObj
+    getPopulatedTrips(state) {
+      return state.trips.map(trip => {
+        return {
+             ...trip, 
+             days: trip.days.map(day => { 
+                return {
+                    ...day, 
+                    ascents: day.ascents.map(id =>  state.ascents.find(a => a._id === id))
+                } 
+            })
+        }
       })
     },
-    isAscentsLoaded(state) {
-      return state.ascents.length > 0
+    getFilteredPopulatedTrips(state) {
+      return state.trips.map(trip => {
+        return {
+             ...trip, 
+             days: trip.days.map(day => { 
+                return {
+                    ...day, 
+                    ascents: day.ascents.map(id =>  state.getFilteredAscents.find(a => a._id === id)).filter(ascent => ascent !== undefined)
+                } 
+            }).filter(day => day.ascents.length > 0)
+        }
+      }).filter(trip => trip.days.length > 0)
     },
-    getAscentById(state) {
-      return (id) => state.ascents.find(ascent => ascent._id === id)
-    },
-
-    // Climbers getters
-    isClimbersLoaded(state) {
-      return state.climbers.length > 0
-    },
-    getClimberById(state) {
-      return (id) => state.climbers.find(c => c._id === id)
-    },
-    getClimberIds(state) {
-      return state.climbers.map(c => c._id)
-    },
-
-    // Routes getters
-    isRoutesLoaded(state) {
-      return state.routes.length > 0
-    },
-    getRouteById(state) {
-      return (id) => state.routes.find(r => r._id === id)
-    },
-
-    // Summits getters
-    isSummitsLoaded(state) {
-      return state.summits.length > 0
-    },
-    getSummitById(state) {
-      return (id) => state.summits.find(s => s._id === id)
-    },
-
-    // Combined loading state
-    isAllDataLoaded(state) {
-      return state.ascents.length > 0 && 
-             state.climbers.length > 0 && 
-             state.routes.length > 0 && 
-             state.summits.length > 0
-    }
   },
 
   actions: {
-    // Ascents actions
-    async loadAscents() {
-      const response = await getAscents()
-      this.ascents = response.data
-    },
-
-    // Climbers actions
-    async loadClimbers() {
+    // Combined loading action
+    async loadData() {
       function seededHash(str) {
         let hash = 0
         for (let i = 0; i < str.length; i++) {
@@ -90,35 +57,90 @@ export const useDataStore = defineStore('data', {
         return Math.abs(hash)
       }
 
-      const response = await getClimbers()
-      this.climbers = response.data.map(climber => {
+      const startTime = new Date().getTime()
+      // Load data from API
+      const [ascentsResponse, climbersResponse, routesResponse, summitsResponse] = await Promise.all([
+        getAscents(),
+        getClimbers(),
+        getRoutes(),
+        getSummits()
+      ])
+      console.log('Data Download time: ', new Date().getTime() - startTime, 'ms')
+      const startTime2 = new Date().getTime()
+
+      this.summits = summitsResponse.data
+
+      // Populate routes with summits
+      this.routes = routesResponse.data.map(route => {
+        route.summit = this.summits.find(summit => summit._id === route.summit)
+        return route
+      })
+
+      // Populate climbers with colors and short names
+      this.climbers = climbersResponse.data.map(climber => {
         const hash = seededHash(climber.firstName + climber.lastName)
         climber.color = colors[hash % colors.length]
         climber.shortName = climber.firstName.slice(0, 2)
         return climber
       })
+
+      // Populate ascents with routes and climbers
+      this.ascents = ascentsResponse.data.map(ascent => {
+        ascent.route = this.routes.find(route => route._id === ascent.route)
+        ascent.climbers = ascent.climbers.map(climber => {
+          return { ...this.climbers.find(c => c._id === climber.climber), isAborted: climber.isAborted }
+        })
+        if (ascent.leadClimber) {
+          ascent.leadClimber = this.climbers.find(climber => climber._id === ascent.leadClimber)
+        }
+        return ascent
+      })
+      this.trips = this.computeTrips(this.ascents)
+
+      console.log('Data Processing time: ', new Date().getTime() - startTime2, 'ms')
+
+      this.isLoaded = true
     },
 
-    // Routes actions
-    async loadRoutes() {
-      const response = await getRoutes()
-      this.routes = response.data
-    },
+    computeTrips(ascents) {
+        // Group ascents by day (YYYY-MM-DD)
+        const ascentsByDay = ascents
+            .map(ascent => { return { _id: ascent._id, date: ascent.date } })
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
+            .reduce((grouped, ascent) => {
+            const dayString = new Date(ascent.date).toISOString().slice(0, 10)
+            if (!grouped[dayString]) grouped[dayString] = []
+            grouped[dayString].push(ascent)
+            return grouped
+            }, {})
 
-    // Summits actions
-    async loadSummits() {
-      const response = await getSummits()
-      this.summits = response.data
-    },
+        const sortedDays = Object.keys(ascentsByDay).sort()
+        let trips = []
+        let currentTrip = []
+        let lastDayDate = null
 
-    // Combined loading action
-    async loadAllData() {
-      await Promise.all([
-        this.loadAscents(),
-        this.loadClimbers(),
-        this.loadRoutes(),
-        this.loadSummits()
-      ])
+        // Split days into trips, allowing max 1 off day between
+        for (const dayString of sortedDays) {
+            const currentDayDate = new Date(dayString)
+            if (
+            lastDayDate &&
+            (currentDayDate - lastDayDate) / (1000 * 60 * 60 * 24) > 4 // more than 3 off day
+            ) {
+            if (currentTrip.length) trips.push(currentTrip)
+            currentTrip = []
+            }
+            currentTrip.push({ name: dayString, ascents: ascentsByDay[dayString].map(ascent => { return ascent._id })})
+            lastDayDate = currentDayDate
+        }
+        if (currentTrip.length) trips.push(currentTrip)
+
+        // Add trip name (months/year) to each trip
+        return trips.map((trip) => {
+            const months = [...new Set(trip.map(dayObj => new Date(dayObj.name).toLocaleString('de-DE', { month: 'long' })))]
+            const year = new Date(trip[0].name).toLocaleString('de-DE', { year: 'numeric' })
+            const name = months.join('/') + ' ' + year
+            return {name, days:trip }
+        })
     }
   }
 }) 

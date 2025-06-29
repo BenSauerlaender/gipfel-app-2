@@ -24,41 +24,41 @@ const dataStore = useDataStore()
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
 const props = defineProps({
-  ascentIDs: {
+  ascents: {
     type: Array,
     required: true,
   }
 })
 
 const sortedClimbers = computed(() => {
-  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
+  const ascents = props.ascents
   
   // Count ascents per climber by type
   const climberStats = {}
   
   ascents.forEach(ascent => {
     ascent.climbers.forEach(climber => {
+        const climberId = climber._id
         if (climber.isAborted === true) return
-        if (!climberStats[climber.climber]) {
-            climberStats[climber.climber] = { lead: 0, solo: 0, topRope: 0, other: 0, total: 0}
+        if (!climberStats[climberId]) {
+            climberStats[climberId] = { lead: 0, solo: 0, topRope: 0, other: 0, total: 0}
         }
         if (ascent.isSolo) {
-            climberStats[climber.climber].solo++
+            climberStats[climberId].solo++
         } else if (ascent.isTopRope) {
-            climberStats[climber.climber].topRope++
-        } else if (climber.climber === ascent.leadClimber) {
-            climberStats[climber.climber].lead++
+            climberStats[climberId].topRope++
+        } else if (climberId === ascent.leadClimber._id) {
+            climberStats[climberId].lead++
         } else {
-            climberStats[climber.climber].other++
+            climberStats[climberId].other++
         }
-        climberStats[climber.climber].total++
+        climberStats[climberId].total++
     })
   })
     
   Object.keys(climberStats).forEach(key => {
-    climberStats[key].name = dataStore.getClimberById(key).firstName 
+    climberStats[key].name = dataStore.climbers.find(climber => climber._id === key).firstName
   })
-  console.log(climberStats)
   
   // Sort by total count and get top 10
   return Object.entries(climberStats)

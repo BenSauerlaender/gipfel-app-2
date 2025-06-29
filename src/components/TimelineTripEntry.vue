@@ -1,10 +1,10 @@
 <template>
     <q-timeline-entry heading>
-        {{ props.trip.tripName }}
+        {{ props.trip.name }}
     </q-timeline-entry>
     <q-timeline-entry v-for="day in props.trip.days"
-      :key="day.day"
-      :subtitle="formatDate(day.day)"
+      :key="day.name"
+      :subtitle="formatDate(day.name)"
     >
       <div v-for="ascent in day.ascents" :key="ascent._id" :class="(ascent.isSolo ? 'solo' : '') + (ascent.isTopRope ? 'topRope' : '') + (ascent.isAborted ? 'aborted' : '')">
           <span v-if="ascent.isAborted == true">{{'('}}</span>

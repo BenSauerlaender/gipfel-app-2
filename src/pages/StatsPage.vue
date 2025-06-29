@@ -3,22 +3,22 @@
      <div>
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <AscentsByTypeChart :ascentIDs="ascents.map(ascent => ascent._id)" />
+          <AscentsByTypeChart :ascents="ascents" />
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <RoutesByGradeChart :routeIDs="uniqueRouteIDs" />
+          <RoutesByGradeChart :routes="uniqueRoutes" />
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <SummitsByRegionChart :summitIDs="uniqueSummitIDs" />
+          <SummitsByRegionChart :summits="uniqueSummits" />
         </div>
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-          <AscentsByDayChart :ascentIDs="ascents.map(ascent => ascent._id)" />
+          <AscentsByDayChart :trips="trips" />
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <TopSummitsChart :ascentIDs="ascents.map(ascent => ascent._id)" />
+          <TopSummitsChart :ascents="ascents" />
         </div>
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-          <TopClimbersChart :ascentIDs="ascents.map(ascent => ascent._id)" />
+          <TopClimbersChart :ascents="ascents" />
         </div>
       </div>
     </div>
@@ -37,14 +37,15 @@
 
   const dataStore = useDataStore()
 
-  const ascents = dataStore.ascents.filter(ascent => ascent.isAborted === false)
-  const uniqueRouteIDs = [...new Set(ascents.map(ascent => ascent.route))]
-  const uniqueSummitIDs = [...new Set(uniqueRouteIDs.map(routeID => dataStore.getRouteById(routeID).summit))]
+  const ascents = dataStore.getFilteredAscents
+  const trips = dataStore.getFilteredPopulatedTrips
+  const uniqueSummits = [...new Set(ascents.map(ascent => ascent.route.summit))]
+  const uniqueRoutes = [...new Set(ascents.map(ascent => ascent.route))]
   </script>
   
   <style scoped>
   .stats-section {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
   }
 

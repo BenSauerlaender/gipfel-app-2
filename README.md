@@ -47,3 +47,5 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - show grade with/without support correctly
 - add tooltip for more information (summit, route, grade, climber, ...)
 
+## note:
+- pinia getter with argument is not cached

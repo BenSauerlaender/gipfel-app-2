@@ -67,7 +67,7 @@ const router = useRouter()
 
 const isLoaded = ref(false)
 
-dataStore.loadAllData().then(() => {
+dataStore.loadData().then(() => {
   console.log('all data loaded')
   isLoaded.value = true
 })

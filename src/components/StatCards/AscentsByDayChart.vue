@@ -1,7 +1,7 @@
 <template>
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ trips.reduce((acc, trip) => acc + trip.days, 0) }}</div>
+              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ trips.reduce((acc, trip) => acc + trip.days.length, 0) }}</div>
               <div class="text-h6 text-grey-9">Tage am Fels</div>
             </q-card-section>
   
@@ -17,71 +17,22 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, TimeScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useDataStore } from 'src/stores/dataStore'
 import 'chartjs-adapter-date-fns'
 import { de } from 'date-fns/locale'
-
-const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale,TimeScale, BarElement, Tooltip, Legend)
 
 const props = defineProps({
-  ascentIDs: {
+  trips: {
     type: Array,
     required: true,
   }
 })
-function groupAscentsIntoTrips(ascents) {
-  // Group ascents by day (YYYY-MM-DD)
-  const ascentsByDay = ascents
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .reduce((grouped, ascent) => {
-      const dayString = new Date(ascent.date).toISOString().slice(0, 10)
-      if (!grouped[dayString]) grouped[dayString] = 0
-      grouped[dayString]++
-      return grouped
-    }, {})
+const trips = props.trips
 
-  const sortedDays = Object.keys(ascentsByDay).sort().reverse()
-  let trips = []
-  let currentTrip = []
-  let lastDayDate = null
-
-  // Split days into trips, allowing max 1 off day between
-  for (const dayString of sortedDays) {
-    const currentDayDate = new Date(dayString)
-    if (
-      lastDayDate &&
-      (lastDayDate - currentDayDate) / (1000 * 60 * 60 * 24) > 2 // more than 1 off day
-    ) {
-      if (currentTrip.length) trips.push(currentTrip)
-      currentTrip = []
-    }
-    currentTrip.push({ day: dayString, ascents: ascentsByDay[dayString] })
-    lastDayDate = currentDayDate
-  }
-  if (currentTrip.length) trips.push(currentTrip)
-
-  // Add trip name (months/year) to each trip
-  return trips.map(trip => {
-    const months = [...new Set(trip.map(dayObj => new Date(dayObj.day).toLocaleString('de-DE', { month: 'long' })))]
-    const year = new Date(trip[0].day).toLocaleString('de-DE', { year: 'numeric' })
-    const tripName = months.join('/') + ' ' + year
-    const days = trip.length
-    const ascents = trip.reduce((acc, day) => acc + day.ascents, 0)
-    const date = new Date(trip[0].day).toISOString().split('T')[0]
-    return { tripName, days, ascents, date }
-  })
-}
-const trips = computed(() => {
-  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
-  return groupAscentsIntoTrips(ascents)
-})
 const chartData = computed(() => {
-  const ascents = props.ascentIDs.map(id => dataStore.getAscentById(id))
-
   // Get date range from last ascent to today
-  const lastAscentDate = new Date(Math.max(...ascents.map(a => new Date(a.date))))
+  const lastAscentDate = new Date(trips[0].days[0].name)
   const today = new Date()
   
   // Generate all dates from last ascent to today
@@ -92,13 +43,12 @@ const chartData = computed(() => {
     currentDate.setDate(currentDate.getDate() + 1)
   }
 
-  const data = trips.value.map(trip => {
+  const data = trips.map(trip => {
     return {
-      x: trip.date,
-      y: trip.ascents,
-      tripName: trip.tripName,
-      days: trip.days,
-      ascents: trip.ascents
+      x: trip.days[0].name,
+      y: trip.days.reduce((acc, day) => acc + day.ascents.length, 0),
+      tripName: trip.name,
+      days: trip.days.length,
     }
   })
   
@@ -127,7 +77,7 @@ const chartOptions = {
         intersect: false,
         callbacks: {
         label: (context) => {
-            return `Tage: ${context.raw.days} | Begehungen: ${context.raw.ascents}`
+            return `Tage: ${context.raw.days} | Begehungen: ${context.raw.y}`
         },
         title: (tooltipItems) => {
           return tooltipItems[0].raw.tripName

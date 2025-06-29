@@ -1,8 +1,8 @@
 <template>
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ routeIDs.length }}</div>
-              <div class="text-h6 text-grey-9">Wege</div>
+              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ routes.length }}</div>
+              <div class="text-h6 text-grey-9">verschiedene Wege</div>
             </q-card-section>
   
             <q-separator />
@@ -17,22 +17,19 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { useDataStore } from 'src/stores/dataStore'
 import { getRouteGrade, getGradeColor, SCALA } from 'src/helper/route'
-
-const dataStore = useDataStore()
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
 const props = defineProps({
-  routeIDs: {
+  routes: {
     type: Array,
     required: true,
   }
 })
 
 const chartData = computed(() => {
-  const routes = props.routeIDs.map(id => dataStore.getRouteById(id))
+  const routes = props.routes
   let labels = SCALA
   let data = labels.map(label => 0)
   routes.map(route => getRouteGrade(route)).forEach(grade => {
@@ -47,7 +44,6 @@ const chartData = computed(() => {
   }
   labels = labels.slice(0, lastIndex + 1)
   data = data.slice(0, lastIndex + 1)
-  console.log(labels, data)
 
   return {
     labels: labels,
