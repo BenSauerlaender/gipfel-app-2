@@ -5,6 +5,13 @@ export const useFilterStore = defineStore('filter', {
     filters: {
       ascents: {
         allowedTypes: ['lead', 'solo', 'topRope', 'aborted']
+      },
+      climbers: {
+        selected: [],
+        mode: 'or'
+      },
+      summit: {
+        selected: null
       }
     }
   }),

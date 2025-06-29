@@ -19,17 +19,32 @@ export const useDataStore = defineStore('data', {
         const filterStore = useFilterStore()
         return state.ascents.filter(ascent => {
             let allow = true
-            if (!filterStore.filters.ascents.allowedTypes.includes('aborted') && ascent.isAborted) {
-                return false
+            if (!filterStore.filters.ascents.allowedTypes.includes('aborted') && ascent.isAborted) { return false }
+            if (!filterStore.filters.ascents.allowedTypes.includes('solo') && ascent.isSolo) { return false }
+            if (!filterStore.filters.ascents.allowedTypes.includes('topRope') && ascent.isTopRope) { return false }
+            if (!filterStore.filters.ascents.allowedTypes.includes('lead') && ascent.leadClimber) { return false }
+            return true
+        })
+        .filter(ascent => {
+            const isAllowed = (climber) => (filterStore.filters.ascents.allowedTypes.includes('aborted') || climber.isAborted === false)
+
+            if (filterStore.filters.climbers.selected.length == 0) { return true  }
+            if (filterStore.filters.climbers.mode === 'or' && 
+                !filterStore.filters.climbers.selected.some(climber => ascent.climbers.filter(isAllowed).some(c => c._id === climber))) { 
+                    return false 
             }
-            if (!filterStore.filters.ascents.allowedTypes.includes('solo') && ascent.isSolo) {
-                return false
+            if (filterStore.filters.climbers.mode === 'and' && 
+                !filterStore.filters.climbers.selected.every(climber => ascent.climbers.filter(isAllowed).some(c => c._id === climber))) { 
+                    return false 
             }
-            if (!filterStore.filters.ascents.allowedTypes.includes('topRope') && ascent.isTopRope) {
-                return false
+            if (filterStore.filters.climbers.mode === 'exact' && 
+                (!filterStore.filters.climbers.selected.every(climber => ascent.climbers.filter(isAllowed).some(c => c._id === climber)) ||
+                ascent.climbers.length !== filterStore.filters.climbers.selected.length)) { 
+                    return false 
             }
-            if (!filterStore.filters.ascents.allowedTypes.includes('lead') && ascent.leadClimber) {
-                return false
+            if (filterStore.filters.climbers.mode === 'not' && 
+                filterStore.filters.climbers.selected.some(climber => ascent.climbers.filter(isAllowed).some(c => c._id === climber))) { 
+                    return false 
             }
             return true
         })

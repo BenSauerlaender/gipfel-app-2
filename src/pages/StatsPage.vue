@@ -18,7 +18,7 @@
           <TopSummitsChart :ascents="filteredAscents" />
         </div>
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-          <TopClimbersChart :ascents="filteredAscents" />
+          <TopClimbersChart :ascents="filteredAscents" :allowAborted="filterStore.filters.ascents.allowedTypes.includes('aborted')" />
         </div>
       </div>
     </div>
@@ -33,10 +33,12 @@
   import TopSummitsChart from 'src/components/StatCards/TopSummitsChart.vue'
   import TopClimbersChart from 'src/components/StatCards/TopClimbersChart.vue'
   import { useDataStore } from 'src/stores/dataStore'
+  import { useFilterStore } from 'src/stores/filterStore'
   import { storeToRefs } from 'pinia'
   import { computed } from 'vue'
 
   const dataStore = useDataStore()
+  const filterStore = useFilterStore()
 
   const {filteredAscents, filteredPopulatedTrips} = storeToRefs(dataStore)
   const uniqueSummits = computed(() => [...new Set(filteredAscents.value.map(ascent => ascent.route.summit))])

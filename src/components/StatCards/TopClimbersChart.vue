@@ -18,6 +18,7 @@ import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { useDataStore } from 'src/stores/dataStore'
+import { useFilterStore } from 'src/stores/filterStore'
 
 const dataStore = useDataStore()
 
@@ -26,6 +27,10 @@ Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 const props = defineProps({
   ascents: {
     type: Array,
+    required: true,
+  },
+  allowAborted: {
+    type: Boolean,
     required: true,
   }
 })
@@ -39,7 +44,7 @@ const sortedClimbers = computed(() => {
   ascents.forEach(ascent => {
     ascent.climbers.forEach(climber => {
         const climberId = climber._id
-        if (climber.isAborted === true) return
+        if (climber.isAborted === true && !props.allowAborted) return
         if (!climberStats[climberId]) {
             climberStats[climberId] = { lead: 0, solo: 0, topRope: 0, other: 0, total: 0}
         }
