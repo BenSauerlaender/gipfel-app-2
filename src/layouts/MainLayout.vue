@@ -50,13 +50,17 @@
     <q-page-container>
       <router-view v-if="isLoaded" />
       <q-inner-loading v-else showing label="Loading..." label-color="primary" color="primary" class="big-loading" />
+      <!-- Bottom Panel Component -->
+      <BottomPanel />
     </q-page-container>
+
   </q-layout>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import BottomPanel from 'components/BottomPanel.vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'
 import { useDataStore } from 'src/stores/dataStore'
