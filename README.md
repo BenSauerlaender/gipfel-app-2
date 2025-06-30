@@ -52,7 +52,6 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - SummitsByRegion: link zu liste aus allen Gipfeln
 
 ## FilterCards
-- time: 2side slider 
 - grade: 2side slider + stern, unsecure
 - leadClimber
 - fix Reihenfolge

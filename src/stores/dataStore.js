@@ -18,12 +18,22 @@ export const useDataStore = defineStore('data', {
   getters: {
     filteredAscents(state) {
         const filterStore = useFilterStore()
-        return state.ascents.filter(ascent => {
-            let allow = true
+        return state.ascents
+        .filter(ascent => {
             if (!filterStore.filters.ascents.allowedTypes.includes('aborted') && ascent.isAborted) { return false }
             if (!filterStore.filters.ascents.allowedTypes.includes('solo') && ascent.isSolo) { return false }
             if (!filterStore.filters.ascents.allowedTypes.includes('topRope') && ascent.isTopRope) { return false }
             if (!filterStore.filters.ascents.allowedTypes.includes('lead') && ascent.leadClimber) { return false }
+            return true
+        })
+        .filter(ascent => {
+            const ascentDate = new Date(ascent.date.split('T')[0])
+            if (filterStore.filters.ascents.dateMin && ascentDate < filterStore.filters.ascents.dateMin) {
+                return false
+            }
+            if (filterStore.filters.ascents.dateMax && ascentDate > filterStore.filters.ascents.dateMax) {
+                return false
+            }
             return true
         })
         .filter(ascent => {
