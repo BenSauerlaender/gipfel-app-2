@@ -1,9 +1,14 @@
 <template>
+  <router-view v-slot="{ Component }">
+  <template v-if="Component">
+    <component :is="Component" />
+  </template>
+  <template v-else>
     <div class="stats-section q-pa-md">
      <div>
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <AscentsByTypeChart :ascents="filteredAscents" />
+          <AscentsByTypeChart :ascents="f_Ascents" />
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
           <RoutesByGradeChart :routes="uniqueRoutes" />
@@ -12,17 +17,19 @@
           <SummitsByRegionChart :summits="uniqueSummits" />
         </div>
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-          <AscentsByDayChart :trips="filteredPopulatedTrips" />
+          <AscentsByDayChart :trips="f_PopulatedTrips" />
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <TopSummitsChart :ascents="filteredAscents" />
+          <TopSummitsChart :ascents="f_Ascents" />
         </div>
         <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-          <TopClimbersChart :ascents="filteredAscents" :allowAborted="filterStore.filters.ascents.allowedTypes.includes('aborted')" />
+          <TopClimbersChart :ascents="f_Ascents" :allowAborted="filterStore.filters.ascents.allowedTypes.includes('aborted')" />
         </div>
       </div>
     </div>
     </div>
+  </template>
+</router-view>
   </template>
   
   <script setup>
@@ -37,17 +44,18 @@
   import { storeToRefs } from 'pinia'
   import { computed } from 'vue'
 
+
   const dataStore = useDataStore()
   const filterStore = useFilterStore()
 
-  const {filteredAscents, filteredPopulatedTrips} = storeToRefs(dataStore)
-  const uniqueSummits = computed(() => [...new Set(filteredAscents.value.map(ascent => ascent.route.summit))])
-  const uniqueRoutes = computed(() => [...new Set(filteredAscents.value.map(ascent => ascent.route))])
+  const {f_Ascents, f_PopulatedTrips} = storeToRefs(dataStore)
+  const uniqueSummits = computed(() => [...new Set(f_Ascents.value.map(ascent => ascent.route.summit))])
+  const uniqueRoutes = computed(() => [...new Set(f_Ascents.value.map(ascent => ascent.route))])
   </script>
   
   <style scoped>
   .stats-section {
-    max-width: 1600px;
+    max-width: 1200px;
     margin: 0 auto;
   }
 

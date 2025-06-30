@@ -17,7 +17,48 @@ export const useDataStore = defineStore('data', {
   }),
   
   getters: {
-    filteredAscents(state) {
+    f_AscentsPerRegion(state) {
+      const map = {}
+      state.f_Ascents.forEach(ascent => {
+        const regionId = ascent.route.summit.region._id
+        if (!map[regionId]) map[regionId] = 0
+        map[regionId]++
+      })
+      return map
+    },
+    f_AscentsPerSummit(state) {
+      const map = {}
+      state.f_Ascents.forEach(ascent => {
+        const summitId = ascent.route.summit._id
+        if (!map[summitId]) map[summitId] = 0
+        map[summitId]++
+      })
+      return map
+    },
+    f_AscentsPerRoute(state) {
+      const map = {}
+      state.f_Ascents.forEach(ascent => {
+        const routeId = ascent.route._id
+        if (!map[routeId]) map[routeId] = 0
+        map[routeId]++
+      })
+      return map
+    },
+    routeIDsPerSummit(state) {
+      return state.routes.reduce((map, route) => {
+        if (!map[route.summit._id]) map[route.summit._id] = []
+        map[route.summit._id].push(route._id)
+        return map
+      }, {})
+    },
+    summitIDsPerRegion(state) {
+      return state.summits.reduce((map, summit) => {
+        if (!map[summit.region._id]) map[summit.region._id] = []
+        map[summit.region._id].push(summit._id)
+        return map
+      }, {})
+    },
+    f_Ascents(state) {
         const filterStore = useFilterStore()
         return state.ascents
         .filter(ascent => {
@@ -113,25 +154,20 @@ export const useDataStore = defineStore('data', {
         }
       })
     },
-    filteredPopulatedTrips(state) {
+    f_PopulatedTrips(state) {
       return state.trips.map(trip => {
         return {
              ...trip, 
              days: trip.days.map(day => { 
                 return {
                     ...day, 
-                    ascents: day.ascents.map(id =>  state.filteredAscents.find(a => a._id === id)).filter(ascent => ascent !== undefined)
+                    ascents: day.ascents.map(id =>  state.f_Ascents.find(a => a._id === id)).filter(ascent => ascent !== undefined)
                 } 
             }).filter(day => day.ascents.length > 0)
         }
       }).filter(trip => trip.days.length > 0)
     },
-    summitRouteCounts(state) {
-      return state.routes.reduce((counts, route) => {
-        counts.set(route.summit._id, (counts.get(route.summit._id) || 0) + 1)
-        return counts
-      }, new Map())
-    }
+
   },
 
   actions: {

@@ -81,28 +81,28 @@ dataStore.loadData().then(() => {
 
 const linksList = [
   {
-    title: 'Tagebuch',
-    caption: 'Alle Begehungen',
-    icon: 'auto_stories',
-    link: '/timeline'
-  },
-  {
     title: 'Statistiken',
     caption: 'über Begehungen',
     icon: 'bar_chart',
     link: '/stats'
   },
   {
-    title: 'Gipfel',
-    caption: 'Begangene',
-    icon: 'terrain',
-    link: '/summits'
+    title: 'Tagebuch',
+    caption: 'Alle Begehungen',
+    icon: 'auto_stories',
+    link: '/timeline'
   },
   {
-    title: 'Wege',
-    caption: 'Begangene',
-    icon: 'hiking',
-    link: '/routes'
+    title: 'Gebiete',
+    caption: 'Alle Gebiete',
+    icon: 'map',
+    link: '/regions'
+  },
+  {
+    title: 'Gipfel',
+    caption: 'Alle Gipfel',
+    icon: 'terrain',
+    link: '/summits'
   }
 ]
 

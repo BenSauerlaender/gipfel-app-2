@@ -2,7 +2,7 @@
           <q-card style="height: 100%;">
             <q-card-section class="flex items-center justify-start no-wrap">
               <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ routes.length }}</div>
-              <div class="text-h6 text-grey-9">verschiedene Wege</div>
+              <div class="text-h6 text-grey-9">Wege</div>
             </q-card-section>
   
             <q-separator />
@@ -15,7 +15,7 @@
                 <q-btn
                   color="primary"
                   label="Alle Wege anzeigen"
-                  to="/routes"
+                  to="/stats/routes"
                   flat
                   icon="list"
                 />

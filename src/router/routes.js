@@ -3,11 +3,15 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: '', redirect: '/stats' },
       { path: '/timeline', component: () => import('pages/TimelinePage.vue') },
       { path: '/stats', component: () => import('pages/StatsPage.vue') },
-      { path: '/summits', component: () => import('pages/SummitPage.vue') },
-      { path: '/routes', component: () => import('pages/RoutesPage.vue') }
+      { path: '/stats/routes', component: () => import('pages/StatsRoutesPage.vue') },
+      { path: '/stats/summits', component: () => import('pages/StatsSummitsPage.vue') },
+      { path: '/regions', component: () => import('pages/RegionsPage.vue') },
+      { path: '/regions/:id', component: () => import('pages/DetailRegionPage.vue') },
+      { path: '/summits', component: () => import('pages/SummitsPage.vue') },
+
     ]
   },
 
@@ -17,11 +21,9 @@ const routes = [
   },
 
 
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
+    component: () => import('pages/ErrorNotFound.vue'), name: '404'
   }
 ]
 

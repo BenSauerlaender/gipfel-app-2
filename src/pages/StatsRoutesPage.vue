@@ -1,8 +1,11 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md page-container">
     <q-card>
       <q-card-section>
-        <div class="text-h5">Begangene Wege</div>
+        <div class="row items-center">
+          <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
+          <div class="text-h5 q-ml-md">Begangene Wege</div>
+        </div>
       </q-card-section>
       <q-separator />
       <q-card-section>
@@ -12,12 +15,18 @@
           row-key="_id"
           virtual-scroll
           :rows-per-page-options="[0]"
-          dense
           flat
-          bordered
+          :filter="filter"
           binary-state-sort
           ref="routesTable"
         >
+              <template v-slot:top-right>
+                <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+                  <template v-slot:append>
+                    <q-icon name="search" />
+                  </template>
+                </q-input>
+              </template>
           <template v-slot:body-cell-grade="props">
             <q-td :props="props">
               <q-chip :style="{backgroundColor: getGradeColor(props.value), color: 'white'}" dense>{{ props.value }}</q-chip>
@@ -47,9 +56,12 @@ import { computed, ref, onMounted } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { getGradeColor } from 'src/helper/route'
 import { SCALA } from 'src/helper/route'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const routesTable = ref(null)
 const dataStore = useDataStore()
+const filter = ref('')
 
 const sortGrade = (a, b, rowA, rowB) => {
   const gradeA = SCALA.indexOf(rowA.difficulty.normal)
@@ -69,7 +81,7 @@ const columns = [
 
 const filteredRoutes = computed(() => {
   // Get all filtered ascents, then unique routes
-  const ascents = dataStore.filteredAscents
+  const ascents = dataStore.f_Ascents
   const routeMap = {}
   ascents.forEach(ascent => {
     if (!routeMap[ascent.route._id]) {
@@ -89,4 +101,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 </style> 
