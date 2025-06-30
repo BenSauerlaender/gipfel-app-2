@@ -61,3 +61,6 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - table: filtered: summits
 - info: summits
 - info: region
+
+## Overall
+- Support Jump, RP und Mit unterstuetzung

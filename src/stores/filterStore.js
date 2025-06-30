@@ -16,6 +16,10 @@ export const useFilterStore = defineStore('filter', {
         region: null,
         summit: null,
         route: null
+      },
+      grade: {
+        min: null,
+        max: null
       }
     }
   }),

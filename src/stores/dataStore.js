@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { getAscents, getClimbers, getRoutes, getSummits, getRegions } from 'src/api'
 import { useFilterStore } from 'src/stores/filterStore'
+import { SCALA } from 'src/helper/route'
 
 const colors = ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'grey', 'blue-grey']
 
@@ -67,6 +68,14 @@ export const useDataStore = defineStore('data', {
             }else if(filterStore.filters.route.region !== null){
                 return ascent.route.summit.region._id === filterStore.filters.route.region
             }
+            return true
+        })
+        .filter(ascent => {
+            // Grade filter
+            const grade = SCALA.indexOf(ascent.route.difficulty.normal)
+            if(grade === -1) return true
+            if(filterStore.filters.grade.min !== null && grade < filterStore.filters.grade.min) return false
+            if(filterStore.filters.grade.max !== null && grade > filterStore.filters.grade.max) return false
             return true
         })
     },
