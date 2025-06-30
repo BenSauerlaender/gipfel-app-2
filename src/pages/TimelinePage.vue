@@ -1,7 +1,9 @@
 <template>
   <div class="page-container">
+      <q-card>
     <div class="space"></div>
     <div class="row justify-center">
+        <q-card-section>
       <q-timeline color="secondary" layout="dense" side="right" class="col-10">
         <div v-if="trips.length === 0">
           <div class="text-h6">Keine Einträge gefunden</div>
@@ -10,7 +12,9 @@
           <TimelineTripEntry v-for="trip in trips" :key="trip.days[0].date" :trip="trip" />
         </div>
       </q-timeline>
+        </q-card-section>
     </div>
+      </q-card>
   </div>
 </template>
 

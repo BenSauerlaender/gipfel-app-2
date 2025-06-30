@@ -81,58 +81,28 @@ dataStore.loadData().then(() => {
 
 const linksList = [
   {
-    title: 'Timeline',
+    title: 'Tagebuch',
     caption: 'Alle Begehungen',
-    icon: 'timeline',
+    icon: 'auto_stories',
     link: '/timeline'
   },
   {
-    title: 'Stats',
-    caption: 'Stats',
+    title: 'Statistiken',
+    caption: 'über Begehungen',
     icon: 'bar_chart',
     link: '/stats'
   },
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Gipfel',
+    caption: 'Begangene',
+    icon: 'terrain',
+    link: '/summits'
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    title: 'Wege',
+    caption: 'Begangene',
+    icon: 'hiking',
+    link: '/routes'
   }
 ]
 

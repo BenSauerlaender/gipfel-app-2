@@ -31,7 +31,7 @@ const dataStore = useDataStore()
 const filterStore = useFilterStore()
 const filters = filterStore.filters
 
-const ascentDates = dataStore.ascents.map(ascent => new Date(ascent.date.split('T')[0])).sort((a, b) => a - b)
+const ascentDates = dataStore.ascents.map(ascent => new Date(ascent.date.split('T')[0])).toSorted((a, b) => a - b)
 const minDate = new Date(ascentDates[0])
 const maxDate = new Date(ascentDates[ascentDates.length - 1])
 

@@ -126,6 +126,12 @@ export const useDataStore = defineStore('data', {
         }
       }).filter(trip => trip.days.length > 0)
     },
+    summitRouteCounts(state) {
+      return state.routes.reduce((counts, route) => {
+        counts.set(route.summit._id, (counts.get(route.summit._id) || 0) + 1)
+        return counts
+      }, new Map())
+    }
   },
 
   actions: {

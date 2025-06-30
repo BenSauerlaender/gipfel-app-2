@@ -48,14 +48,12 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - add tooltip for more information (summit, route, grade, climber, ...)
 
 ## StatCards
-- RoutesByGrade: link zu Liste aus allen gipfeln
-- SummitsByRegion: link zu liste aus allen Gipfeln
+
 
 ## FilterCards
 
 ## Seiten:
-- table: filtered: routes
-- table: filtered: summits
+
 - info: summits
 - info: region
 

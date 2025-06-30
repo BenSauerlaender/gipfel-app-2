@@ -8,7 +8,18 @@
             <q-separator />
 
             <q-card-section>
-              <Bar :data="chartData" :options="chartOptions" />
+              <div>
+                <Bar :data="chartData" :options="chartOptions" />
+              </div>
+              <div class="q-mt-md row justify-center">
+                <q-btn
+                  color="primary"
+                  label="Alle Gipfel anzeigen"
+                  to="/summits"
+                  flat
+                  icon="list"
+                />
+              </div>
             </q-card-section>
           </q-card>
 </template>

@@ -44,6 +44,8 @@ const unsecureModeOptions = [
 
 const starMode = ref(starModeOptions[0])
 const unsecureMode = ref(unsecureModeOptions[0])
+starMode.value.value = null
+unsecureMode.value.value = null
 
 watch(starMode, (newVal) => {
   filters.route.tags.star = newVal?.value ?? null
