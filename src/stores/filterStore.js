@@ -10,12 +10,17 @@ export const useFilterStore = defineStore('filter', {
       },
       climbers: {
         selected: [],
-        mode: 'or'
+        mode: 'or',
+        lead: null
       },
       route: {
         region: null,
         summit: null,
-        route: null
+        route: null,
+        tags: {
+          star: null,
+          unsecure: null
+        }
       },
       grade: {
         min: null,

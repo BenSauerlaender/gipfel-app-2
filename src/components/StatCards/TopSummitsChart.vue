@@ -47,7 +47,7 @@ const sortedSummits = computed(() => {
   
   // Sort by count and get top 10
   return Object.entries(summitCounts)
-    .sort(([,a], [,b]) => b.total - a.total)
+    .toSorted(([,a], [,b]) => b.total - a.total)
     .slice(0, 10)
 })
 

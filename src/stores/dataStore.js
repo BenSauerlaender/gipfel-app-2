@@ -61,6 +61,13 @@ export const useDataStore = defineStore('data', {
             return true
         })
         .filter(ascent => {
+            if(ascent.leadClimber === null) return true
+            if(filterStore.filters.climbers.lead !== null && ascent.leadClimber._id !== filterStore.filters.climbers.lead){
+                return false
+            }
+            return true
+        })
+        .filter(ascent => {
             if(filterStore.filters.route.route !== null){
                 return ascent.route._id === filterStore.filters.route.route
             }else if(filterStore.filters.route.summit !== null){
@@ -76,6 +83,20 @@ export const useDataStore = defineStore('data', {
             if(grade === -1) return true
             if(filterStore.filters.grade.min !== null && grade < filterStore.filters.grade.min) return false
             if(filterStore.filters.grade.max !== null && grade > filterStore.filters.grade.max) return false
+            return true
+        })
+        .filter(ascent => {
+            if(filterStore.filters.route.tags.star === null) return true
+            if(filterStore.filters.route.tags.star === 'none' && ascent.route.stars !== 0) return false
+            if(filterStore.filters.route.tags.star === 'one' && ascent.route.stars !== 1) return false
+            if(filterStore.filters.route.tags.star === 'two' && ascent.route.stars !== 2) return false
+            if(filterStore.filters.route.tags.star === 'oneOrTwo' && ascent.route.stars === 0) return false
+            return true
+        })
+        .filter(ascent => {
+            if(filterStore.filters.route.tags.unsecure === null) return true
+            if(filterStore.filters.route.tags.unsecure === 'false' && ascent.route.unsecure === true) return false
+            if(filterStore.filters.route.tags.unsecure === 'true' && ascent.route.unsecure === false) return false
             return true
         })
     },
@@ -165,6 +186,16 @@ export const useDataStore = defineStore('data', {
       })
       this.trips = this.computeTrips(this.ascents)
 
+      // Sort climbers by number of ascents (descending)
+      const climberCount = {};
+      this.ascents.forEach(ascent => {
+        ascent.climbers.forEach(c => {
+          climberCount[c._id] = (climberCount[c._id] || 0) + 1;
+        });
+      });
+      this.climbers.sort((a, b) => (climberCount[b._id] || 0) - (climberCount[a._id] || 0));
+      console.log(this.climbers.map(climber => climber.firstName));
+
       console.log('Data Processing time: ', new Date().getTime() - startTime2, 'ms')
 
       this.isLoaded = true
@@ -174,7 +205,7 @@ export const useDataStore = defineStore('data', {
         // Group ascents by day (YYYY-MM-DD)
         const ascentsByDay = ascents
             .map(ascent => { return { _id: ascent._id, date: ascent.date } })
-            .sort((a, b) => new Date(a.date) - new Date(b.date))
+            .toSorted((a, b) => new Date(a.date) - new Date(b.date))
             .reduce((grouped, ascent) => {
             const dayString = new Date(ascent.date).toISOString().slice(0, 10)
             if (!grouped[dayString]) grouped[dayString] = []
@@ -182,7 +213,7 @@ export const useDataStore = defineStore('data', {
             return grouped
             }, {})
 
-        const sortedDays = Object.keys(ascentsByDay).sort()
+        const sortedDays = Object.keys(ascentsByDay).toSorted()
         let trips = []
         let currentTrip = []
         let lastDayDate = null

@@ -2,7 +2,7 @@
   <div class="col-12 col-sm-6 col-md-4 col-lg-3">
     <q-card class="filter-card">
       <q-card-section>
-        <div class="text-h8">Gebiet</div>
+        <div class="text-h8">Gebiet, Gipfel, Weg</div>
         <q-select
           v-model="selectedRegion"
           use-input
@@ -43,7 +43,7 @@
           clearable
           :disable="selectedSummit == null"
           input-debounce="0"
-          label="Route"
+          label="Weg"
           :options="routeOptions"
           @filter="routeFilter"
         >
@@ -73,7 +73,7 @@ const filters = filterStore.filters
 const regionOptionDefault = [...new Set(dataStore.ascents.map(ascent => ascent.route.summit.region))].map(region => ({ 
   label: region.name, 
   value: region._id 
-}))
+})).sort((a, b) => a.label.localeCompare(b.label))
 const regionOptions = ref(regionOptionDefault)
 
 const regionFilter = (val, update) => {
@@ -116,7 +116,7 @@ const summitOptionDefault = computed(() => uniqueSummits.value.filter(summit => 
 }).map(summit => ({ 
   label: summit.name, 
   value: summit._id 
-})))
+})).sort((a, b) => a.label.localeCompare(b.label)))
 const summitOptions = ref(summitOptionDefault.value)
 
 const selectedSummit = computed({
@@ -154,23 +154,27 @@ const summitFilter = (val, update) => {
   })
 }
 
-const routeOptionDefault = dataStore.routes.map(route => ({ 
+const routeOptionDefault = computed(() => dataStore.ascents.map(ascent => ascent.route)
+.filter(route => {
+  if(selectedSummit.value == null) return true
+  return route.summit._id === selectedSummit.value.value
+}).map(route => ({ 
   label: route.name, 
   value: route._id 
-}))
-const routeOptions = ref(routeOptionDefault)
+})).sort((a, b) => a.label.localeCompare(b.label)))
+const routeOptions = ref(routeOptionDefault.value)
 
 const routeFilter = (val, update) => {
   if (val === '') {
     update(() => {
-      routeOptions.value = routeOptionDefault
+      routeOptions.value = routeOptionDefault.value
     })
     return
   }
 
   update(() => {
     const needle = val.toLowerCase()
-    routeOptions.value = routeOptionDefault.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+    routeOptions.value = routeOptionDefault.value.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
   })
 }
 
@@ -178,7 +182,7 @@ const selectedRoute = computed({
   get: () => {
     if(filters.route.route == null) return null
     return {
-      label: routeOptionDefault.find(option => option.value === filters.route.route).label,
+      label: routeOptionDefault.value.find(option => option.value === filters.route.route).label,
       value: filters.route.route
     }
   },

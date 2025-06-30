@@ -3,7 +3,12 @@
     <div class="space"></div>
     <div class="row justify-center">
       <q-timeline color="secondary" layout="dense" side="right" class="col-10">
-        <TimelineTripEntry v-for="trip in trips" :key="trip.name" :trip="trip" />
+        <div v-if="trips.length === 0">
+          <div class="text-h6">Keine Einträge gefunden</div>
+        </div>
+        <div v-else>
+          <TimelineTripEntry v-for="trip in trips" :key="trip.days[0].date" :trip="trip" />
+        </div>
       </q-timeline>
     </div>
   </div>

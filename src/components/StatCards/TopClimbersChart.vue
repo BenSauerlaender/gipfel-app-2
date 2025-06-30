@@ -67,7 +67,7 @@ const sortedClimbers = computed(() => {
   
   // Sort by total count and get top 10
   return Object.entries(climberStats)
-    .sort(([,a], [,b]) => b.total - a.total)
+    .toSorted(([,a], [,b]) => b.total - a.total)
     .slice(0, 10)
 })
 
