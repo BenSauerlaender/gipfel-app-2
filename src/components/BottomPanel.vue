@@ -14,7 +14,13 @@
       <q-toolbar class="bg-grey-2 justify-between shadow-2" style="z-index: 1000;">
         <div></div>
         <q-toolbar-title shrink>
-          Filter
+          Filter 
+          <q-toggle
+            v-model="filterStore.applyFilter"
+            checked-icon="check"
+            color="green"
+            unchecked-icon="clear"
+          />
         </q-toolbar-title>
         <q-btn
           flat
@@ -29,6 +35,8 @@
       <div class="bottom-panel__content" v-show="isExpanded">
         <q-scroll-area class="bottom-panel__scroll-area">
           <div class="bottom-panel__inner-content">
+      <div v-if="!filterStore.applyFilter" class="filter-overlay">
+      </div>
             <slot>
               <!-- Default content -->
               <q-card class="q-ma-md">
@@ -58,7 +66,9 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted} from 'vue'
 import { useRouter } from 'vue-router'
+import { useFilterStore } from 'src/stores/filterStore'
 
+const filterStore = useFilterStore()
 const router = useRouter()
 
 const minHeight = 50
@@ -192,4 +202,15 @@ onUnmounted(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+.filter-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(128,128,128,0.6);
+  z-index: 2000;
+}
+
 </style> 

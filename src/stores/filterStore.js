@@ -26,7 +26,8 @@ export const useFilterStore = defineStore('filter', {
         min: null,
         max: null
       }
-    }
+    },
+    applyFilter: true
   }),
   getters: {
   },

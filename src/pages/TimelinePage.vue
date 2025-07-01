@@ -1,16 +1,6 @@
 <template>
   <div class="page-container">
       <q-card>
-        <q-card-section class="q-pa-xl row items-center justify-between">
-          <div class="text-h2"></div>
-          <q-toggle
-            v-model="applyFilter"
-            checked-icon="check"
-            color="green"
-            unchecked-icon="clear"
-            label="Filter anwenden"
-          />
-        </q-card-section>
         <div class="space"></div>
         <div class="row justify-center">
           <div>
@@ -54,7 +44,7 @@ const trips = computed(() => {
 
 <style scoped>
 .space {
-  height: 80px;
+  height: 180px;
 }
 .page-container {
   max-width: 1200px;

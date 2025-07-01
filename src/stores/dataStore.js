@@ -60,6 +60,7 @@ export const useDataStore = defineStore('data', {
     },
     f_Ascents(state) {
         const filterStore = useFilterStore()
+        if (!filterStore.applyFilter) return state.ascents
         return state.ascents
         .filter(ascent => {
             if (!filterStore.filters.ascents.allowedTypes.includes('aborted') && ascent.isAborted) { return false }
