@@ -3,6 +3,7 @@
     :rows="summits"
     :columns="columns"
     row-key="_id"
+    style="height: 800px"
     virtual-scroll
     :rows-per-page-options="[0]"
     binary-state-sort
@@ -22,9 +23,15 @@
           {{ props.col.label }} <span class="text-grey-6">(% begangen)</span>
       </q-th>
       </template>
+
       <template v-slot:body-cell-routes="props">
       <q-td :props="props">
           {{ props.value }} <span class="text-grey-6">({{ props.row.routePercentage }}%)</span>
+      </q-td>
+      </template>
+      <template v-slot:body-cell-ascents="props">
+      <q-td :props="props">
+          {{ props.value}}
       </q-td>
       </template>
       <template v-slot:body-cell-region="props">
@@ -65,24 +72,23 @@ const filter = ref('')
 
 const columns = [
   { name: 'name', label: 'Gipfel', field: row => row.name, align: 'left', sortable: true },
-  { name: 'region', label: 'Gebiet', field: row => row.region?.name, align: 'left', sortable: true },
-  { name: 'routes', label: 'Wege', field: 'routes', align: 'left', sortable: true },
+  { name: 'region', label: 'Gebiet', field: row => row.region.name, align: 'left', sortable: true },
+  { name: 'routes', label: 'Wege', field: row => row.routeIDs.length, align: 'left', sortable: true },
   { name: 'ascents', label: 'Begehungen', field: 'ascents', align: 'left', sortable: true },
 ].filter(column => props.columns.includes(column.name))
 
 const summits = computed(() => {
-  return props.summits.map(summit => {
-    const routes = dataStore.routes.filter(route => route.summit._id === summit._id)
-    const routeCount = routes.length
-    const routesWithAscents = routes.filter(routeId => dataStore.f_Ascents.some(ascent => ascent.route._id === routeId)).length
+  const summits = props.summits.map(summit => {
+    const routesWithAscents = summit.routeIDs.filter(routeID => dataStore.f_AscentsPerRoute[routeID] > 0).length
+    const routeCount = summit.routeIDs.length
     const routePercentage = routeCount == 0 ? 0.0 : (routesWithAscents / routeCount * 100).toFixed(1)
     return {
       ...summit,
-      routes: routeCount,
-      ascents: dataStore.f_AscentsPerSummit[summit._id] ?? '-',
-      routePercentage
+      routePercentage,
+      ascents: dataStore.f_AscentsPerSummit[summit._id] ?? '-'
     }
   })
+  return summits
 })
 
 onMounted(() => {

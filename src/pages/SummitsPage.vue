@@ -31,13 +31,35 @@ import SummitTable from 'src/components/tables/SummitTable.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 
-const dataStore = useDataStore()
+console.log("start SummitsPage")
 
-const summits = dataStore.summits
+const dataStore = useDataStore()
+const t0 = performance.now()
+
+const summits = dataStore.summits.map(summit => {
+  return {
+    _id: summit._id,
+    name: summit.name,
+    routeIDs: summit.routeIDs,
+    region: {
+      _id: summit.region._id,
+      name: summit.region.name
+    }
+  }
+})
+console.log('SummitArray precalculation in', performance.now() - t0, 'milliseconds')
+
 const ascentCount = computed(() => dataStore.f_Ascents.length)
-const summitWithAscentsCount = computed(() => summits.filter(summit => dataStore.f_Ascents.some(ascent => ascent.route.summit._id === summit._id)).length)
+const summitWithAscentsCount = computed(() =>{
+  const count = summits.filter(summit => dataStore.f_Ascents.some(ascent => ascent.route.summit._id === summit._id)).length
+  return count
+})
 const summitPercentage = computed(() => summits.length == 0 ? 0.0 : (summitWithAscentsCount.value / summits.length * 100).toFixed(1))
 
+onMounted(() => {
+  const t1 = performance.now()
+  console.log(`SummitsPage mounted in ${t1 - t0} milliseconds`)
+})
 
 
 </script>

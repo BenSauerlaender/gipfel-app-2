@@ -13,7 +13,7 @@ export const useDataStore = defineStore('data', {
     summits: [], // Array of summit objects
     regions: [], // Array of region objects
     trips: [],
-    isLoaded: false
+    isLoaded: false,
   }),
   
   getters: {
@@ -194,10 +194,15 @@ export const useDataStore = defineStore('data', {
       console.log('Data Download time: ', new Date().getTime() - startTime, 'ms')
       const startTime2 = new Date().getTime()
 
-      this.regions = regionsResponse.data
+      this.regions = regionsResponse.data.map(region => {
+        region.summitIDs = summitsResponse.data.filter(summit => summit.region === region._id).map(summit => summit._id)
+        return region
+      })
 
       this.summits = summitsResponse.data.map(summit => {
+        const routeIDs = routesResponse.data.filter(route => route.summit === summit._id).map(route => route._id)
         summit.region = this.regions.find(region => region._id === summit.region)
+        summit.routeIDs = routeIDs
         return summit
       })
 
