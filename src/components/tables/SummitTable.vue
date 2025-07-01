@@ -29,11 +29,7 @@
           {{ props.value }} <span class="text-grey-6">({{ props.row.routePercentage }}%)</span>
       </q-td>
       </template>
-      <template v-slot:body-cell-ascents="props">
-      <q-td :props="props">
-          {{ props.value}}
-      </q-td>
-      </template>
+
       <template v-slot:body-cell-region="props">
       <q-td :props="props">
           <router-link style="text-decoration: none; color: inherit;" :to="`/regions/${props.row.region._id}`">{{ props.value }}</router-link>

@@ -11,7 +11,7 @@ const routes = [
       { path: '/regions', component: () => import('pages/RegionsPage.vue') },
       { path: '/regions/:id', component: () => import('pages/DetailRegionPage.vue') },
       { path: '/summits', component: () => import('pages/SummitsPage.vue') },
-
+      { path: '/summits/:id', component: () => import('pages/DetailSummitPage.vue') },
     ]
   },
 

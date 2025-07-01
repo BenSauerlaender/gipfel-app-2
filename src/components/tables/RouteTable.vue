@@ -1,0 +1,128 @@
+<template>
+  <q-table
+    :rows="routes"
+    :columns="columns"
+    row-key="_id"
+    style="height: 800px"
+    virtual-scroll
+    :rows-per-page-options="[0]"
+    binary-state-sort
+    flat
+    :filter="filter"
+    ref="routesTable"
+  >
+        <template v-slot:top-right>
+          <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+      <template v-slot:header-cell-routes="props">
+      <q-th :props="props">
+          {{ props.col.label }} <span class="text-grey-6">(% begangen)</span>
+      </q-th>
+      </template>
+
+      <template v-slot:body-cell-summit="props">
+      <q-td :props="props">
+          <router-link style="text-decoration: none; color: inherit;" :to="`/summits/${props.row.summit._id}`">{{ props.value }}</router-link>
+      </q-td>
+      </template>
+      <template v-slot:body-cell-region="props">
+      <q-td :props="props">
+          <router-link style="text-decoration: none; color: inherit;" :to="`/regions/${props.row.summit.region._id}`">{{ props.value }}</router-link>
+      </q-td>
+      </template>
+      <template v-slot:body-cell-name="props">
+      <q-td :props="props">
+          <router-link style="text-decoration: none; color: inherit;" :to="`/routes/${props.row._id}`">{{ props.value }}</router-link>
+      </q-td>
+      </template>
+
+      <template v-slot:body-cell-grade="props">
+        <q-td :props="props">
+          <q-chip :style="{backgroundColor: getGradeColor(props.value), color: 'white'}" dense>{{ props.value }}</q-chip>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-stars="props">
+        <q-td :props="props">
+          <q-chip v-if="props.value === 1" color="yellow" dense><q-icon name="star" /></q-chip>
+          <q-chip v-else-if="props.value === 2" color="yellow" dense><q-icon name="star" /><q-icon name="star" /></q-chip>
+          <span v-else>-</span>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-unsecure="props">
+        <q-td :props="props">
+          <q-chip v-if="props.value" color="red" dense>!</q-chip>
+          <span v-else>-</span>
+        </q-td>
+      </template>
+  </q-table>
+</template>
+
+<script setup>
+import { computed, ref, onMounted } from 'vue'
+import { useDataStore } from 'src/stores/dataStore'
+import { getGradeColor, SCALA } from 'src/helper/route'
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
+  routes: {
+    type: Array,
+    required: true
+  },
+  columns: {
+    type: Array,
+    default: () => ['name', 'region', 'routes', 'ascents']
+  },
+  defaultSort: {
+    type: Array,
+    default: () => ['ascents', 'desc']
+  }
+})
+
+const routesTable = ref(null)
+const dataStore = useDataStore()
+const filter = ref('')
+
+const sortGrade = (a, b, rowA, rowB) => {
+  const gradeA = SCALA.indexOf(rowA.difficulty.normal)
+  const gradeB = SCALA.indexOf(rowB.difficulty.normal)
+  return gradeA - gradeB
+}
+
+const columns = [
+  { name: 'name', label: 'Weg', field: 'name', align: 'left', sortable: true },
+  { name: 'summit', label: 'Gipfel', field: row => row.summit?.name, align: 'left', sortable: true },
+  { name: 'region', label: 'Gebiet', field: row => row.summit?.region?.name, align: 'left', sortable: true },
+  { name: 'grade', label: 'Grad', field: row => row.difficulty.normal, align: 'left', sortable: true , sort: sortGrade},
+  { name: 'stars', label: 'Sterne', field: row => row.stars, align: 'center', sortable: true },
+  { name: 'unsecure', label: 'Unsicher', field: row => row.unsecure, align: 'center', sortable: true },
+  { name: 'ascents', label: 'Begehungen', field: 'ascents', align: 'left', sortable: true },
+].filter(column => props.columns.includes(column.name))
+
+const routes = computed(() => {
+  const routes = props.routes.map(route => {
+    return {
+      ...route,
+      ascents: dataStore.f_AscentsPerRoute[route._id] ?? '-'
+    }
+  })
+  return routes
+})
+
+onMounted(() => {
+  routesTable.value.sort(props.defaultSort[0])
+  if (props.defaultSort[1] == 'desc') {
+    routesTable.value.sort(props.defaultSort[0])
+  }
+})
+</script>
+
+<style scoped>
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+</style> 
