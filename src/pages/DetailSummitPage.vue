@@ -23,7 +23,7 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <RouteTable :routes="routes" :columns="['name', 'grade', 'stars', 'ascents']" :defaultSort="['name', 'asc']" />
+        <RouteTable :routes="routes" :columns="['name', 'grade', 'stars', 'unsecure', 'ascents']" :defaultSort="['name', 'asc']" />
       </q-card-section>
     </q-card>
   </div>
@@ -40,7 +40,7 @@ const route = useRoute()
 
 const dataStore = useDataStore()
 
-const summit = computed(() => dataStore.summits.find(summit => summit._id === route.params.id))
+const summit = computed(() => dataStore.summits.find(summit => summit._id === useRoute().params.id))
 const routes = computed(() => dataStore.routes.filter(route => route.summit._id === summit.value._id))
 const ascentCount = computed(() => dataStore.f_AscentsPerSummit[summit.value._id] ?? 0)
 const routeWithAscentsCount = computed(() => summit.value.routeIDs.filter(routeID => dataStore.f_AscentsPerRoute[routeID] > 0).length)

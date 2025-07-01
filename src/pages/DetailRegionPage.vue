@@ -36,11 +36,10 @@ import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
-const route = useRoute()
 
 const dataStore = useDataStore()
 
-const region = computed(() => dataStore.regions.find(region => region._id === route.params.id))
+const region = computed(() => dataStore.regions.find(region => region._id === useRoute().params.id))
 
 const summits = dataStore.summits.filter(summit => summit.region._id === region.value._id)
 const ascentCount = computed(() => dataStore.f_AscentsPerRegion[region.value._id] ?? 0)

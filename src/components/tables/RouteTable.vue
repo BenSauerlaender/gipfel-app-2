@@ -42,20 +42,17 @@
 
       <template v-slot:body-cell-grade="props">
         <q-td :props="props">
-          <q-chip :style="{backgroundColor: getGradeColor(props.value), color: 'white'}" dense>{{ props.value }}</q-chip>
+            <RouteGradeChip :grade="props.value" />
         </q-td>
       </template>
       <template v-slot:body-cell-stars="props">
         <q-td :props="props">
-          <q-chip v-if="props.value === 1" color="yellow" dense><q-icon name="star" /></q-chip>
-          <q-chip v-else-if="props.value === 2" color="yellow" dense><q-icon name="star" /><q-icon name="star" /></q-chip>
-          <span v-else>-</span>
+          <RouteStarsChip :stars="props.value">-</RouteStarsChip>
         </q-td>
       </template>
       <template v-slot:body-cell-unsecure="props">
         <q-td :props="props">
-          <q-chip v-if="props.value" color="red" dense>!</q-chip>
-          <span v-else>-</span>
+          <RouteUnsecureChip :unsecure="props.value">-</RouteUnsecureChip>
         </q-td>
       </template>
   </q-table>
@@ -64,8 +61,10 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
-import { getGradeColor, SCALA } from 'src/helper/route'
-import { useRouter } from 'vue-router'
+import { SCALA } from 'src/helper/route'
+import RouteGradeChip from 'src/components/RouteGradeChip.vue'
+import RouteStarsChip from 'src/components/RouteStarsChip.vue'
+import RouteUnsecureChip from 'src/components/RouteUnsecureChip.vue'
 
 const props = defineProps({
   routes: {
