@@ -41,7 +41,6 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 
 # TODO
-- rewrite Timeline
 - move precalculation to server side
 - cache data in localStorage
 

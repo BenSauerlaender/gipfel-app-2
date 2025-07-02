@@ -42,57 +42,59 @@ const NORMAL_SCALA = [
     "XIIc"
 ]
 const COLORS = {
-    "I": "#094a25",
-    "II": "#094a25",
-    "III": "#0c6b37",
-    "IV": "#0c6b37",
-    "V": "#f8b324",
-    "VI": "#f8b324",
-    "VIIa": "#eb442c",
-    "VIIb": "#eb442c",
-    "VIIc": "#eb442c",
-    "VIIIa": "#bc2023",
-    "VIIIb": "#bc2023",
-    "VIIIc": "#bc2023",
-    "IXa": "#bc2023",
-    "IXb": "#bc2023",
-    "IXc": "#bc2023",
-    "Xa": "#bc2023",
-    "Xb": "#bc2023",
-    "Xc": "#bc2023",
-    "XIa": "#bc2023",
-    "XIb": "#bc2023",
-    "XIc": "#bc2023",
-    "XIIa": "#bc2023",
-    "XIIb": "#bc2023",
-    "XIIc": "#bc2023",
+    "I": "#aad576",
+    "II": "#73a942",
+    "III": "#538d22",
+    "IV": "#245501",
 
-    "1":"#094a25",
-    "2":"#0c6b37",
-    "3":"#f8b324",
-    "4":"#eb442c",
-    "5":"#bc2023"}
+    "V": "#faa307",
+    "VI": "#f48c06",
+    "VIIa": "#e85d04",
+    "VIIb": "#e85d04",
+    "VIIc": "#e85d04",
+    "VIIIa": "#dc2f02",
+    "VIIIb": "#dc2f02",
+    "VIIIc": "#dc2f02",
+    "IXa": "#d00000",
+    "IXb": "#d00000",
+    "IXc": "#d00000",
+    "Xa": "#9d0208",
+    "Xb": "#9d0208",
+    "Xc": "#9d0208",
+    "XIa": "#6a040f",
+    "XIb": "#6a040f",
+    "XIc": "#6a040f",
+    "XIIa": "#370617",
+    "XIIb": "#370617",
+    "XIIc": "#370617",
+
+    "1":"#aad576",
+    "2":"#538d22",
+    "3":"#faa307",
+    "4":"#e85d04",
+    "5":"#9d0208"
+}
+
 
 
 const sortRouteByGrades = (a,b) => {
-    if(a.difficulty.jump && b.difficulty.jump){
-        return JUMP_SCALA.indexOf(a.difficulty.jump) - JUMP_SCALA.indexOf(b.difficulty.jump)
-    }else if (a.difficulty.normal && b.difficulty.normal){
-        return NORMAL_SCALA.indexOf(a.difficulty.normal) - NORMAL_SCALA.indexOf(b.difficulty.normal)
-    }else if (a.difficulty.normal && b.difficulty.jump){
-        return 1
-    }else if (a.difficulty.jump && b.difficulty.normal){
-        return -1
-    }else{
-        return 0
+    let idxA = 0
+    let idxB = 0
+    if (a.difficulty.jump){
+       idxA = JUMP_SCALA.indexOf(a.difficulty.jump)
+    }else if (a.difficulty.normal){
+       idxA = NORMAL_SCALA.indexOf(a.difficulty.normal) + JUMP_SCALA.length
     }
+    if (b.difficulty.jump){
+       idxB = JUMP_SCALA.indexOf(b.difficulty.jump)
+    }else if (b.difficulty.normal){
+       idxB = NORMAL_SCALA.indexOf(b.difficulty.normal) + JUMP_SCALA.length
+    }
+    return idxA - idxB
 }
 
 const sortGradeInTable= (a, b, rowA, rowB) => {
-    console.log(rowA)
-    console.log(rowB)
   const res =  sortRouteByGrades(rowA,rowB)
-    console.log(res)
   return res
 }
 export { getRouteGrade, getGradeColor, NORMAL_SCALA, JUMP_SCALA, sortGradeInTable, sortRouteByGrades as sortSummitByGrades }

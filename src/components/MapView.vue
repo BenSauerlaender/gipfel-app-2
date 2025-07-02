@@ -134,7 +134,6 @@ const updateMarkers = () => {
   const maxAscents = 1.0*Math.max(...Object.values(dataStore.f_AscentsPerSummit))
   allMarkers.value.forEach(marker => {
     if (filterStore.applyFilter && filterStore.filters.route.region != null) {
-      console.log(filterStore.filters.route.region)
       if (marker.summit.region._id != filterStore.filters.route.region){
         marker.marker.setStyle({fill: false, strole: false})
         return
