@@ -41,8 +41,23 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 
 # TODO
-- move precalculation to server side
-- cache data in localStorage
+- refresh token (15 stueck in der db)
+
+
+## Performance verbessern Strategie:
+1. Download daten verringern, ohne Frontend umzuschreiben (Ziel unter 10MB)
+  - timestamps und __v entfernen
+  - unnoetige datenduplikate entfernen
+    - route in routes braucht maximal summitID, summmitName, regionID, regionName
+    - das gleiche fuer summits und ascents 
+  - vielleicht summitIDs, ascentIDs und routeIDs in Region, Climber und Summits komplett entfernen
+  
+2. Wenn download noch zu hoch: lazy loading (pot. Offline faehigkeit geht bisschen verloren)
+  - routes kann stueck fuer stueck geladen werden. Am Anfang nicht notwendig
+
+3. SPA daten managment analysieren und verbessern
+  
+4. IndexedDB (fuer offline/ schnelleren start)
 
 
 # Limitations:
