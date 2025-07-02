@@ -62,9 +62,9 @@
 import { computed, ref, onMounted } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { getRouteGrade, sortGradeInTable } from 'src/helper/route'
-import RouteGradeChip from 'src/components/RouteGradeChip.vue'
-import RouteStarsChip from 'src/components/RouteStarsChip.vue'
-import RouteUnsecureChip from 'src/components/RouteUnsecureChip.vue'
+import RouteGradeChip from 'src/components/Chips/RouteGradeChip.vue'
+import RouteStarsChip from 'src/components/Chips/RouteStarsChip.vue'
+import RouteUnsecureChip from 'src/components/Chips/RouteUnsecureChip.vue'
 
 const props = defineProps({
   routes: {
