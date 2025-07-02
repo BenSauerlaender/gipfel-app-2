@@ -105,9 +105,9 @@ const columns = [
 
 const ascents = computed(() => {
   const ascents = props.ascents.map(ascent => {
-    if(ascent.ascentType == 'lead') ascent.ascentType = 'Kl.'
-    if(ascent.ascentType == 'solo') ascent.ascentType = 'solo'
-    if(ascent.ascentType == 'topRope') ascent.ascentType = 'v.o.g'
+    if(ascent.leadClimber) ascent.ascentType = 'Kl.'
+    if(ascent.isSolo) ascent.ascentType = 'solo'
+    if(ascent.isTopRope) ascent.ascentType = 'v.o.g'
 
     ascent.climbersText = ''
     ascent.climbers.forEach(climber => {

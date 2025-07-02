@@ -174,15 +174,6 @@ export const useDataStore = defineStore('data', {
   actions: {
     // Combined loading action
     async loadData() {
-      function seededHash(str) {
-        let hash = 0
-        for (let i = 0; i < str.length; i++) {
-          hash = ((hash << 5) - hash) + str.charCodeAt(i)
-          hash |= 0 // Convert to 32bit integer
-        }
-        return Math.abs(hash)
-      }
-
       const startTime = performance.now()
       // Load data from API
       const [ascentsResponse, climbersResponse, routesResponse, summitsResponse, regionsResponse] = await Promise.all([
@@ -213,13 +204,7 @@ export const useDataStore = defineStore('data', {
         return route
       })
 
-      // Populate climbers with colors and short names
-      this.climbers = climbersResponse.data.map(climber => {
-        const hash = seededHash(climber.firstName + climber.lastName)
-        climber.color = colors[hash % colors.length]
-        climber.shortName = climber.firstName.slice(0, 2)
-        return climber
-      })
+      this.climbers = climbersResponse.data
 
       // Populate ascents with routes and climbers
       this.ascents = ascentsResponse.data.map(ascent => {
@@ -229,16 +214,8 @@ export const useDataStore = defineStore('data', {
         })
         if (ascent.leadClimber) {
           ascent.leadClimber = this.climbers.find(climber => climber._id === ascent.leadClimber)
-          ascent.ascentType = 'lead'
           if (ascent.leadClimber._id != ascent.climbers[0]._id) console.warn('Lead climber is not the first climber', ascent)
         }
-        if (ascent.isSolo) {
-          ascent.ascentType = 'solo'
-        }
-        if (ascent.isTopRope) {
-          ascent.ascentType = 'topRope'
-        }
-        
         return ascent
       })
       this.trips = this.computeTrips(this.ascents)
