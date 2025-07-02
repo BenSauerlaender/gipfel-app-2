@@ -201,9 +201,9 @@ export const useDataStore = defineStore('data', {
       })
 
       this.summits = summitsResponse.data.map(summit => {
-        const routeIDs = routesResponse.data.filter(route => route.summit === summit._id).map(route => route._id)
+        const routeIDs = routesResponse.data.filter(route => route.summit === summit._id).map(route => route._id) 
         summit.region = this.regions.find(region => region._id === summit.region)
-        summit.routeIDs = routeIDs
+        summit.routeIDs = routeIDs ?? []
         return summit
       })
 

@@ -81,17 +81,18 @@ dataStore.loadData().then(() => {
 
 const linksList = [
   {
-    title: 'Statistiken',
-    caption: 'über Begehungen',
-    icon: 'bar_chart',
-    link: '/stats'
-  },
-  {
     title: 'Tagebuch',
     caption: 'Alle Begehungen',
     icon: 'auto_stories',
     link: '/timeline'
   },
+  {
+    title: 'Statistiken',
+    caption: 'über Begehungen',
+    icon: 'bar_chart',
+    link: '/stats'
+  },
+
   {
     title: 'Gebiete',
     caption: 'Alle Gebiete',

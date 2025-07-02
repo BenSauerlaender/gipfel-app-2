@@ -3,7 +3,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', redirect: '/stats' },
+      { path: '', redirect: '/timeline' },
       { path: '/timeline', component: () => import('pages/TimelinePage.vue') },
       { path: '/stats', component: () => import('pages/StatsPage.vue') },
       { path: '/stats/routes', component: () => import('pages/StatsRoutesPage.vue') },
@@ -13,7 +13,7 @@ const routes = [
       { path: '/summits', component: () => import('pages/SummitsPage.vue') },
       { path: '/summits/:id', component: () => import('pages/DetailSummitPage.vue') },
       { path: '/routes/:id', component: () => import('pages/DetailRoutePage.vue') },
-      { path: '/map', component: () => import('pages/MapPage.vue') },
+      { path: '/map/:id?', component: () => import('pages/MapPage.vue') },
     ]
   },
 

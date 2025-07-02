@@ -2,9 +2,16 @@
   <div class="q-pa-md page-container">
     <q-card v-if="summit">
       <q-card-section>
-        <div class="row items-center">
-          <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-          <div class="text-h5 q-ml-md">{{ summit.name }} <span class="text-grey-6">(<router-link style="text-decoration: none; color: inherit;" :to="`/regions/${summit.region._id}`">{{ summit.region.name }}</router-link>)</span></div>
+        <div class="row justify-between">
+          <div class="row items-center">
+            <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
+            <div class="text-h5 q-ml-md">{{ summit.name }} <span class="text-grey-6">(<router-link style="text-decoration: none; color: inherit;" :to="`/regions/${summit.region._id}`">{{ summit.region.name }}</router-link>)</span></div>
+          </div>
+            <q-btn flat round color="primary" icon="map" @click="router.push('/map/' + summit._id)" >
+              <q-tooltip>
+                Auf Karte ansehen
+              </q-tooltip>
+            </q-btn>
         </div>
       </q-card-section>
       <q-separator />
@@ -51,10 +58,9 @@ import AscentTable from 'src/components/tables/AscentTable.vue'
 import RouteTable from 'src/components/tables/RouteTable.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 
 const router = useRouter()
-const route = useRoute()
 
 const dataStore = useDataStore()
 
@@ -68,11 +74,25 @@ const tab = ref('routes')
 
 const ascents = computed(() => dataStore.f_Ascents.filter(ascent => ascent.route.summit._id === summit.value._id))
 
-
 onMounted(() => {
   if (!summit.value) {
     router.push({ name: '404' })
   }
+})
+
+onBeforeRouteLeave( (to, from) => {
+  // Prüfe die History-Länge
+  if (window.history.length > 1) {
+    // Es gibt eine vorherige Seite
+    const previousRoute = router.options.history.state?.current
+    const newRoute = '/map/'+summit.value._id
+
+    if(to.fullPath == newRoute) return true
+
+    if (previousRoute.startsWith('/map') && to.fullPath.startsWith( "/map")) {
+      return newRoute
+    } 
+  } 
 })
 
 </script>
