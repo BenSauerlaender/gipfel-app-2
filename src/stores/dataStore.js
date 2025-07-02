@@ -186,38 +186,12 @@ export const useDataStore = defineStore('data', {
       console.log('Data Download time: ', performance.now() - startTime, 'ms')
       const startTime2 = performance.now()
 
-      this.regions = regionsResponse.data.map(region => {
-        region.summitIDs = summitsResponse.data.filter(summit => summit.region === region._id).map(summit => summit._id)
-        return region
-      })
-
-      this.summits = summitsResponse.data.map(summit => {
-        const routeIDs = routesResponse.data.filter(route => route.summit === summit._id).map(route => route._id) 
-        summit.region = this.regions.find(region => region._id === summit.region)
-        summit.routeIDs = routeIDs ?? []
-        return summit
-      })
-
-      // Populate routes with summits
-      this.routes = routesResponse.data.map(route => {
-        route.summit = this.summits.find(summit => summit._id === route.summit)
-        return route
-      })
-
+      this.regions = regionsResponse.data.map
+      this.summits = summitsResponse.data
+      this.routes = routesResponse.data
       this.climbers = climbersResponse.data
-
-      // Populate ascents with routes and climbers
-      this.ascents = ascentsResponse.data.map(ascent => {
-        ascent.route = this.routes.find(route => route._id === ascent.route)
-        ascent.climbers = ascent.climbers.map(climber => {
-          return { ...this.climbers.find(c => c._id === climber.climber), isAborted: climber.isAborted }
-        })
-        if (ascent.leadClimber) {
-          ascent.leadClimber = this.climbers.find(climber => climber._id === ascent.leadClimber)
-          if (ascent.leadClimber._id != ascent.climbers[0]._id) console.warn('Lead climber is not the first climber', ascent)
-        }
-        return ascent
-      })
+      this.ascents = ascentsResponse.data
+      console.log(this.routes[0])
       this.trips = this.computeTrips(this.ascents)
 
       // Sort climbers by number of ascents (descending)

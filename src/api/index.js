@@ -54,26 +54,33 @@ api.interceptors.response.use(
     const userStore = useUserStore()
     const originalRequest = error.config
 
-    // Skip auth for login/register endpoints
-    if (originalRequest.url?.includes('/auth/login')) {
+    // Skip auth for login/register and refresh endpoints
+    if (
+      originalRequest.url?.includes('/auth/login') ||
+      originalRequest.url?.includes('/auth/refresh')
+    ) {
       return Promise.reject(error)
     }
 
     // Handle 401 errors
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401) {
+      console.log('401 detected for', originalRequest.url, 'retry:', originalRequest._retry)
+      if (originalRequest._retry) {
+        userStore.clearAuth()
+        router.push('/login')
+        return Promise.reject(error)
+      }
       originalRequest._retry = true
 
       // Try to refresh token
       const refreshed = await userStore.refreshAccessToken()
-      
       if (refreshed) {
-        // Retry original request with new token
         originalRequest.headers.Authorization = `Bearer ${userStore.accessToken}`
         return api(originalRequest)
       } else {
-        // Refresh failed, redirect to login
         userStore.clearAuth()
         router.push('/login')
+        return Promise.reject(error)
       }
     }
 
