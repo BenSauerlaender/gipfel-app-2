@@ -3,6 +3,8 @@ const getRouteGrade = (route) => {
         return route.difficulty.jump
     } else if(route.difficulty.normal) {
         return route.difficulty.normal
+    }else{
+        return undefined
     }
 }
 
@@ -10,9 +12,10 @@ const getGradeColor = (grade) => {
     return COLORS[grade]
 }
 
+const JUMP_SCALA = [ "1", "2", "3", "4", "5" ]
 
 
-const SCALA = [
+const NORMAL_SCALA = [
     "I",
     "II",
     "III",
@@ -62,6 +65,34 @@ const COLORS = {
     "XIc": "#bc2023",
     "XIIa": "#bc2023",
     "XIIb": "#bc2023",
-    "XIIc": "#bc2023"}
+    "XIIc": "#bc2023",
 
-export { getRouteGrade, getGradeColor, SCALA }
+    "1":"#094a25",
+    "2":"#0c6b37",
+    "3":"#f8b324",
+    "4":"#eb442c",
+    "5":"#bc2023"}
+
+
+const sortRouteByGrades = (a,b) => {
+    if(a.difficulty.jump && b.difficulty.jump){
+        return JUMP_SCALA.indexOf(a.difficulty.jump) - JUMP_SCALA.indexOf(b.difficulty.jump)
+    }else if (a.difficulty.normal && b.difficulty.normal){
+        return NORMAL_SCALA.indexOf(a.difficulty.normal) - NORMAL_SCALA.indexOf(b.difficulty.normal)
+    }else if (a.difficulty.normal && b.difficulty.jump){
+        return 1
+    }else if (a.difficulty.jump && b.difficulty.normal){
+        return -1
+    }else{
+        return 0
+    }
+}
+
+const sortGradeInTable= (a, b, rowA, rowB) => {
+    console.log(rowA)
+    console.log(rowB)
+  const res =  sortRouteByGrades(rowA,rowB)
+    console.log(res)
+  return res
+}
+export { getRouteGrade, getGradeColor, NORMAL_SCALA, JUMP_SCALA, sortGradeInTable, sortRouteByGrades as sortSummitByGrades }

@@ -41,24 +41,13 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 
 # TODO
-## Timeline
-- show firstTime Summit
-- show firstTime Route
-- show grade with/without support correctly
-- add tooltip for more information (summit, route, grade, climber, ...)
-
-## StatCards
-
-
-## FilterCards
-
-## Seiten:
-
-## map view:
-
-## Overall
-- Support Jump, RP und Mit unterstuetzung
+- rewrite Timeline
 - move precalculation to server side
 - cache data in localStorage
-- fix filter: routeCount, routePercentage, summitCount, summitPercentage
 
+
+# Limitations:
+- Schwierigkeitsgrad von Routen
+    - RP wird nicht beachtet
+    - Grad mit Unterstuetzung wird nicht beachtet
+    - Normaler Grad wird nicht beachtet, wenn es auch einen Sprung Grad gibt

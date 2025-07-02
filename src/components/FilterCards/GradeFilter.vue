@@ -8,8 +8,8 @@
           :min="minGrade"
           :max="maxGrade"
           :step="1"
-          :left-label-value="SCALA[range.min]"
-          :right-label-value="SCALA[range.max]"
+          :left-label-value="NORMAL_SCALA[range.min]"
+          :right-label-value="NORMAL_SCALA[range.max]"
           label-always
           label
           switch-label-side
@@ -22,17 +22,20 @@
   </div>
 </template>
 
+
+//only for normals not jumps
+
 <script setup>
 import { ref, watch } from 'vue'
 import { useFilterStore } from 'src/stores/filterStore'
-import { SCALA } from 'src/helper/route'
+import { NORMAL_SCALA } from 'src/helper/route'
 import { useDataStore } from 'src/stores/dataStore'
 
 const filterStore = useFilterStore()
 const filters = filterStore.filters
 
 const dataStore = useDataStore()
-const ascentGrades = new Set(dataStore.ascents.map(ascent => SCALA.indexOf(ascent.route.difficulty.normal)))
+const ascentGrades = new Set(dataStore.ascents.map(ascent => NORMAL_SCALA.indexOf(ascent.route.difficulty.normal)))
 
 const minGrade = Math.min(...ascentGrades)
 const maxGrade = Math.max(...ascentGrades)
@@ -40,8 +43,8 @@ const maxGrade = Math.max(...ascentGrades)
 const range = ref({ min: minGrade, max: maxGrade })
 
 watch(range, (newValue) => {
-  filters.grade.min = newValue.min
-  filters.grade.max = newValue.max
+  filters.grade.normal.min = newValue.min
+  filters.grade.normal.max = newValue.max
 })
 </script>
 

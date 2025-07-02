@@ -33,7 +33,7 @@ const JUMP_SCALA = {
   "4":"#eb442c",
   "5":"#bc2023"
 }
-const SCALA = {
+const NORMAL_SCALA = {
     "I": "#094a25",
     "II": "#094a25",
     "III": "#0c6b37",
@@ -70,7 +70,7 @@ if(route.difficulty.jump) {
   gradeColor.value = JUMP_SCALA[route.difficulty.jump]
   gradeString.value = route.difficulty.jump
 } else if(route.difficulty.normal) {
-  gradeColor.value = SCALA[route.difficulty.normal]
+  gradeColor.value = NORMAL_SCALA[route.difficulty.normal]
   gradeString.value = route.difficulty.normal
 } 
 if(props.color) {

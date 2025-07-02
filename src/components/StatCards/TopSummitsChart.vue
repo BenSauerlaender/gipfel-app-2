@@ -17,7 +17,7 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { SCALA, getGradeColor } from 'src/helper/route'
+import { NORMAL_SCALA, getGradeColor } from 'src/helper/route'
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -39,8 +39,13 @@ const sortedSummits = computed(() => {
       if (!summitCounts[summitName]) {
         summitCounts[summitName] = {}
       }
-      const grade = ascent.route.difficulty.normal
-      summitCounts[summitName][grade] = (summitCounts[summitName][grade] || 0) + 1
+      const jumpGrade = ascent.route.difficulty.jump
+      const normalGrade = ascent.route.difficulty.normal
+      if(jumpGrade){
+         summitCounts[summitName][jumpGrade] = (summitCounts[summitName][jumpGrade] || 0) + 1
+      }else{
+         summitCounts[summitName][normalGrade] = (summitCounts[summitName][normalGrade] || 0) + 1
+      }
       summitCounts[summitName].total = (summitCounts[summitName].total || 0) + 1
     }
   })
@@ -58,9 +63,8 @@ const chartData = computed(() => {
     }
   }
   const labels = sortedSummits.value.map(([name]) => name)
-  const data = sortedSummits.value.map(([,data]) => data.total)
 
-  const datasets = SCALA.map(grade => {
+  const datasets = NORMAL_SCALA.map(grade => {
     if (sortedSummits.value.some(([, data]) => Object.keys(data).includes(grade))) {
       return {
         label: grade,

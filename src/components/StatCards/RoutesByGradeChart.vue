@@ -28,7 +28,7 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
-import { getRouteGrade, getGradeColor, SCALA } from 'src/helper/route'
+import { getRouteGrade, getGradeColor, NORMAL_SCALA } from 'src/helper/route'
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -46,7 +46,7 @@ const chartData = computed(() => {
     }
   }
   const routes = props.routes
-  let labels = SCALA
+  let labels = NORMAL_SCALA
   let data = labels.map(label => 0)
   routes.map(route => getRouteGrade(route)).forEach(grade => {
     data[labels.indexOf(grade)]++

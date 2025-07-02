@@ -61,7 +61,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
-import { SCALA } from 'src/helper/route'
+import { getRouteGrade, sortGradeInTable } from 'src/helper/route'
 import RouteGradeChip from 'src/components/RouteGradeChip.vue'
 import RouteStarsChip from 'src/components/RouteStarsChip.vue'
 import RouteUnsecureChip from 'src/components/RouteUnsecureChip.vue'
@@ -85,17 +85,11 @@ const routesTable = ref(null)
 const dataStore = useDataStore()
 const filter = ref('')
 
-const sortGrade = (a, b, rowA, rowB) => {
-  const gradeA = SCALA.indexOf(rowA.difficulty.normal)
-  const gradeB = SCALA.indexOf(rowB.difficulty.normal)
-  return gradeA - gradeB
-}
-
 const columns = [
   { name: 'name', label: 'Weg', field: 'name', align: 'left', sortable: true },
   { name: 'summit', label: 'Gipfel', field: row => row.summit?.name, align: 'left', sortable: true },
   { name: 'region', label: 'Gebiet', field: row => row.summit?.region?.name, align: 'left', sortable: true },
-  { name: 'grade', label: 'Grad', field: row => row.difficulty?.normal ?? '-', align: 'center', sortable: true , sort: sortGrade},
+  { name: 'grade', label: 'Grad', field: row => getRouteGrade(row) ?? '-', align: 'center', sortable: true , sort: sortGradeInTable},
   { name: 'stars', label: 'Sterne', field: row => row.stars, align: 'center', sortable: true },
   { name: 'unsecure', label: '!', field: row => row.unsecure, align: 'left', sortable: true },
   { name: 'ascents', label: 'Begehungen', field: 'ascents', align: 'left', sortable: true },

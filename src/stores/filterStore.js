@@ -23,8 +23,14 @@ export const useFilterStore = defineStore('filter', {
         }
       },
       grade: {
-        min: null,
-        max: null
+        normal: {
+          min: null,
+          max: null
+        },
+        jump: {
+          min: null,
+          max: null
+        }
       }
     },
     applyFilter: true

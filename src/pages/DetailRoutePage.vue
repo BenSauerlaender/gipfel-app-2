@@ -12,7 +12,7 @@
         <div class="row justify-center items-center">
           <div class="col-12 col-sm-5 text-center">
             <div class="row justify-center">
-              <RouteGradeChip :grade="route.difficulty.normal" />
+              <RouteGradeChip :grade="getRouteGrade(route)" />
               <RouteStarsChip :stars="route.stars" />
               <RouteUnsecureChip :unsecure="route.unsecure" />
             </div>
@@ -38,6 +38,7 @@ import RouteUnsecureChip from 'src/components/RouteUnsecureChip.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { getRouteGrade } from 'src/helper/route'
 
 const router = useRouter()
 
