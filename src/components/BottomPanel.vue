@@ -159,6 +159,9 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.q-page-sticky {
+  z-index: 1000;
+}
 .bottom-panel {
   width: 100%;
   user-select: none;

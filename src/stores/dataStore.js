@@ -183,7 +183,7 @@ export const useDataStore = defineStore('data', {
         return Math.abs(hash)
       }
 
-      const startTime = new Date().getTime()
+      const startTime = performance.now()
       // Load data from API
       const [ascentsResponse, climbersResponse, routesResponse, summitsResponse, regionsResponse] = await Promise.all([
         getAscents(),
@@ -192,8 +192,8 @@ export const useDataStore = defineStore('data', {
         getSummits(),
         getRegions()
       ])
-      console.log('Data Download time: ', new Date().getTime() - startTime, 'ms')
-      const startTime2 = new Date().getTime()
+      console.log('Data Download time: ', performance.now() - startTime, 'ms')
+      const startTime2 = performance.now()
 
       this.regions = regionsResponse.data.map(region => {
         region.summitIDs = summitsResponse.data.filter(summit => summit.region === region._id).map(summit => summit._id)
@@ -229,7 +229,16 @@ export const useDataStore = defineStore('data', {
         })
         if (ascent.leadClimber) {
           ascent.leadClimber = this.climbers.find(climber => climber._id === ascent.leadClimber)
+          ascent.ascentType = 'lead'
+          if (ascent.leadClimber._id != ascent.climbers[0]._id) console.warn('Lead climber is not the first climber', ascent)
         }
+        if (ascent.isSolo) {
+          ascent.ascentType = 'solo'
+        }
+        if (ascent.isTopRope) {
+          ascent.ascentType = 'topRope'
+        }
+        
         return ascent
       })
       this.trips = this.computeTrips(this.ascents)
@@ -242,9 +251,8 @@ export const useDataStore = defineStore('data', {
         });
       });
       this.climbers.sort((a, b) => (climberCount[b._id] || 0) - (climberCount[a._id] || 0));
-      console.log(this.climbers.map(climber => climber.firstName));
 
-      console.log('Data Processing time: ', new Date().getTime() - startTime2, 'ms')
+      console.log('Data Processing time: ', performance.now() - startTime2, 'ms')
 
       this.isLoaded = true
     },

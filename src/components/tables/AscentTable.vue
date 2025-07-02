@@ -1,0 +1,144 @@
+<template>
+  <q-table
+    :rows="ascents"
+    :columns="columns"
+    row-key="_id"
+    style="height: 800px"
+    virtual-scroll
+    :rows-per-page-options="[0]"
+    binary-state-sort
+    flat
+    :filter="filter"
+    ref="ascentsTable"
+  >
+        <template v-slot:top-right>
+          <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+      <template v-slot:body-cell-date="props">
+        <q-td :props="props">
+            {{ new Date(props.value).toLocaleDateString('de-DE') }}
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-summit="props">
+        <q-td :props="props">
+            <router-link style="text-decoration: none; color: inherit;" :to="`/summits/${props.row.route.summit._id}`">{{ props.value }}</router-link>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-region="props">
+        <q-td :props="props">
+            <router-link style="text-decoration: none; color: inherit;" :to="`/regions/${props.row.route.summit.region._id}`">{{ props.value }}</router-link>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-route="props">
+        <q-td :props="props">
+            <router-link style="text-decoration: none; color: inherit;" :to="`/routes/${props.row.route._id}`">{{ props.value }}</router-link>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-climbers="props">
+        <q-td :props="props">
+            {{ props.value }}
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-grade="props">
+        <q-td :props="props">
+            <RouteGradeChip :grade="props.value" />
+        </q-td>
+      </template>
+      <template v-slot:body-cell-stars="props">
+        <q-td :props="props">
+          <RouteStarsChip :stars="props.value">-</RouteStarsChip>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-unsecure="props">
+        <q-td :props="props">
+          <RouteUnsecureChip :unsecure="props.value">-</RouteUnsecureChip>
+        </q-td>
+      </template>
+  </q-table>
+</template>
+
+<script setup>
+import { computed, ref, onMounted } from 'vue'
+import { SCALA } from 'src/helper/route'
+import RouteGradeChip from 'src/components/RouteGradeChip.vue'
+import RouteStarsChip from 'src/components/RouteStarsChip.vue'
+import RouteUnsecureChip from 'src/components/RouteUnsecureChip.vue'
+
+const props = defineProps({
+  ascents: {
+    type: Array,
+    required: true
+  },
+  columns: {
+    type: Array,
+    default: () => ['date', 'route', 'summit', 'region', 'grade', 'stars', 'unsecure', 'ascentType', 'climbers', 'isAborted', 'notes']
+  },
+  defaultSort: {
+    type: Array,
+    default: () => ['date', 'desc']
+  }
+})
+
+const ascentsTable = ref(null)
+const filter = ref('')
+
+const sortGrade = (a, b, rowA, rowB) => {
+  const gradeA = SCALA.indexOf(rowA.difficulty.normal)
+  const gradeB = SCALA.indexOf(rowB.difficulty.normal)
+  return gradeA - gradeB
+}
+
+const columns = [
+  { name: 'date', label: 'Datum', field: 'date', align: 'left', sortable: true },
+  { name: 'route', label: 'Weg', field: row => row.route?.name, align: 'left', sortable: true },
+  { name: 'summit', label: 'Gipfel', field: row => row.route?.summit?.name, align: 'left', sortable: true },
+  { name: 'region', label: 'Gebiet', field: row => row.route?.summit?.region?.name, align: 'left', sortable: true },
+  { name: 'grade', label: 'Grad', field: row => row.route?.difficulty?.normal ?? '-', align: 'center', sortable: true , sort: sortGrade},
+  { name: 'stars', label: 'Sterne', field: row => row.route?.stars, align: 'center', sortable: true },
+  { name: 'unsecure', label: '!', field: row => row.route?.unsecure, align: 'left', sortable: true },
+  { name: 'ascentType', label: 'Art', field: row => row.ascentType, align: 'left', sortable: true },
+  { name: 'climbers', label: 'Kletterer', field: row => row.climbersText, align: 'left', sortable: true },
+  { name: 'isAborted', label: 'Abgebrochen', field: row => row.isAborted ? 'X' : '', align: 'center', sortable: true },
+  { name: 'notes', label: 'Notizen', field: row => row.notes, align: 'left', sortable: true },
+].filter(column => props.columns.includes(column.name))
+
+const ascents = computed(() => {
+  const ascents = props.ascents.map(ascent => {
+    if(ascent.ascentType == 'lead') ascent.ascentType = 'Kl.'
+    if(ascent.ascentType == 'solo') ascent.ascentType = 'solo'
+    if(ascent.ascentType == 'topRope') ascent.ascentType = 'v.o.g'
+
+    ascent.climbersText = ''
+    ascent.climbers.forEach(climber => {
+      if(climber.isAborted) ascent.climbersText += '(' + climber.firstName + ')'
+      else ascent.climbersText += climber.firstName
+      ascent.climbersText += ', '
+    })
+    ascent.climbersText = ascent.climbersText.slice(0, -2)
+
+    return ascent
+  })
+  return ascents
+})
+
+onMounted(() => {
+  ascentsTable.value.sort(props.defaultSort[0])
+  if (props.defaultSort[1] == 'desc') {
+    ascentsTable.value.sort(props.defaultSort[0])
+  }
+})
+</script>
+
+<style scoped>
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+</style> 

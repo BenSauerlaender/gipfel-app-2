@@ -69,7 +69,6 @@ async function onSubmit() {
   loading.value = true;
   try {
     await userStore.login(username.value, password.value);
-    console.log(userStore.accessToken)
     router.push('/');
   } catch (err) {
     error.value = err.message || 'Login failed.';

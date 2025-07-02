@@ -140,7 +140,6 @@ const selectedSummit = computed({
 })
 
 const summitFilter = (val, update) => {
-  console.log(summitOptionDefault.value)
   if (val === '') {
     update(() => {
       summitOptions.value = summitOptionDefault.value

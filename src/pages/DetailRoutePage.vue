@@ -24,16 +24,14 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <!-- TODO: add ascents to route 
         <AscentTable :ascents="ascents" :columns="['date', 'climbers', 'ascentType', 'leadClimber', 'isAborted', 'notes']" :defaultSort="['date', 'asc']" />
--->
       </q-card-section>
     </q-card>
   </div>
 </template>
   
 <script setup>
-//import AscentTable from 'src/components/tables/AscentTable.vue'
+import AscentTable from 'src/components/tables/AscentTable.vue'
 import RouteGradeChip from 'src/components/RouteGradeChip.vue'
 import RouteStarsChip from 'src/components/RouteStarsChip.vue'
 import RouteUnsecureChip from 'src/components/RouteUnsecureChip.vue'

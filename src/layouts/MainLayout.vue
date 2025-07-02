@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Gipfel App
         </q-toolbar-title>
 
         <q-btn round flat icon="more_vert">
@@ -95,7 +95,7 @@ const linksList = [
   {
     title: 'Gebiete',
     caption: 'Alle Gebiete',
-    icon: 'map',
+    icon: 'interests',
     link: '/regions'
   },
   {
@@ -103,6 +103,12 @@ const linksList = [
     caption: 'Alle Gipfel',
     icon: 'terrain',
     link: '/summits'
+  },
+  {
+    title: 'Karte',
+    caption: '',
+    icon: 'map',
+    link: '/map'
   }
 ]
 

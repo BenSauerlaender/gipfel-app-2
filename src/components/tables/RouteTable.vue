@@ -73,7 +73,7 @@ const props = defineProps({
   },
   columns: {
     type: Array,
-    default: () => ['name', 'region', 'routes', 'ascents']
+    default: () => ['name','summit', 'region', 'grade', 'stars', 'unsecure', 'ascents']
   },
   defaultSort: {
     type: Array,
@@ -95,9 +95,9 @@ const columns = [
   { name: 'name', label: 'Weg', field: 'name', align: 'left', sortable: true },
   { name: 'summit', label: 'Gipfel', field: row => row.summit?.name, align: 'left', sortable: true },
   { name: 'region', label: 'Gebiet', field: row => row.summit?.region?.name, align: 'left', sortable: true },
-  { name: 'grade', label: 'Grad', field: row => row.difficulty.normal, align: 'left', sortable: true , sort: sortGrade},
+  { name: 'grade', label: 'Grad', field: row => row.difficulty?.normal ?? '-', align: 'center', sortable: true , sort: sortGrade},
   { name: 'stars', label: 'Sterne', field: row => row.stars, align: 'center', sortable: true },
-  { name: 'unsecure', label: 'Unsicher', field: row => row.unsecure, align: 'center', sortable: true },
+  { name: 'unsecure', label: '!', field: row => row.unsecure, align: 'left', sortable: true },
   { name: 'ascents', label: 'Begehungen', field: 'ascents', align: 'left', sortable: true },
 ].filter(column => props.columns.includes(column.name))
 

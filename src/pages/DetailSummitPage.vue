@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="row items-center">
           <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-          <div class="text-h5 q-ml-md">{{ summit.name }} <span class="text-grey-6">({{ summit.region.name }})</span></div>
+          <div class="text-h5 q-ml-md">{{ summit.name }} <span class="text-grey-6">(<router-link style="text-decoration: none; color: inherit;" :to="`/regions/${summit.region._id}`">{{ summit.region.name }}</router-link>)</span></div>
         </div>
       </q-card-section>
       <q-separator />
@@ -23,13 +23,31 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <RouteTable :routes="routes" :columns="['name', 'grade', 'stars', 'unsecure', 'ascents']" :defaultSort="['name', 'asc']" />
+        <q-tabs
+          v-model="tab"
+          class="text-blue-7 q-mt-md"
+          inline-label
+          align="justify"
+        >
+          <q-tab name="routes" icon="book" label="Wege" />
+          <q-tab name="ascents" icon="table_chart" label="Begehungen" />
+        </q-tabs>
+        <q-separator />
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="routes">
+            <RouteTable :routes="routes" :columns="['name', 'grade', 'stars', 'unsecure', 'ascents']" :defaultSort="['name', 'asc']" />
+          </q-tab-panel>
+          <q-tab-panel name="ascents">
+            <AscentTable :ascents="ascents" :columns="['date', 'route', 'summit', 'grade', 'stars', 'unsecure', 'ascentType', 'climbers', 'isAborted', 'notes']" />
+          </q-tab-panel>
+        </q-tab-panels>
       </q-card-section>
     </q-card>
   </div>
 </template>
   
 <script setup>
+import AscentTable from 'src/components/tables/AscentTable.vue'
 import RouteTable from 'src/components/tables/RouteTable.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
@@ -46,6 +64,9 @@ const ascentCount = computed(() => dataStore.f_AscentsPerSummit[summit.value._id
 const routeWithAscentsCount = computed(() => summit.value.routeIDs.filter(routeID => dataStore.f_AscentsPerRoute[routeID] > 0).length)
 const routePercentage = computed(() => summit.value.routeIDs.length == 0 ? 0.0 : (routeWithAscentsCount.value / summit.value.routeIDs.length * 100).toFixed(1))
 
+const tab = ref('routes')
+
+const ascents = computed(() => dataStore.f_Ascents.filter(ascent => ascent.route.summit._id === summit.value._id))
 
 
 onMounted(() => {

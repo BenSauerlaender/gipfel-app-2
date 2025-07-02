@@ -54,11 +54,16 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 ## Seiten:
 
-- info: summits
-- summit detail page
-- map view
+## map view:
+- more data to popup?
+- transperency/color depending on ascents
+- link to summit
+- add button for other summits visible
+- add links from summits to map
+
 
 ## Overall
 - Support Jump, RP und Mit unterstuetzung
-- fix performance
+- move precalculation to server side
+- cache data in localStorage
 

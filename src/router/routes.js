@@ -13,6 +13,7 @@ const routes = [
       { path: '/summits', component: () => import('pages/SummitsPage.vue') },
       { path: '/summits/:id', component: () => import('pages/DetailSummitPage.vue') },
       { path: '/routes/:id', component: () => import('pages/DetailRoutePage.vue') },
+      { path: '/map', component: () => import('pages/MapPage.vue') },
     ]
   },
 
