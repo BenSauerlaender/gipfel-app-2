@@ -11,7 +11,8 @@
             <span class="text-h4 text-weight-bold text-blue-7">{{ summits.length }}</span> Gipfel
           </div>
           <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ summitPercentage }}%</span> begangen
+            <span class="text-h4 text-weight-bold text-blue-7">{{ summitPercentage }}%</span>
+            begangen
           </div>
           <div class="col-12 col-sm-3 text-center">
             <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Begehungen
@@ -25,7 +26,7 @@
     </q-card>
   </div>
 </template>
-  
+
 <script setup>
 import SummitTable from 'src/components/tables/SummitTable.vue'
 import { useDataStore } from 'src/stores/dataStore'
@@ -33,25 +34,27 @@ import { computed } from 'vue'
 
 const dataStore = useDataStore()
 
-const summits = dataStore.summits.map(summit => {
+const summits = dataStore.summits.map((summit) => {
   return {
     _id: summit._id,
     name: summit.name,
     routeIDs: summit.routeIDs,
     region: {
       _id: summit.region._id,
-      name: summit.region.name
-    }
+      name: summit.region.name,
+    },
   }
 })
 const ascentCount = computed(() => dataStore.f_Ascents.length)
-const summitWithAscentsCount = computed(() =>{
-  const count = summits.filter(summit => dataStore.f_Ascents.some(ascent => ascent.route.summit._id === summit._id)).length
+const summitWithAscentsCount = computed(() => {
+  const count = summits.filter((summit) =>
+    dataStore.f_Ascents.some((ascent) => ascent.route.summit._id === summit._id),
+  ).length
   return count
 })
-const summitPercentage = computed(() => summits.length == 0 ? 0.0 : (summitWithAscentsCount.value / summits.length * 100).toFixed(1))
-
-
+const summitPercentage = computed(() =>
+  summits.length == 0 ? 0.0 : ((summitWithAscentsCount.value / summits.length) * 100).toFixed(1),
+)
 </script>
 
 <style scoped>

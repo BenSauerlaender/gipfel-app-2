@@ -1,27 +1,21 @@
 <template>
-          <q-card style="height: 100%;">
-            <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ routes.length }}</div>
-              <div class="text-h6 text-grey-9">Wege</div>
-            </q-card-section>
-  
-            <q-separator />
+  <q-card style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap">
+      <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ routes.length }}</div>
+      <div class="text-h6 text-grey-9">Wege</div>
+    </q-card-section>
 
-            <q-card-section>
-              <div>
-                <Bar :data="chartData" :options="chartOptions" />
-              </div>
-              <div class="q-mt-md row justify-center">
-                <q-btn
-                  color="primary"
-                  label="Alle Wege anzeigen"
-                  to="/stats/routes"
-                  flat
-                  icon="list"
-                />
-            </div>
-            </q-card-section>
-          </q-card>
+    <q-separator />
+
+    <q-card-section>
+      <div>
+        <Bar :data="chartData" :options="chartOptions" />
+      </div>
+      <div class="q-mt-md row justify-center">
+        <q-btn color="primary" label="Alle Wege anzeigen" to="/stats/routes" flat icon="list" />
+      </div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>
@@ -36,21 +30,23 @@ const props = defineProps({
   routes: {
     type: Array,
     required: true,
-  }
+  },
 })
 
 const chartData = computed(() => {
   if (props.routes.length === 0) {
     return {
-      datasets: []
+      datasets: [],
     }
   }
   const routes = props.routes
   let labels = NORMAL_SCALA
-  let data = labels.map(label => 0)
-  routes.map(route => getRouteGrade(route)).forEach(grade => {
-    data[labels.indexOf(grade)]++
-  })
+  let data = labels.map((label) => 0)
+  routes
+    .map((route) => getRouteGrade(route))
+    .forEach((grade) => {
+      data[labels.indexOf(grade)]++
+    })
   let lastIndex = data.length - 1
   for (let i = data.length - 1; i >= 0; i--) {
     if (data[i] !== 0) {
@@ -67,11 +63,11 @@ const chartData = computed(() => {
       {
         label: 'Anzahl',
         data: data,
-        backgroundColor: labels.map(label => getGradeColor(label)),
+        backgroundColor: labels.map((label) => getGradeColor(label)),
         borderWidth: 1,
-        borderColor: '#fff'
-      }
-    ]
+        borderColor: '#fff',
+      },
+    ],
   }
 })
 
@@ -80,16 +76,16 @@ const chartOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false
-    }
+      display: false,
+    },
   },
   scales: {
     y: {
       beginAtZero: true,
       ticks: {
-        stepSize: 1
-      }
-    }
-  }
+        stepSize: 1,
+      },
+    },
+  },
 }
 </script>

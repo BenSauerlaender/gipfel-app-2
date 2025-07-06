@@ -9,7 +9,11 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <RouteTable :routes="routes" :columns="['name','summit', 'region', 'grade', 'stars', 'ascents']" :defaultSort="['ascents', 'desc']" />
+        <RouteTable
+          :routes="routes"
+          :columns="['name', 'summit', 'region', 'grade', 'stars', 'ascents']"
+          :defaultSort="['ascents', 'desc']"
+        />
       </q-card-section>
     </q-card>
   </div>
@@ -27,7 +31,7 @@ const dataStore = useDataStore()
 
 const routes = computed(() => {
   const routeMap = {}
-  dataStore.f_Ascents.forEach(ascent => {
+  dataStore.f_Ascents.forEach((ascent) => {
     if (!routeMap[ascent.route._id]) {
       routeMap[ascent.route._id] = ascent.route
     }
@@ -41,4 +45,4 @@ const routes = computed(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
-</style> 
+</style>

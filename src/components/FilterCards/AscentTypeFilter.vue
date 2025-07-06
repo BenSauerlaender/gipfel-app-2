@@ -27,14 +27,14 @@ const ascentsAllowedTypes = computed({
   get: () => filters.ascents.allowedTypes,
   set: (newVal) => {
     filters.ascents.allowedTypes = newVal
-  }
+  },
 })
 
 const ascentTypeOptions = [
   { label: 'Klassisch', value: 'lead' },
   { label: 'Solo', value: 'solo' },
   { label: 'v.o.g.', value: 'topRope' },
-  { label: 'Abgebrochen', value: 'aborted' }
+  { label: 'Abgebrochen', value: 'aborted' },
 ]
 </script>
 
@@ -48,4 +48,4 @@ const ascentTypeOptions = [
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-</style> 
+</style>

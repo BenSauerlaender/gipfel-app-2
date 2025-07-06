@@ -3,12 +3,7 @@
     <q-card class="filter-card">
       <q-card-section>
         <div class="text-h8">Weg-Tags</div>
-        <q-select
-          v-model="starMode"
-          :options="starModeOptions"
-          class="q-mt-md"
-          label="Sterne"
-        />
+        <q-select v-model="starMode" :options="starModeOptions" class="q-mt-md" label="Sterne" />
         <q-select
           v-model="unsecureMode"
           :options="unsecureModeOptions"
@@ -33,13 +28,13 @@ const starModeOptions = [
   { label: 'keine', value: 'none' },
   { label: 'genau 1', value: 'one' },
   { label: 'genau 2', value: 'two' },
-  { label: '1 oder 2', value: 'oneOrTwo' }
+  { label: '1 oder 2', value: 'oneOrTwo' },
 ]
 
 const unsecureModeOptions = [
   { label: 'egal', value: null },
   { label: 'ohne', value: 'false' },
-  { label: 'mit', value: 'true' }
+  { label: 'mit', value: 'true' },
 ]
 
 const starMode = ref(starModeOptions[0])
@@ -66,4 +61,4 @@ watch(unsecureMode, (newVal) => {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-</style> 
+</style>

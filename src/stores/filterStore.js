@@ -6,12 +6,12 @@ export const useFilterStore = defineStore('filter', {
       ascents: {
         allowedTypes: ['lead', 'solo', 'topRope', 'aborted'],
         dateMin: null,
-        dateMax: null
+        dateMax: null,
       },
       climbers: {
         selected: [],
         mode: 'or',
-        lead: null
+        lead: null,
       },
       route: {
         region: null,
@@ -19,24 +19,22 @@ export const useFilterStore = defineStore('filter', {
         route: null,
         tags: {
           star: null,
-          unsecure: null
-        }
+          unsecure: null,
+        },
       },
       grade: {
         normal: {
           min: null,
-          max: null
+          max: null,
         },
         jump: {
           min: null,
-          max: null
-        }
-      }
+          max: null,
+        },
+      },
     },
-    applyFilter: true
+    applyFilter: true,
   }),
-  getters: {
-  },
-  actions: {
-  }
-}) 
+  getters: {},
+  actions: {},
+})

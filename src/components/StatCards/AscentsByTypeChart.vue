@@ -1,16 +1,16 @@
 <template>
-          <q-card style="height: 100%;">
-            <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ props.ascents.length }}</div>
-              <div class="text-h6 text-grey-9">Begehungen</div>
-            </q-card-section>
-  
-            <q-separator />
+  <q-card style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap">
+      <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ props.ascents.length }}</div>
+      <div class="text-h6 text-grey-9">Begehungen</div>
+    </q-card-section>
 
-            <q-card-section>
-              <Doughnut :data="chartData" :options="chartOptions" />
-            </q-card-section>
-          </q-card>
+    <q-separator />
+
+    <q-card-section>
+      <Doughnut :data="chartData" :options="chartOptions" />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>
@@ -24,19 +24,21 @@ const props = defineProps({
   ascents: {
     type: Array,
     required: true,
-  }
+  },
 })
 
 const chartData = computed(() => {
   if (props.ascents.length === 0) {
     return {
       labels: [],
-      datasets: []
+      datasets: [],
     }
   }
-  const leadCount = props.ascents.filter(ascent => !ascent.isSolo && !ascent.isTopRope && ascent.leadClimber).length
-  const soloCount = props.ascents.filter(ascent => ascent.isSolo).length
-  const topRopeCount = props.ascents.filter(ascent => ascent.isTopRope).length
+  const leadCount = props.ascents.filter(
+    (ascent) => !ascent.isSolo && !ascent.isTopRope && ascent.leadClimber,
+  ).length
+  const soloCount = props.ascents.filter((ascent) => ascent.isSolo).length
+  const topRopeCount = props.ascents.filter((ascent) => ascent.isTopRope).length
 
   return {
     labels: ['Klassisch', 'Solo', 'von oben gesichert'],
@@ -45,9 +47,9 @@ const chartData = computed(() => {
         data: [leadCount, soloCount, topRopeCount],
         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
         borderWidth: 2,
-        borderColor: '#fff'
-      }
-    ]
+        borderColor: '#fff',
+      },
+    ],
   }
 })
 
@@ -59,9 +61,9 @@ const chartOptions = {
       position: 'bottom',
       labels: {
         padding: 20,
-        usePointStyle: true
-      }
-    }
-  }
+        usePointStyle: true,
+      },
+    },
+  },
 }
 </script>

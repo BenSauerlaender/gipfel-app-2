@@ -1,20 +1,17 @@
 <template>
   <q-page-sticky expand position="bottom">
-    <div
-      class="bg-white bottom-panel" 
-      :style="panelStyle"
-    >
+    <div class="bg-white bottom-panel" :style="panelStyle">
       <!-- Draggable handle for resizing -->
-      <div 
+      <div
         class="bottom-panel__resize-handle"
         @mousedown="startResize"
         @touchstart="startResize"
       ></div>
-      
-      <q-toolbar class="bg-grey-2 justify-between shadow-2" style="z-index: 1000;">
+
+      <q-toolbar class="bg-grey-2 justify-between shadow-2" style="z-index: 1000">
         <div></div>
         <q-toolbar-title shrink>
-          Filter 
+          Filter
           <q-toggle
             v-model="filterStore.applyFilter"
             checked-icon="check"
@@ -31,12 +28,11 @@
           aria-label="Toggle Bottom Panel"
         />
       </q-toolbar>
-      
+
       <div class="bottom-panel__content" v-show="isExpanded">
         <q-scroll-area class="bottom-panel__scroll-area">
           <div class="bottom-panel__inner-content">
-      <div v-if="!filterStore.applyFilter" class="filter-overlay">
-      </div>
+            <div v-if="!filterStore.applyFilter" class="filter-overlay"></div>
             <slot>
               <!-- Default content -->
               <q-card class="q-ma-md">
@@ -47,12 +43,16 @@
                   <p>The content area has its own scroll bar when needed.</p>
                 </q-card-section>
               </q-card>
-              
+
               <!-- Add more content to demonstrate scrolling -->
               <q-card class="q-ma-md" v-for="i in 20" :key="i">
                 <q-card-section>
                   <div class="text-subtitle1">Content Item {{ i }}</div>
-                  <p>This is sample content to demonstrate the scrollable area. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                  <p>
+                    This is sample content to demonstrate the scrollable area. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua.
+                  </p>
                 </q-card-section>
               </q-card>
             </slot>
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted} from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useFilterStore } from 'src/stores/filterStore'
 
@@ -81,25 +81,25 @@ const resizeStartHeight = ref(0)
 const panelHeight = ref(minHeight) // Default collapsed height
 
 const panelStyle = computed(() => ({
-  height: `${panelHeight.value}px`
+  height: `${panelHeight.value}px`,
 }))
 
 //colapse panel when page changes using Router
 //router.beforeEach((to, from, next) => {
-  //isExpanded.value = false
-  //panelHeight.value = minHeight
-  //next()
+//isExpanded.value = false
+//panelHeight.value = minHeight
+//next()
 //})
 
 function startResize(event) {
   event.preventDefault()
   event.stopPropagation()
   isResizing.value = true
-  
+
   const clientY = event.clientY || event.touches?.[0]?.clientY || 0
   resizeStartY.value = clientY
   resizeStartHeight.value = panelHeight.value
-  
+
   document.addEventListener('mousemove', onResize)
   document.addEventListener('touchmove', onResize, { passive: false })
   document.addEventListener('mouseup', stopResize)
@@ -108,19 +108,19 @@ function startResize(event) {
 
 function onResize(event) {
   if (!isResizing.value) return
-  
+
   event.preventDefault()
-  
+
   const clientY = event.clientY || event.touches?.[0]?.clientY || 0
   const deltaY = resizeStartY.value - clientY // Inverted because we're dragging up
-  
+
   let newHeight = resizeStartHeight.value + deltaY
-  
+
   // Constrain to min/max heights
   newHeight = Math.max(minHeight, Math.min(newHeight, maxHeight))
-  
+
   panelHeight.value = newHeight
-  
+
   // Auto-expand if height is greater than collapsed height
   if (newHeight > minHeight + 10) {
     isExpanded.value = true
@@ -212,8 +212,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(128,128,128,0.6);
+  background: rgba(128, 128, 128, 0.6);
   z-index: 2000;
 }
-
-</style> 
+</style>

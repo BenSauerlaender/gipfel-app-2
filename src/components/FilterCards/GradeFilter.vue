@@ -22,7 +22,6 @@
   </div>
 </template>
 
-
 //only for normals not jumps
 
 <script setup>
@@ -35,7 +34,9 @@ const filterStore = useFilterStore()
 const filters = filterStore.filters
 
 const dataStore = useDataStore()
-const ascentGrades = new Set(dataStore.ascents.map(ascent => NORMAL_SCALA.indexOf(ascent.route.difficulty.normal)))
+const ascentGrades = new Set(
+  dataStore.ascents.map((ascent) => NORMAL_SCALA.indexOf(ascent.route.difficulty.normal)),
+)
 
 const minGrade = Math.min(...ascentGrades)
 const maxGrade = Math.max(...ascentGrades)
@@ -58,4 +59,4 @@ watch(range, (newValue) => {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-</style> 
+</style>

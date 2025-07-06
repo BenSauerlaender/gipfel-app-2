@@ -4,7 +4,10 @@
       <q-card-section>
         <div class="row items-center">
           <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-          <div class="text-h5 q-ml-md">{{ route.name }} , {{ route.summit.name }} <span class="text-grey-6">({{ route.summit.region.name }})</span></div>
+          <div class="text-h5 q-ml-md">
+            {{ route.name }} , {{ route.summit.name }}
+            <span class="text-grey-6">({{ route.summit.region.name }})</span>
+          </div>
         </div>
       </q-card-section>
       <q-separator />
@@ -18,18 +21,23 @@
             </div>
           </div>
           <div class="col-12 col-sm-5 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ ascents.length }}</span> Begehungen
+            <span class="text-h4 text-weight-bold text-blue-7">{{ ascents.length }}</span>
+            Begehungen
           </div>
         </div>
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <AscentTable :ascents="ascents" :columns="['date', 'climbers', 'ascentType', 'leadClimber', 'isAborted', 'notes']" :defaultSort="['date', 'asc']" />
+        <AscentTable
+          :ascents="ascents"
+          :columns="['date', 'climbers', 'ascentType', 'leadClimber', 'isAborted', 'notes']"
+          :defaultSort="['date', 'asc']"
+        />
       </q-card-section>
     </q-card>
   </div>
 </template>
-  
+
 <script setup>
 import AscentTable from 'src/components/tables/AscentTable.vue'
 import RouteGradeChip from 'src/components/Chips/RouteGradeChip.vue'
@@ -44,16 +52,17 @@ const router = useRouter()
 
 const dataStore = useDataStore()
 
-const route = computed(() => dataStore.routes.find(route => route._id === useRoute().params.id))
+const route = computed(() => dataStore.routes.find((route) => route._id === useRoute().params.id))
 
-const ascents = computed(() => dataStore.f_Ascents.filter(ascent => ascent.route._id === route.value._id))
+const ascents = computed(() =>
+  dataStore.f_Ascents.filter((ascent) => ascent.route._id === route.value._id),
+)
 
 onMounted(() => {
   if (!route.value) {
     router.push({ name: '404' })
   }
 })
-
 </script>
 
 <style scoped>

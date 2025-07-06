@@ -22,5 +22,4 @@ import LeadClimberFilter from './FilterCards/LeadClimberFilter.vue'
 import RouteTagFilter from './FilterCards/RouteTagFilter.vue'
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

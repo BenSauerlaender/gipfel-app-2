@@ -2,60 +2,45 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title>
-          Gipfel App
-        </q-toolbar-title>
+        <q-toolbar-title> Gipfel App </q-toolbar-title>
 
         <q-btn round flat icon="more_vert">
-            <q-menu auto-close :offset="[110, 0]">
-              <q-list style="min-width: 150px">
-                <q-item clickable @click="handleLogout">
-                  <q-item-section>Logout</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
+          <q-menu auto-close :offset="[110, 0]">
+            <q-list style="min-width: 150px">
+              <q-item clickable @click="handleLogout">
+                <q-item-section>Logout</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Menu
-        </q-item-label>
+        <q-item-label header> Menu </q-item-label>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
+        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
       </q-list>
     </q-drawer>
 
     <q-page-container>
       <router-view v-if="isLoaded" />
-      <q-inner-loading v-else showing label="Loading..." label-color="primary" color="primary" class="big-loading" />
+      <q-inner-loading
+        v-else
+        showing
+        label="Loading..."
+        label-color="primary"
+        color="primary"
+        class="big-loading"
+      />
       <!-- Bottom Panel Component -->
       <BottomPanel v-if="isLoaded">
         <FilterOptions />
       </BottomPanel>
     </q-page-container>
-
   </q-layout>
 </template>
 
@@ -84,38 +69,38 @@ const linksList = [
     title: 'Tagebuch',
     caption: 'Alle Begehungen',
     icon: 'auto_stories',
-    link: '/timeline'
+    link: '/timeline',
   },
   {
     title: 'Statistiken',
     caption: 'über Begehungen',
     icon: 'bar_chart',
-    link: '/stats'
+    link: '/stats',
   },
 
   {
     title: 'Gebiete',
     caption: 'Alle Gebiete',
     icon: 'interests',
-    link: '/regions'
+    link: '/regions',
   },
   {
     title: 'Gipfel',
     caption: 'Alle Gipfel',
     icon: 'terrain',
-    link: '/summits'
+    link: '/summits',
   },
   {
     title: 'Karte',
     caption: '',
     icon: 'map',
-    link: '/map'
-  }
+    link: '/map',
+  },
 ]
 
 const leftDrawerOpen = ref(false)
 
-function toggleLeftDrawer () {
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 

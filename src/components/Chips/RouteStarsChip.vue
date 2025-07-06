@@ -1,15 +1,18 @@
 <script setup>
 const props = defineProps({
   stars: { type: Number, required: false, default: 0 },
-  color: { type: String, required: false }
-
+  color: { type: String, required: false },
 })
 </script>
 
-<template >
-  <q-chip v-if="props.stars > 0" :style="{backgroundColor:  props.color ?? '#26a69a', color:'white'}" dense>
+<template>
+  <q-chip
+    v-if="props.stars > 0"
+    :style="{ backgroundColor: props.color ?? '#26a69a', color: 'white' }"
+    dense
+  >
     <template v-for="n in props.stars" v-bind:key="n">
       <q-icon name="star" />
     </template>
   </q-chip>
-</template> 
+</template>

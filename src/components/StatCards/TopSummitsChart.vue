@@ -1,16 +1,20 @@
 <template>
-          <q-card style="height: 100%;">
-            <q-card-section class="flex items-center justify-start no-wrap">
-              <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ (ascents.length > 0) ? sortedSummits[0][1].total : 0 }}</div>
-              <div class="text-h6 text-grey-9">Begehungen auf den {{ (ascents.length > 0) ? sortedSummits[0][0] : 'Nix' }}</div>
-            </q-card-section>
-  
-            <q-separator />
+  <q-card style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap">
+      <div class="q-mr-md text-h4 text-weight-bold text-blue-7">
+        {{ ascents.length > 0 ? sortedSummits[0][1].total : 0 }}
+      </div>
+      <div class="text-h6 text-grey-9">
+        Begehungen auf den {{ ascents.length > 0 ? sortedSummits[0][0] : 'Nix' }}
+      </div>
+    </q-card-section>
 
-            <q-card-section>
-              <Bar :data="chartData" :options="chartOptions" />
-            </q-card-section>
-          </q-card>
+    <q-separator />
+
+    <q-card-section>
+      <Bar :data="chartData" :options="chartOptions" />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>
@@ -25,14 +29,14 @@ const props = defineProps({
   ascents: {
     type: Array,
     required: true,
-  }
+  },
 })
 const sortedSummits = computed(() => {
   const ascents = props.ascents
-  
+
   // Count ascents per summit
   const summitCounts = {}
-  ascents.forEach(ascent => {
+  ascents.forEach((ascent) => {
     const summit = ascent.route.summit
     if (summit) {
       const summitName = summit.name || 'Unknown Summit'
@@ -41,30 +45,30 @@ const sortedSummits = computed(() => {
       }
       const jumpGrade = ascent.route.difficulty.jump
       const normalGrade = ascent.route.difficulty.normal
-      if(jumpGrade){
-         summitCounts[summitName][jumpGrade] = (summitCounts[summitName][jumpGrade] || 0) + 1
-      }else{
-         summitCounts[summitName][normalGrade] = (summitCounts[summitName][normalGrade] || 0) + 1
+      if (jumpGrade) {
+        summitCounts[summitName][jumpGrade] = (summitCounts[summitName][jumpGrade] || 0) + 1
+      } else {
+        summitCounts[summitName][normalGrade] = (summitCounts[summitName][normalGrade] || 0) + 1
       }
       summitCounts[summitName].total = (summitCounts[summitName].total || 0) + 1
     }
   })
-  
+
   // Sort by count and get top 10
   return Object.entries(summitCounts)
-    .toSorted(([,a], [,b]) => b.total - a.total)
+    .toSorted(([, a], [, b]) => b.total - a.total)
     .slice(0, 10)
 })
 
 const chartData = computed(() => {
   if (sortedSummits.value.length === 0) {
     return {
-      datasets: []
+      datasets: [],
     }
   }
   const labels = sortedSummits.value.map(([name]) => name)
 
-  const datasets = NORMAL_SCALA.map(grade => {
+  const datasets = NORMAL_SCALA.map((grade) => {
     if (sortedSummits.value.some(([, data]) => Object.keys(data).includes(grade))) {
       return {
         label: grade,
@@ -73,15 +77,14 @@ const chartData = computed(() => {
         stack: 'Stack 0',
         borderWidth: 1,
         borderColor: '#fff',
-        borderRadius: 4
+        borderRadius: 4,
       }
     }
-  }).filter(dataset => dataset !== undefined)
+  }).filter((dataset) => dataset !== undefined)
 
-  
   return {
     labels: labels,
-    datasets: datasets
+    datasets: datasets,
   }
 })
 
@@ -94,38 +97,38 @@ const chartOptions = {
   },
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       callbacks: {
         footer: (tooltipItems) => {
-        let total = 0;
-        tooltipItems.forEach(function(tooltipItem) {
-            total += tooltipItem.parsed.y;
-        });
-        return 'Gesamt: ' + total ;
-      }
+          let total = 0
+          tooltipItems.forEach(function (tooltipItem) {
+            total += tooltipItem.parsed.y
+          })
+          return 'Gesamt: ' + total
+        },
+      },
+      filter: (tooltipItem, data) => {
+        return tooltipItem.parsed.y > 0
+      },
     },
-    filter: (tooltipItem, data) => {
-    return tooltipItem.parsed.y > 0
-    }
+    scales: {
+      x: {
+        ticks: {
+          maxRotation: 45,
+          minRotation: 0,
+        },
+        stacked: true,
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+        },
+        stacked: true,
+      },
+    },
   },
-  scales: {
-    x: {
-      ticks: {
-        maxRotation: 45,
-        minRotation: 0
-      },
-      stacked: true
-    },
-    y: {
-      beginAtZero: true,
-      ticks: {
-        stepSize: 1
-      },
-      stacked: true
-    }
-  }
 }
-}
-</script> 
+</script>

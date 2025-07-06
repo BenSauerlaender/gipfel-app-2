@@ -7,8 +7,8 @@ const api = axios.create({
   timeout: 10000,
   withCredentials: true, // Important: Include cookies in requests
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 })
 
 export const getClimbers = () => api.get('/api/climbers')
@@ -18,12 +18,11 @@ export const getSummits = () => api.get('/api/summits')
 export const getRegions = () => api.get('/api/regions')
 export const getTrips = () => api.get('/api/trips')
 
-
 // Request interceptor
 api.interceptors.request.use(
   async (config) => {
     const userStore = useUserStore()
-    
+
     // Skip auth for login/register endpoints
     if (config.url?.includes('/auth/login')) {
       return config
@@ -45,7 +44,7 @@ api.interceptors.request.use(
 
     return config
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )
 
 // Response interceptor
@@ -86,7 +85,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error)
-  }
+  },
 )
 
 export default api

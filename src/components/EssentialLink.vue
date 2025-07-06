@@ -6,10 +6,7 @@
     :href="isExternal ? props.link : undefined"
     :to="!isExternal ? props.link : undefined"
   >
-    <q-item-section
-      v-if="props.icon"
-      avatar
-    >
+    <q-item-section v-if="props.icon" avatar>
       <q-icon :name="props.icon" />
     </q-item-section>
 
@@ -26,23 +23,23 @@ import { computed } from 'vue'
 const props = defineProps({
   title: {
     type: String,
-    required: true
+    required: true,
   },
 
   caption: {
     type: String,
-    default: ''
+    default: '',
   },
 
   link: {
     type: String,
-    default: '#'
+    default: '#',
   },
 
   icon: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const isExternal = computed(() => {

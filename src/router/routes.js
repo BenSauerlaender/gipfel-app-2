@@ -14,19 +14,19 @@ const routes = [
       { path: '/summits/:id', component: () => import('pages/DetailSummitPage.vue') },
       { path: '/routes/:id', component: () => import('pages/DetailRoutePage.vue') },
       { path: '/map/:id?', component: () => import('pages/MapPage.vue') },
-    ]
+    ],
   },
 
   {
     path: '/login',
-    component: () => import('pages/LoginPage.vue')
+    component: () => import('pages/LoginPage.vue'),
   },
-
 
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'), name: '404'
-  }
+    component: () => import('pages/ErrorNotFound.vue'),
+    name: '404',
+  },
 ]
 
 export default routes

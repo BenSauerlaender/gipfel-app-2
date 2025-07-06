@@ -17,7 +17,7 @@
 
 <script setup>
 import SummitTable from 'src/components/tables/SummitTable.vue'
-import { computed} from 'vue'
+import { computed } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { useRouter } from 'vue-router'
 
@@ -27,7 +27,7 @@ const dataStore = useDataStore()
 const summits = computed(() => {
   const summitIDs = new Set()
   const summits = []
-  dataStore.f_Ascents.forEach(ascent => {
+  dataStore.f_Ascents.forEach((ascent) => {
     if (!summitIDs.has(ascent.route.summit._id)) {
       summitIDs.add(ascent.route.summit._id)
       summits.push(ascent.route.summit)
@@ -42,4 +42,4 @@ const summits = computed(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
-</style> 
+</style>
