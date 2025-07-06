@@ -55,10 +55,10 @@ watch(
 )
 
 const popupHtml = (summit) => {
-  const routesWithAscents = summit.routeIDs.filter(
-    (routeID) => dataStore.f_AscentsPerRoute[routeID] > 0,
+  const routesWithAscents = dataStore.routes[summit._id].filter(
+    (route) => dataStore.f_AscentsPerRoute[route._id] > 0,
   ).length
-  const routeCount = summit.routeIDs.length
+  const routeCount = summit.routeCount
   const routePercentage =
     routeCount == 0 ? 0.0 : ((routesWithAscents / routeCount) * 100).toFixed(1)
   const ascents = dataStore.f_AscentsPerSummit[summit._id] ?? 0
@@ -164,15 +164,12 @@ const updateMarkers = () => {
   const maxAscents = 1.0 * Math.max(...Object.values(dataStore.f_AscentsPerSummit))
   allMarkers.value.forEach((marker) => {
     if (filterStore.applyFilter && filterStore.filters.route.region != null) {
-      if (marker.summit.region._id != filterStore.filters.route.region) {
+      if (marker.summit.regionID != filterStore.filters.route.region) {
         marker.marker.setStyle({ fill: false, strole: false })
         return
       }
     }
 
-    //const routesWithAscents = marker.summit.routeIDs.filter(routeID => dataStore.f_AscentsPerRoute[routeID] > 0).length
-    //const routeCount = 1.0*marker.summit.routeIDs.length
-    //const routePercentage = routeCount == 0 ? 0.0 : (routesWithAscents / routeCount )
     const ascents = dataStore.f_AscentsPerSummit[marker.summit._id] ?? 0.0
     const routePercentage = Math.pow((1.0 * ascents) / maxAscents, 0.3)
     if (summitsAscendedIDs.value.includes(marker.summit._id)) {

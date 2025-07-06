@@ -37,21 +37,18 @@ const sortedSummits = computed(() => {
   // Count ascents per summit
   const summitCounts = {}
   ascents.forEach((ascent) => {
-    const summit = ascent.route.summit
-    if (summit) {
-      const summitName = summit.name || 'Unknown Summit'
-      if (!summitCounts[summitName]) {
-        summitCounts[summitName] = {}
-      }
-      const jumpGrade = ascent.route.difficulty.jump
-      const normalGrade = ascent.route.difficulty.normal
-      if (jumpGrade) {
-        summitCounts[summitName][jumpGrade] = (summitCounts[summitName][jumpGrade] || 0) + 1
-      } else {
-        summitCounts[summitName][normalGrade] = (summitCounts[summitName][normalGrade] || 0) + 1
-      }
-      summitCounts[summitName].total = (summitCounts[summitName].total || 0) + 1
+    const summitName = ascent.route.summitName || 'Unknown Summit'
+    if (!summitCounts[summitName]) {
+      summitCounts[summitName] = {}
     }
+    const jumpGrade = ascent.route.difficulty.jump
+    const normalGrade = ascent.route.difficulty.normal
+    if (jumpGrade) {
+      summitCounts[summitName][jumpGrade] = (summitCounts[summitName][jumpGrade] || 0) + 1
+    } else {
+      summitCounts[summitName][normalGrade] = (summitCounts[summitName][normalGrade] || 0) + 1
+    }
+    summitCounts[summitName].total = (summitCounts[summitName].total || 0) + 1
   })
 
   // Sort by count and get top 10

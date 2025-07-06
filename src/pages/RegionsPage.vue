@@ -71,17 +71,19 @@ const columns = [
 
 const regions = computed(() =>
   dataStore.regions.map((region) => {
-    const summitIDs = region.summitIDs
+    const summitIDs = dataStore.summits
+      .filter((summit) => summit.regionID === region._id)
+      .map((summit) => summit._id)
     const summitsWithAscents = summitIDs.filter(
       (summitID) => dataStore.f_AscentsPerSummit[summitID] > 0,
     ).length
-    const summitCount = summitIDs.length
+    const summitCount = region.summitCount
     const summitPercentage =
       summitCount == 0 ? 0.0 : ((summitsWithAscents / summitCount) * 100).toFixed(1)
 
     return {
       ...region,
-      summits: summitIDs.length,
+      summits: summitCount,
       ascents: dataStore.f_AscentsPerRegion[region._id] ?? '-',
       summitPercentage: summitPercentage,
     }

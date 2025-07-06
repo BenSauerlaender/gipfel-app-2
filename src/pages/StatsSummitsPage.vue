@@ -26,14 +26,12 @@ const dataStore = useDataStore()
 
 const summits = computed(() => {
   const summitIDs = new Set()
-  const summits = []
   dataStore.f_Ascents.forEach((ascent) => {
-    if (!summitIDs.has(ascent.route.summit._id)) {
-      summitIDs.add(ascent.route.summit._id)
-      summits.push(ascent.route.summit)
+    if (!summitIDs.has(ascent.route.summitID)) {
+      summitIDs.add(ascent.route.summitID)
     }
   })
-  return summits
+  return dataStore.summits.filter((summit) => summitIDs.has(summit._id))
 })
 </script>
 

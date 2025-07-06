@@ -28,7 +28,7 @@
       <q-td :props="props">
         <router-link
           style="text-decoration: none; color: inherit"
-          :to="`/summits/${props.row.summit._id}`"
+          :to="`/summits/${props.row.summitID}`"
           >{{ props.value }}</router-link
         >
       </q-td>
@@ -37,7 +37,7 @@
       <q-td :props="props">
         <router-link
           style="text-decoration: none; color: inherit"
-          :to="`/regions/${props.row.summit.region._id}`"
+          :to="`/regions/${props.row.regionID}`"
           >{{ props.value }}</router-link
         >
       </q-td>

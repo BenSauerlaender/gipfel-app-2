@@ -10,8 +10,8 @@
               <span class="text-grey-6"
                 >(<router-link
                   style="text-decoration: none; color: inherit"
-                  :to="`/regions/${summit.region._id}`"
-                  >{{ summit.region.name }}</router-link
+                  :to="`/regions/${summit.regionID}`"
+                  >{{ summit.regionName }}</router-link
                 >)</span
               >
             </div>
@@ -88,23 +88,21 @@ const dataStore = useDataStore()
 const summit = computed(() =>
   dataStore.summits.find((summit) => summit._id === useRoute().params.id),
 )
-const routes = computed(() =>
-  dataStore.routes.filter((route) => route.summit._id === summit.value._id),
-)
+const routes = computed(() => dataStore.routes[useRoute().params.id])
 const ascentCount = computed(() => dataStore.f_AscentsPerSummit[summit.value._id] ?? 0)
 const routeWithAscentsCount = computed(
-  () => summit.value.routeIDs.filter((routeID) => dataStore.f_AscentsPerRoute[routeID] > 0).length,
+  () => routes.value.filter((route) => dataStore.f_AscentsPerRoute[route._id] > 0).length,
 )
 const routePercentage = computed(() =>
-  summit.value.routeIDs.length == 0
+  summit.value.routeCount == 0
     ? 0.0
-    : ((routeWithAscentsCount.value / summit.value.routeIDs.length) * 100).toFixed(1),
+    : ((routeWithAscentsCount.value / summit.value.routeCount) * 100).toFixed(1),
 )
 
 const tab = ref('routes')
 
 const ascents = computed(() =>
-  dataStore.f_Ascents.filter((ascent) => ascent.route.summit._id === summit.value._id),
+  dataStore.f_Ascents.filter((ascent) => ascent.route.summitID === summit.value._id),
 )
 
 onMounted(() => {

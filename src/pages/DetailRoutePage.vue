@@ -5,8 +5,8 @@
         <div class="row items-center">
           <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
           <div class="text-h5 q-ml-md">
-            {{ route.name }} , {{ route.summit.name }}
-            <span class="text-grey-6">({{ route.summit.region.name }})</span>
+            {{ route.name }} , {{ route.summitName }}
+            <span class="text-grey-6">({{ route.regionName }})</span>
           </div>
         </div>
       </q-card-section>
@@ -52,7 +52,14 @@ const router = useRouter()
 
 const dataStore = useDataStore()
 
-const route = computed(() => dataStore.routes.find((route) => route._id === useRoute().params.id))
+const route = computed(() => {
+  let foundRoute = undefined
+  for (const region of Object.values(dataStore.routes)) {
+    foundRoute = region.find((route) => route._id === useRoute().params.id)
+    if (foundRoute) break
+  }
+  return foundRoute
+})
 
 const ascents = computed(() =>
   dataStore.f_Ascents.filter((ascent) => ascent.route._id === route.value._id),

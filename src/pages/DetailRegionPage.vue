@@ -11,7 +11,7 @@
       <q-card-section>
         <div class="row justify-center">
           <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ region.summitIDs.length }}</span>
+            <span class="text-h4 text-weight-bold text-blue-7">{{ region.summitCount }}</span>
             Gipfel
           </div>
           <div class="col-12 col-sm-3 text-center">
@@ -79,19 +79,21 @@ const region = computed(() =>
 )
 
 const ascents = computed(() =>
-  dataStore.f_Ascents.filter((ascent) => ascent.route.summit.region._id === region.value._id),
+  dataStore.f_Ascents.filter((ascent) => ascent.route.regionID === region.value._id),
 )
 
-const summits = dataStore.summits.filter((summit) => summit.region._id === region.value._id)
+const summits = dataStore.summits.filter((summit) => summit.regionID === region.value._id)
 const ascentCount = computed(() => dataStore.f_AscentsPerRegion[region.value._id] ?? 0)
 const summitWithAscentsCount = computed(
   () =>
-    region.value.summitIDs.filter((summitID) => dataStore.f_AscentsPerSummit[summitID] > 0).length,
+    dataStore.summits
+      .filter((summit) => summit.regionID === region.value._id)
+      .filter((summitID) => dataStore.f_AscentsPerSummit[summitID] > 0).length,
 )
 const summitPercentage = computed(() =>
-  region.value.summitIDs.length == 0
+  region.value.summitCount == 0
     ? 0.0
-    : ((summitWithAscentsCount.value / region.value.summitIDs.length) * 100).toFixed(1),
+    : ((summitWithAscentsCount.value / region.value.summitCount) * 100).toFixed(1),
 )
 
 onMounted(() => {

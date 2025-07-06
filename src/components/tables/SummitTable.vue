@@ -34,7 +34,7 @@
       <q-td :props="props">
         <router-link
           style="text-decoration: none; color: inherit"
-          :to="`/regions/${props.row.region._id}`"
+          :to="`/regions/${props.row.regionID}`"
           >{{ props.value }}</router-link
         >
       </q-td>
@@ -79,14 +79,14 @@ const columns = [
   {
     name: 'region',
     label: 'Gebiet',
-    field: (row) => row.region.name,
+    field: (row) => row.regionName,
     align: 'left',
     sortable: true,
   },
   {
     name: 'routes',
     label: 'Wege',
-    field: (row) => row.routeIDs.length,
+    field: (row) => row.routeCount,
     align: 'left',
     sortable: true,
   },
@@ -95,10 +95,10 @@ const columns = [
 
 const summits = computed(() => {
   const summits = props.summits.map((summit) => {
-    const routesWithAscents = summit.routeIDs.filter(
-      (routeID) => dataStore.f_AscentsPerRoute[routeID] > 0,
+    const routesWithAscents = dataStore.routes[summit._id].filter(
+      (route) => dataStore.f_AscentsPerRoute[route._id] > 0,
     ).length
-    const routeCount = summit.routeIDs.length
+    const routeCount = summit.routeCount
     const routePercentage =
       routeCount == 0 ? 0.0 : ((routesWithAscents / routeCount) * 100).toFixed(1)
     return {

@@ -3,33 +3,11 @@ import { getAscents, getClimbers, getRoutes, getSummits, getRegions, getTrips } 
 import { useFilterStore } from 'src/stores/filterStore'
 import { NORMAL_SCALA } from 'src/helper/route'
 
-const colors = [
-  'red',
-  'pink',
-  'purple',
-  'deep-purple',
-  'indigo',
-  'blue',
-  'light-blue',
-  'cyan',
-  'teal',
-  'green',
-  'light-green',
-  'lime',
-  'yellow',
-  'amber',
-  'orange',
-  'deep-orange',
-  'brown',
-  'grey',
-  'blue-grey',
-]
-
 export const useDataStore = defineStore('data', {
   state: () => ({
     ascents: [], // Array of ascent objects
     climbers: [], // Array of climber objects
-    routes: [], // Array of route objects
+    routes: {}, // Object of route objects grouped by summit ID
     summits: [], // Array of summit objects
     regions: [], // Array of region objects
     trips: [],
@@ -40,7 +18,7 @@ export const useDataStore = defineStore('data', {
     f_AscentsPerRegion(state) {
       const map = {}
       state.f_Ascents.forEach((ascent) => {
-        const regionId = ascent.route.summit.region._id
+        const regionId = ascent.route.regionID
         if (!map[regionId]) map[regionId] = 0
         map[regionId]++
       })
@@ -49,7 +27,7 @@ export const useDataStore = defineStore('data', {
     f_AscentsPerSummit(state) {
       const map = {}
       state.f_Ascents.forEach((ascent) => {
-        const summitId = ascent.route.summit._id
+        const summitId = ascent.route.summitID
         if (!map[summitId]) map[summitId] = 0
         map[summitId]++
       })
@@ -63,20 +41,6 @@ export const useDataStore = defineStore('data', {
         map[routeId]++
       })
       return map
-    },
-    routeIDsPerSummit(state) {
-      return state.routes.reduce((map, route) => {
-        if (!map[route.summit._id]) map[route.summit._id] = []
-        map[route.summit._id].push(route._id)
-        return map
-      }, {})
-    },
-    summitIDsPerRegion(state) {
-      return state.summits.reduce((map, summit) => {
-        if (!map[summit.region._id]) map[summit.region._id] = []
-        map[summit.region._id].push(summit._id)
-        return map
-      }, {})
     },
     f_Ascents(state) {
       const filterStore = useFilterStore()
@@ -170,9 +134,9 @@ export const useDataStore = defineStore('data', {
           if (filterStore.filters.route.route !== null) {
             return ascent.route._id === filterStore.filters.route.route
           } else if (filterStore.filters.route.summit !== null) {
-            return ascent.route.summit._id === filterStore.filters.route.summit
+            return ascent.route.summitID === filterStore.filters.route.summit
           } else if (filterStore.filters.route.region !== null) {
-            return ascent.route.summit.region._id === filterStore.filters.route.region
+            return ascent.route.regionID === filterStore.filters.route.region
           }
           return true
         })
@@ -213,6 +177,7 @@ export const useDataStore = defineStore('data', {
           return true
         })
     },
+    //TODO: maybe move to backend
     populatedTrips(state) {
       return state.trips.map((trip) => {
         return {
@@ -272,19 +237,10 @@ export const useDataStore = defineStore('data', {
 
       this.regions = regionsResponse.data
       this.summits = summitsResponse.data
-      this.routes = routesResponse.data
+      this.routes = routesResponse.data[0]
       this.climbers = climbersResponse.data
       this.ascents = ascentsResponse.data
       this.trips = tripsResponse.data
-
-      // Sort climbers by number of ascents (descending)
-      const climberCount = {}
-      this.ascents.forEach((ascent) => {
-        ascent.climbers.forEach((c) => {
-          climberCount[c._id] = (climberCount[c._id] || 0) + 1
-        })
-      })
-      this.climbers.sort((a, b) => (climberCount[b._id] || 0) - (climberCount[a._id] || 0))
 
       console.log('Data Processing time: ', performance.now() - startTime2, 'ms')
 

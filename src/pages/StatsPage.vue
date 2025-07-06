@@ -51,9 +51,17 @@ const dataStore = useDataStore()
 const filterStore = useFilterStore()
 
 const { f_Ascents, f_PopulatedTrips } = storeToRefs(dataStore)
-const uniqueSummits = computed(() => [
-  ...new Set(f_Ascents.value.map((ascent) => ascent.route.summit)),
-])
+const uniqueSummits = computed(() => {
+  const uniqueSummits = new Map()
+  f_Ascents.value.forEach((ascent) => {
+    uniqueSummits.set(ascent.route.summitID, {
+      _id: ascent.route.summitID,
+      regionName: ascent.route.regionName,
+    })
+  })
+  return Array.from(uniqueSummits.values()).sort((a, b) => a.regionName.localeCompare(b.regionName))
+})
+
 const uniqueRoutes = computed(() => [...new Set(f_Ascents.value.map((ascent) => ascent.route))])
 </script>
 

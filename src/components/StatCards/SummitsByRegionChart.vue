@@ -43,7 +43,7 @@ const chartData = computed(() => {
   // Group summits by region
   const regionCounts = {}
   summits.forEach((summit) => {
-    const region = summit.region.name || 'Unknown'
+    const region = summit.regionName || 'Unknown'
     regionCounts[region] = (regionCounts[region] || 0) + 1
   })
 

@@ -58,20 +58,23 @@
 import { computed, ref } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { useFilterStore } from 'src/stores/filterStore'
+import { data } from 'autoprefixer'
 
 const dataStore = useDataStore()
 const filterStore = useFilterStore()
 const filters = filterStore.filters
 
+const uniqueRegions = new Map()
+dataStore.ascents.forEach((ascent) => {
+  uniqueRegions.set(ascent.route.regionID, {
+    label: ascent.route.regionName,
+    value: ascent.route.regionID,
+  })
+})
 // get all unique regions from ascents
-const regionOptionDefault = [
-  ...new Set(dataStore.ascents.map((ascent) => ascent.route.summit.region)),
-]
-  .map((region) => ({
-    label: region.name,
-    value: region._id,
-  }))
-  .sort((a, b) => a.label.localeCompare(b.label))
+const regionOptionDefault = Array.from(uniqueRegions.values()).sort((a, b) =>
+  a.label.localeCompare(b.label),
+)
 const regionOptions = ref(regionOptionDefault)
 
 const regionFilter = (val, update) => {
@@ -103,7 +106,7 @@ const selectedRegion = computed({
       filters.route.region = newVal.value
       if (
         filters.route.summit &&
-        dataStore.summits.find((summit) => summit._id === filters.route.summit).region._id !==
+        dataStore.summits.find((summit) => summit._id === filters.route.summit).regionID !==
           newVal.value
       ) {
         filters.route.summit = null
@@ -112,21 +115,22 @@ const selectedRegion = computed({
   },
 })
 
-const uniqueSummits = computed(() => [
-  ...new Set(dataStore.ascents.map((ascent) => ascent.route.summit)),
-])
-const summitOptionDefault = computed(() =>
-  uniqueSummits.value
+const summitOptionDefault = computed(() => {
+  const uniqueSummits = new Map()
+  dataStore.summits
     .filter((summit) => {
       if (selectedRegion.value == null) return true
-      return summit.region._id === selectedRegion.value.value
+      return summit.regionID === selectedRegion.value.value
     })
-    .map((summit) => ({
-      label: summit.name,
-      value: summit._id,
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label)),
-)
+    .filter((summit) => dataStore.f_AscentsPerSummit[summit._id] > 0)
+    .forEach((summit) => {
+      uniqueSummits.set(summit._id, {
+        label: summit.name,
+        value: summit._id,
+      })
+    })
+  return Array.from(uniqueSummits.values()).sort((a, b) => a.label.localeCompare(b.label))
+})
 const summitOptions = ref(summitOptionDefault.value)
 
 const selectedSummit = computed({
@@ -146,7 +150,7 @@ const selectedSummit = computed({
       filters.route.summit = newVal.value
       filters.route.region = dataStore.summits.find(
         (summit) => summit._id === newVal.value,
-      ).region._id
+      ).regionID
     }
     filters.route.route = null
   },
@@ -168,19 +172,22 @@ const summitFilter = (val, update) => {
   })
 }
 
-const routeOptionDefault = computed(() =>
+const routeOptionDefault = computed(() => {
+  const uniqueRoutes = new Map()
   dataStore.ascents
     .map((ascent) => ascent.route)
     .filter((route) => {
       if (selectedSummit.value == null) return true
-      return route.summit._id === selectedSummit.value.value
+      return route.summitID === selectedSummit.value.value
     })
-    .map((route) => ({
-      label: route.name,
-      value: route._id,
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label)),
-)
+    .forEach((route) => {
+      uniqueRoutes.set(route._id, {
+        label: route.name,
+        value: route._id,
+      })
+    })
+  return Array.from(uniqueRoutes.values()).sort((a, b) => a.label.localeCompare(b.label))
+})
 const routeOptions = ref(routeOptionDefault.value)
 
 const routeFilter = (val, update) => {

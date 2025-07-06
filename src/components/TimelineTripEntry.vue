@@ -18,9 +18,9 @@
       <router-link
         class="summit text-weight-medium"
         style="text-decoration: inherit; color: inherit"
-        :to="`/summits/${ascent.route.summit._id}`"
+        :to="`/summits/${ascent.route.summitID}`"
       >
-        {{ ascent.route.summit.name }} </router-link
+        {{ ascent.route.summitName }} </router-link
       >,
       <router-link
         class="q-ml-sm route"
