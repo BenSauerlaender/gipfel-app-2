@@ -2,9 +2,13 @@
   <q-timeline-entry heading>
     {{ props.trip.name }}
   </q-timeline-entry>
-  <q-timeline-entry v-for="day in props.trip.days" :key="day.name" :subtitle="formatDate(day.name)">
+  <q-timeline-entry
+    v-for="(day, dayIdx) in props.trip.days"
+    :key="day.name"
+    :subtitle="formatDate(day.name)"
+  >
     <div
-      v-for="ascent in day.ascents"
+      v-for="(ascent, ascentIdx) in day.ascents"
       :key="ascent._id"
       class="row items-center q-ma-sm"
       :class="
@@ -17,13 +21,16 @@
 
       <router-link
         class="summit text-weight-medium"
+        :class="repeatedSummit(dayIdx, ascentIdx) ? 'invisible' : ''"
         style="text-decoration: inherit; color: inherit"
         :to="`/summits/${ascent.route.summitID}`"
       >
-        {{ ascent.route.summitName }} </router-link
-      >,
+        {{ ascent.route.summitName }}
+      </router-link>
+      <q-icon name="chevron_right" color="grey-7" />
+
       <router-link
-        class="q-ml-sm route"
+        class="route"
         style="text-decoration: none; color: inherit"
         :to="`/routes/${ascent.route._id}`"
       >
@@ -44,11 +51,11 @@
         :color="ascent.isAborted ? colors.aborted : undefined"
       />
 
-      <q-icon name="chevron_right" />
+      <q-icon name="chevron_right" color="grey-7" />
 
       <template v-if="ascent.leadClimber">
         <span class="lead-climber">{{ ascent.leadClimber.firstName }}</span>
-        <q-icon name="chevron_right" />
+        <q-icon name="chevron_right" color="grey-7" />
       </template>
       <template v-for="(c, idx) in climbers(ascent)" :key="c._id">
         <span class="climber q-ml-xs" :class="c.isAborted ? 'aborted' : ''">
@@ -56,9 +63,9 @@
         </span>
         <span v-if="idx < climbers(ascent).length - 1">,</span>
       </template>
-      <span v-if="ascent.isSolo === true" class="solo-hint"> (solo)</span>
-      <span v-if="ascent.isTopRope === true" class="topRope-hint"> (v.o.g.)</span>
-      <span v-if="ascent.notes != null" class="notes"> ({{ ascent.notes }})</span>
+      <span v-if="ascent.isSolo === true" class="q-ml-xs solo-hint">(solo)</span>
+      <span v-if="ascent.isTopRope === true" class="q-ml-xs topRope-hint">(v.o.g.)</span>
+      <span v-if="ascent.notes != null" class="q-ml-xs notes">({{ ascent.notes }})</span>
       <span v-if="ascent.isAborted == true">{{ ')' }}</span>
     </div>
   </q-timeline-entry>
@@ -76,6 +83,17 @@ const props = defineProps({
     required: true,
   },
 })
+
+const repeatedSummit = (dayIdx, ascentIdx) => {
+  const lastSummit = props.trip.days[dayIdx]?.ascents[ascentIdx - 1]?.route?.summitName
+  if (!lastSummit) {
+    return false
+  } else {
+    const thisSummit = props.trip.days[dayIdx].ascents[ascentIdx].route?.summitName
+    return lastSummit === thisSummit
+  }
+}
+
 const formatDate = (date) => {
   return new Date(date).toLocaleDateString('de-DE', {
     year: 'numeric',
@@ -87,7 +105,7 @@ const climbers = (ascent) => {
   if (ascent.leadClimber) {
     return ascent.climbers.filter((climber) => climber._id !== ascent.leadClimber._id)
   } else {
-    return ascent.climbes
+    return ascent.climbers
   }
 }
 
@@ -110,8 +128,10 @@ const colors = {
 .lead-climber {
   text-decoration: underline;
 }
+.summit .invisible {
+  visibility: hidden;
+}
 .solo-hint {
-  font-style: italic;
 }
 .topRope-hint {
   color: v-bind('colors.topRope');

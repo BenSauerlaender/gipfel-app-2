@@ -44,13 +44,38 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
-- refresh token (15 stueck in der db)
+## Consistensy/Robustness
 
-## Performance verbessern Strategie:
+- use ColorUtils for all colors
+- use DomUtils for height of Map and BottomPanel
 
-3. Tagebuch performance analysieren.
+## Features
 
-4. IndexedDB (fuer offline/ schnelleren start)
+- Timeline indent
+- use URL parameter for tabViews
+- On Mobile: getLocation in MapView
+
+### Server
+
+- run DB Updates periodicly (Teufelsturm(Basic Data + userScore + Location), OSM-Location)
+- save Server log
+
+## Performance
+
+- Tagebuch performance analysieren.
+
+## Offline
+
+- IndexedDB Data + MapTiles
+- StatusPage, check for updates, update local IndexedDB
+
+### PWA
+
+- Service Workers
+
+## Electron
+
+## Capacitor
 
 # Limitations:
 
