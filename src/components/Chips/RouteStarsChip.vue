@@ -1,6 +1,6 @@
 <script setup>
 const props = defineProps({
-  stars: { type: Number, required: false, default: 0 },
+  stars: { type: Number, required: false, default: 1 },
   color: { type: String, required: false },
 })
 </script>

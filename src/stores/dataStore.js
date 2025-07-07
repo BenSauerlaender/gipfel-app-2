@@ -178,19 +178,6 @@ export const useDataStore = defineStore('data', {
         })
     },
     //TODO: maybe move to backend
-    populatedTrips(state) {
-      return state.trips.map((trip) => {
-        return {
-          ...trip,
-          days: trip.days.map((day) => {
-            return {
-              ...day,
-              ascents: day.ascents.map((id) => state.ascents.find((a) => a._id === id)),
-            }
-          }),
-        }
-      })
-    },
     f_PopulatedTrips(state) {
       return state.trips
         .map((trip) => {

@@ -57,7 +57,6 @@
               :columns="[
                 'date',
                 'route',
-                'summit',
                 'grade',
                 'stars',
                 'unsecure',

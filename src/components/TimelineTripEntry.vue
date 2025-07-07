@@ -31,10 +31,11 @@
       </router-link>
 
       <RouteUnsecureChip
-        :unsecure="ascent.route.unsecure"
+        v-if="ascent.route.unsecure"
         :color="ascent.isAborted ? colors.aborted : undefined"
       />
       <RouteStarsChip
+        v-if="ascent.route.stars > 0"
         :stars="ascent.route.stars"
         :color="ascent.isAborted ? colors.aborted : undefined"
       />

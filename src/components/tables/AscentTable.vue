@@ -60,17 +60,23 @@
 
     <template v-slot:body-cell-grade="props">
       <q-td :props="props">
-        <RouteGradeChip :grade="props.value" />
+        <RouteGradeChip v-memo="[props.value]" :grade="props.value" />
       </q-td>
     </template>
     <template v-slot:body-cell-stars="props">
       <q-td :props="props">
-        <RouteStarsChip :stars="props.value">-</RouteStarsChip>
+        <RouteStarsChip
+          v-memo="[props.value]"
+          :stars="props.value"
+          v-if="props.value > 0"
+        ></RouteStarsChip>
+        <span v-else>-</span>
       </q-td>
     </template>
     <template v-slot:body-cell-unsecure="props">
       <q-td :props="props">
-        <RouteUnsecureChip :unsecure="props.value">-</RouteUnsecureChip>
+        <RouteUnsecureChip v-if="props.value">-</RouteUnsecureChip>
+        <span v-else>-</span>
       </q-td>
     </template>
   </q-table>

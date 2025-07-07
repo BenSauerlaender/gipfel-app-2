@@ -13,12 +13,12 @@
             <div>
               <q-card-section>
                 <q-timeline color="secondary" layout="dense" side="right" class="col-10">
-                  <div v-if="trips.length === 0">
+                  <div v-if="f_PopulatedTrips.length === 0">
                     <div class="text-h6">Keine Einträge gefunden</div>
                   </div>
                   <div v-else>
                     <TimelineTripEntry
-                      v-for="trip in trips"
+                      v-for="trip in f_PopulatedTrips.toReversed()"
                       :key="trip.days[0].date"
                       :trip="trip"
                     />
@@ -30,7 +30,7 @@
         </q-tab-panel>
         <q-tab-panel name="table">
           <AscentTable
-            :ascents="ascents"
+            :ascents="f_Ascents"
             :columns="[
               'date',
               'route',
@@ -58,21 +58,10 @@ import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 import AscentTable from 'src/components/tables/AscentTable.vue'
 
 const dataStore = useDataStore()
-const { f_PopulatedTrips } = storeToRefs(dataStore)
 
-const ascents = computed(() => {
-  return dataStore.f_Ascents
-})
+const { f_Ascents, f_PopulatedTrips } = storeToRefs(dataStore)
 
-const applyFilter = ref(true)
 const tab = ref('timeline')
-
-const trips = computed(() => {
-  if (applyFilter.value) {
-    return [...f_PopulatedTrips.value].reverse()
-  }
-  return [...dataStore.populatedTrips].reverse()
-})
 </script>
 
 <style scoped lang="scss">

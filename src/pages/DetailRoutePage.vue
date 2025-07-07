@@ -15,9 +15,9 @@
         <div class="row justify-center items-center">
           <div class="col-12 col-sm-5 text-center">
             <div class="row justify-center">
-              <RouteGradeChip :grade="getRouteGrade(route)" />
-              <RouteStarsChip :stars="route.stars" />
-              <RouteUnsecureChip :unsecure="route.unsecure" />
+              <RouteGradeChip v-memo="[getRouteGrade(route)]" :grade="getRouteGrade(route)" />
+              <RouteStarsChip v-memo="[route.stars]" v-if="route.stars > 0" :stars="route.stars" />
+              <RouteUnsecureChip v-if="route.unsecure"></RouteUnsecureChip>
             </div>
           </div>
           <div class="col-12 col-sm-5 text-center">
