@@ -47,7 +47,7 @@
           <q-tab-panel name="routes">
             <RouteTable
               :routes="routes"
-              :columns="['name', 'grade', 'stars', 'unsecure', 'ascents']"
+              :columns="['name', 'grade', 'stars', 'unsecure', 'ascents', 'ttScore']"
               :defaultSort="['name', 'asc']"
             />
           </q-tab-panel>

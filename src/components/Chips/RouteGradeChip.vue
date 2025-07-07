@@ -8,6 +8,7 @@ const props = defineProps({
 
 <template>
   <q-chip
+    v-once
     :style="{ backgroundColor: props.color ?? getGradeColor(props.grade), color: 'white' }"
     dense
     >{{ props.grade }}</q-chip

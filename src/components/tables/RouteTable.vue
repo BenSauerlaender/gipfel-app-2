@@ -73,6 +73,16 @@
         <span v-else>-</span>
       </q-td>
     </template>
+    <template v-slot:body-cell-ttScore="props">
+      <q-td :props="props">
+        <RouteTTScoreChip
+          v-if="props.value"
+          :score="props.value"
+          :ttrouteid="props.row.teufelsturmId"
+        />
+        <span v-else>-</span>
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -83,6 +93,7 @@ import { getRouteGrade, sortGradeInTable } from 'src/helper/route'
 import RouteGradeChip from 'src/components/Chips/RouteGradeChip.vue'
 import RouteStarsChip from 'src/components/Chips/RouteStarsChip.vue'
 import RouteUnsecureChip from 'src/components/Chips/RouteUnsecureChip.vue'
+import RouteTTScoreChip from '../Chips/RouteTTScoreChip.vue'
 
 const props = defineProps({
   routes: {
@@ -91,7 +102,7 @@ const props = defineProps({
   },
   columns: {
     type: Array,
-    default: () => ['name', 'summit', 'region', 'grade', 'stars', 'unsecure', 'ascents'],
+    default: () => ['name', 'summit', 'region', 'grade', 'stars', 'unsecure', 'ascents', 'ttScore'],
   },
   defaultSort: {
     type: Array,
@@ -108,14 +119,14 @@ const columns = [
   {
     name: 'summit',
     label: 'Gipfel',
-    field: (row) => row.summit?.name,
+    field: (row) => row.summitName,
     align: 'left',
     sortable: true,
   },
   {
     name: 'region',
     label: 'Gebiet',
-    field: (row) => row.summit?.region?.name,
+    field: (row) => row.regionName,
     align: 'left',
     sortable: true,
   },
@@ -130,6 +141,13 @@ const columns = [
   { name: 'stars', label: 'Sterne', field: (row) => row.stars, align: 'center', sortable: true },
   { name: 'unsecure', label: '!', field: (row) => row.unsecure, align: 'left', sortable: true },
   { name: 'ascents', label: 'Begehungen', field: 'ascents', align: 'left', sortable: true },
+  {
+    name: 'ttScore',
+    label: 'TT Bewertung',
+    field: 'teufelsturmScore',
+    align: 'center',
+    sortable: true,
+  },
 ].filter((column) => props.columns.includes(column.name))
 
 const routes = computed(() => {

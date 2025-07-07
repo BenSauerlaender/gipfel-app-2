@@ -7,6 +7,7 @@ const props = defineProps({
 
 <template>
   <q-chip
+    v-once
     v-if="props.stars > 0"
     :style="{ backgroundColor: props.color ?? '#26a69a', color: 'white' }"
     dense

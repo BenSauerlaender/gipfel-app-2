@@ -11,7 +11,16 @@
       <q-card-section>
         <RouteTable
           :routes="routes"
-          :columns="['name', 'summit', 'region', 'grade', 'stars', 'ascents']"
+          :columns="[
+            'name',
+            'summit',
+            'region',
+            'grade',
+            'stars',
+            'ascents',
+            'ttScore',
+            'unsecure',
+          ]"
           :defaultSort="['ascents', 'desc']"
         />
       </q-card-section>

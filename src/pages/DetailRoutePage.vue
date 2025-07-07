@@ -2,12 +2,20 @@
   <div class="q-pa-md page-container">
     <q-card v-if="route">
       <q-card-section>
-        <div class="row items-center">
-          <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-          <div class="text-h5 q-ml-md">
-            {{ route.name }} , {{ route.summitName }}
-            <span class="text-grey-6">({{ route.regionName }})</span>
+        <div class="row justify-between items-center">
+          <div class="row items-center">
+            <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
+            <div class="text-h5 q-ml-md">
+              {{ route.name }} , {{ route.summitName }}
+              <span class="text-grey-6">({{ route.regionName }})</span>
+            </div>
           </div>
+          <RouteTTScoreChip
+            v-if="route.teufelsturmScore"
+            :score="route.teufelsturmScore"
+            :ttrouteid="route.teufelsturmId"
+            dense="false"
+          />
         </div>
       </q-card-section>
       <q-separator />
@@ -47,6 +55,7 @@ import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { getRouteGrade } from 'src/helper/route'
+import RouteTTScoreChip from 'src/components/Chips/RouteTTScoreChip.vue'
 
 const router = useRouter()
 
