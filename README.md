@@ -51,7 +51,6 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 ## Features
 
-- Timeline indent
 - use URL parameter for tabViews
 - On Mobile: getLocation in MapView
 
@@ -66,7 +65,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 ## Offline
 
-- IndexedDB Data + MapTiles
+- IndexedDB MapTiles
 - StatusPage, check for updates, update local IndexedDB
 
 ### PWA
