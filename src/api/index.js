@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useUserStore } from 'src/stores/user'
 import router from 'src/router'
+import { route } from 'quasar/wrappers'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -11,12 +12,8 @@ const api = axios.create({
   },
 })
 
-export const getClimbers = () => api.get('/api/climbers')
-export const getRoutes = () => api.get('/api/routes')
-export const getAscents = () => api.get('/api/ascents')
-export const getSummits = () => api.get('/api/summits')
-export const getRegions = () => api.get('/api/regions')
-export const getTrips = () => api.get('/api/trips')
+export const getData = (route) => api.get(`/api/${route}`)
+export const getlastModified = (route) => api.get(`/api/last-modified/${route}`)
 
 // Request interceptor
 api.interceptors.request.use(

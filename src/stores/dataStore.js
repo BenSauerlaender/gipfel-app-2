@@ -1,20 +1,93 @@
 import { defineStore } from 'pinia'
-import { getAscents, getClimbers, getRoutes, getSummits, getRegions, getTrips } from 'src/api'
+import { getlastModified, getData } from 'src/api'
 import { useFilterStore } from 'src/stores/filterStore'
 import { NORMAL_SCALA } from 'src/helper/route'
 
+import { openDB } from 'idb'
+
+// Initialize the database
+async function initDB() {
+  const db = await openDB('gipfel-app', 1, {
+    upgrade(db) {
+      // Create object store if it doesn't exist
+      if (!db.objectStoreNames.contains('data')) {
+        db.createObjectStore('data', { keyPath: 'id' })
+      }
+    },
+  })
+  return db
+}
+
+export const dataFields = ['ascents', 'climbers', 'routes', 'summits', 'regions', 'trips']
+
 export const useDataStore = defineStore('data', {
   state: () => ({
-    ascents: [], // Array of ascent objects
+    ascents: [],
     climbers: [], // Array of climber objects
     routes: {}, // Object of route objects grouped by summit ID
     summits: [], // Array of summit objects
     regions: [], // Array of region objects
     trips: [],
-    isLoaded: false,
+    meta: {
+      ascents: {
+        status: '',
+        date: null,
+        remoteDate: null,
+      },
+      climbers: {
+        status: '',
+        date: null,
+        remoteDate: null,
+      },
+      routes: {
+        status: '',
+        date: null,
+        remoteDate: null,
+      },
+      summits: {
+        status: '',
+        date: null,
+        remoteDate: null,
+      },
+      regions: {
+        status: '',
+        date: null,
+        remoteDate: null,
+      },
+      trips: {
+        status: '',
+        date: null,
+        remoteDate: null,
+      },
+    },
   }),
 
   getters: {
+    getDataLength(state) {
+      return (field) => {
+        if (!state[field]) return 0
+        return Array.isArray(state[field]) ? state[field].length : Object.keys(state[field]).length
+      }
+    },
+    isLoaded(state) {
+      return (
+        dataFields.every((field) => state.meta[field].status === 'loaded') &&
+        dataFields.every((field) => this.getDataLength(field) > 0)
+      )
+    },
+    needUpdate(state) {
+      return (dataName) => {
+        if (!state.meta[dataName].remoteDate) {
+          return false // No remote date means no update needed
+        }
+        if (!state.meta[dataName].date) {
+          return true // No local date means data is outdated
+        }
+        const remoteDate = new Date(state.meta[dataName].remoteDate)
+        const localDate = new Date(state.meta[dataName].date)
+        return remoteDate > localDate
+      }
+    },
     f_AscentsPerRegion(state) {
       const map = {}
       state.f_Ascents.forEach((ascent) => {
@@ -177,7 +250,6 @@ export const useDataStore = defineStore('data', {
           return true
         })
     },
-    //TODO: maybe move to backend
     f_PopulatedTrips(state) {
       return state.trips
         .map((trip) => {
@@ -200,38 +272,65 @@ export const useDataStore = defineStore('data', {
   },
 
   actions: {
-    // Combined loading action
-    async loadData() {
-      const startTime = performance.now()
-      // Load data from API
-      const [
-        ascentsResponse,
-        climbersResponse,
-        routesResponse,
-        summitsResponse,
-        regionsResponse,
-        tripsResponse,
-      ] = await Promise.all([
-        getAscents(),
-        getClimbers(),
-        getRoutes(),
-        getSummits(),
-        getRegions(),
-        getTrips(),
-      ])
-      console.log('Data Download time: ', performance.now() - startTime, 'ms')
-      const startTime2 = performance.now()
+    // Load data from API and save to IndexedDB and load into state
+    async loadDataFromApi(dataName) {
+      try {
+        this.meta[dataName].status = 'downloading'
+        console.log(`Loading ${dataName} data from API...`)
+        const response = await getData(dataName)
 
-      this.regions = regionsResponse.data
-      this.summits = summitsResponse.data
-      this.routes = routesResponse.data[0]
-      this.climbers = climbersResponse.data
-      this.ascents = ascentsResponse.data
-      this.trips = tripsResponse.data
+        if (response?.data?.data?.length === 1) response.data.data = response.data.data[0]
+        if (!response || !response.data || !response.data.data || response.data.data.length === 0) {
+          throw new Error(`No data received for ${dataName}`)
+        }
 
-      console.log('Data Processing time: ', performance.now() - startTime2, 'ms')
+        this.meta[dataName].status = 'saving'
+        console.log(`Saving ${dataName} data to IndexedDB...`)
+        const db = await initDB()
+        await db.put('data', { id: dataName, data: response.data })
 
-      this.isLoaded = true
+        this.meta[dataName].status = 'loading'
+        this.meta[dataName].date = response.data.date || new Date().toISOString()
+        this[dataName] = response.data.data
+        this.meta[dataName].status = 'loaded'
+        console.log(`${dataName} data loaded successfully`)
+      } catch (error) {
+        console.error(`Error loading ${dataName} data from API:`, error)
+        this.meta[dataName].status = 'error'
+      }
+    },
+    // Load data from IndexedDB
+    async loadDataFromIndexedDB(dataName) {
+      try {
+        this.meta[dataName].status = 'loading'
+        console.log(`Loading ${dataName} data from IndexedDB...`)
+        const db = await initDB()
+        const { id, data } = await db.get('data', dataName)
+        if (!data || !data.data || data.data.length === 0) {
+          throw new Error(`No data found for ${dataName} in IndexedDB`)
+        }
+        this[dataName] = data.data
+        this.meta[dataName].date = data.date
+        this.meta[dataName].status = 'loaded'
+        console.log(`${dataName} data loaded successfully from IndexedDB`)
+      } catch (error) {
+        this.meta[dataName].status = ''
+        throw error
+      }
+    },
+    // check if data is outdated
+    async getRemoteDate(dataName) {
+      const lastModifiedResponse = await getlastModified(dataName)
+      if (!lastModifiedResponse || !lastModifiedResponse.data) {
+        this.meta[dataName].remoteDate = null
+        throw new Error(`No last modified date received for ${dataName}`)
+      }
+      this.meta[dataName].remoteDate = lastModifiedResponse.data
+    },
+    async getAllRemoteDates() {
+      for (const dataName of dataFields) {
+        await this.getRemoteDate(dataName)
+      }
     },
   },
 })

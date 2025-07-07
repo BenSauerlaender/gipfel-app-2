@@ -4,6 +4,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', redirect: '/timeline' },
+      { path: '/status', component: () => import('pages/StatusPage.vue') },
       { path: '/timeline', component: () => import('pages/TimelinePage.vue') },
       { path: '/stats', component: () => import('pages/StatsPage.vue') },
       { path: '/stats/routes', component: () => import('pages/StatsRoutesPage.vue') },
@@ -16,12 +17,10 @@ const routes = [
       { path: '/map/:id?', component: () => import('pages/MapPage.vue') },
     ],
   },
-
   {
     path: '/login',
     component: () => import('pages/LoginPage.vue'),
   },
-
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),

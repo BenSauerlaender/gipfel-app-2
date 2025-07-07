@@ -9,8 +9,14 @@
         <q-btn round flat icon="more_vert">
           <q-menu auto-close :offset="[110, 0]">
             <q-list style="min-width: 150px">
-              <q-item clickable @click="handleLogout">
+              <q-item clickable @click="router.push('/status')">
+                <q-item-section>Status</q-item-section>
+              </q-item>
+              <q-item v-if="loggedIn === true" clickable @click="userStore.logout">
                 <q-item-section>Logout</q-item-section>
+              </q-item>
+              <q-item v-else clickable @click="router.push('/login')">
+                <q-item-section>Login</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -27,15 +33,16 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view v-if="isLoaded" />
-      <q-inner-loading
-        v-else
-        showing
-        label="Loading..."
-        label-color="primary"
-        color="primary"
-        class="big-loading"
-      />
+      <router-view v-if="isLoaded || router.currentRoute.value.fullPath === '/status'" />
+      <div v-else class="column items-center justify-center relative-position loading-container">
+        <q-circular-progress indeterminate rounded size="50px" color="primary" class="q-ma-md" />
+        <q-btn
+          v-if="showStatusButton"
+          @click="router.push('/status')"
+          label="Check Status"
+          color="primary"
+        />
+      </div>
       <!-- Bottom Panel Component -->
       <BottomPanel v-if="isLoaded">
         <FilterOptions />
@@ -45,24 +52,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import BottomPanel from 'components/BottomPanel.vue'
 import FilterOptions from 'components/FilterOptions.vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'
 import { useDataStore } from 'src/stores/dataStore'
+import { storeToRefs } from 'pinia'
 
 const dataStore = useDataStore()
 const userStore = useUserStore()
 const router = useRouter()
 
-const isLoaded = ref(false)
-
-dataStore.loadData().then(() => {
-  console.log('all data loaded')
-  isLoaded.value = true
-})
+const { isLoaded } = storeToRefs(dataStore)
+const { loggedIn } = storeToRefs(userStore)
 
 const linksList = [
   {
@@ -99,37 +103,25 @@ const linksList = [
 ]
 
 const leftDrawerOpen = ref(false)
+const showStatusButton = ref(false)
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-function handleLogout() {
-  userStore.logout().then(() => {
-    router.push('/login')
-  })
-}
+onMounted(() => {
+  setTimeout(() => {
+    if (!isLoaded.value) {
+      showStatusButton.value = true
+    }
+  }, 3000)
+})
 </script>
 
 <style scoped>
-.big-loading {
-  justify-content: center !important;
-  align-items: center !important;
+.loading-container {
   z-index: 1000;
-}
-.big-loading .q-inner-loading__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.big-loading .q-spinner {
-  width: 80px !important;
-  height: 80px !important;
-}
-.big-loading .q-inner-loading__label {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-top: 24px;
+  height: calc(100vh - 660px);
 }
 
 /* Add bottom padding to ensure content can scroll past the bottom panel */

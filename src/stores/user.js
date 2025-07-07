@@ -63,7 +63,8 @@ export const useUserStore = defineStore('user', {
         }
         this.loggedIn = true
         return true
-      } catch {
+      } catch (error) {
+        console.error('Token refresh error:', error)
         this.clearAuth()
         return false
       }

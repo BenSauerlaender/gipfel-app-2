@@ -36,14 +36,15 @@ export default defineRouter(function (/* { store, ssrContext } */) {
 
   Router.beforeEach(async (to) => {
     const userStore = useUserStore()
-    if (userStore.loggedIn == false && to.path !== '/login') {
-      const res = await userStore.refreshAccessToken()
-      if (res == false) {
-        return '/login'
+    if (to.path === '/login') {
+      if (userStore.loggedIn == true) {
+        return '/status'
+      } else {
+        await userStore.refreshAccessToken()
+        if (userStore.loggedIn) {
+          return '/status'
+        }
       }
-    }
-    if (to.path === '/login' && userStore.loggedIn == true) {
-      return '/'
     }
   })
 

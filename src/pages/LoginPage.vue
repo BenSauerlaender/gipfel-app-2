@@ -51,14 +51,6 @@ const passwordError = ref('')
 const userStore = useUserStore()
 const router = useRouter()
 
-if (userStore.loggedIn) {
-  router.push('/')
-} else {
-  userStore.refreshAccessToken().then(() => {
-    router.push('/')
-  })
-}
-
 async function onSubmit() {
   error.value = ''
   usernameError.value = ''
@@ -74,7 +66,7 @@ async function onSubmit() {
   loading.value = true
   try {
     await userStore.login(username.value, password.value)
-    router.push('/')
+    router.push('/status')
   } catch (err) {
     error.value = err.message || 'Login failed.'
   } finally {
