@@ -2,21 +2,7 @@ import { defineStore } from 'pinia'
 import { getlastModified, getData } from 'src/api'
 import { useFilterStore } from 'src/stores/filterStore'
 import { NORMAL_SCALA } from 'src/helper/route'
-
-import { openDB } from 'idb'
-
-// Initialize the database
-async function initDB() {
-  const db = await openDB('gipfel-app', 1, {
-    upgrade(db) {
-      // Create object store if it doesn't exist
-      if (!db.objectStoreNames.contains('data')) {
-        db.createObjectStore('data', { keyPath: 'id' })
-      }
-    },
-  })
-  return db
-}
+import { initDB } from 'src/helper/db'
 
 export const dataFields = ['ascents', 'climbers', 'routes', 'summits', 'regions', 'trips']
 
@@ -319,7 +305,7 @@ export const useDataStore = defineStore('data', {
       }
     },
     // check if data is outdated
-    async getRemoteDate(dataName) {
+    async fetchRemoteLastModified(dataName) {
       const lastModifiedResponse = await getlastModified(dataName)
       if (!lastModifiedResponse || !lastModifiedResponse.data) {
         this.meta[dataName].remoteDate = null
@@ -327,9 +313,9 @@ export const useDataStore = defineStore('data', {
       }
       this.meta[dataName].remoteDate = lastModifiedResponse.data
     },
-    async getAllRemoteDates() {
+    async fetchAllRemoteLastModified() {
       for (const dataName of dataFields) {
-        await this.getRemoteDate(dataName)
+        await this.fetchRemoteLastModified(dataName)
       }
     },
   },

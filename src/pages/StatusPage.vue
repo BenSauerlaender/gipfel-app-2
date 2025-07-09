@@ -154,11 +154,13 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDataStore, dataFields } from 'src/stores/dataStore'
 import { useUserStore } from 'src/stores/user'
+import { useResourceStore } from 'src/stores/resourceStore'
 import { date } from 'quasar'
 
 const router = useRouter()
 const dataStore = useDataStore()
 const userStore = useUserStore()
+const rescourceStore = useResourceStore()
 
 const label = (s) => {
   switch (s) {
@@ -280,14 +282,14 @@ const handleDataFieldAction = async (field) => {
 
 const checkForUpdates = async () => {
   checkingUpdates.value = true
-  dataStore
-    .getAllRemoteDates()
-    .catch((error) => {
-      console.error('Error checking for updates:', error)
-    })
-    .finally(() => {
-      checkingUpdates.value = false
-    })
+  const promises = [
+    dataStore.fetchAllRemoteLastModified(),
+    rescourceStore.fetchAllRemoteLastModified(),
+  ]
+  await Promise.all(promises).catch((error) => {
+    console.error('Error checking for updates:', error)
+  })
+  checkingUpdates.value = false
 }
 </script>
 

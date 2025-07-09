@@ -14,6 +14,13 @@ const api = axios.create({
 
 export const getData = (route) => api.get(`/api/${route}`)
 export const getlastModified = (route) => api.get(`/api/last-modified/${route}`)
+export const getMapFonts = () =>
+  api.get(`/api/map/fonts`, {
+    responseType: 'arraybuffer',
+    headers: {
+      Accept: 'application/gzip',
+    },
+  })
 
 // Request interceptor
 api.interceptors.request.use(
