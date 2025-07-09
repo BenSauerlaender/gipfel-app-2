@@ -5,14 +5,14 @@
 <script setup>
 import { useUserStore } from 'src/stores/user'
 import { dataFields, useDataStore } from 'src/stores/dataStore'
-import { useResourceStore } from 'src/stores/resourceStore'
+import { useResourceOldStore } from 'src/stores/resourceStoreOld'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
 const userStore = useUserStore()
 const dataStore = useDataStore()
-const resourceStore = useResourceStore()
+const resourceOldStore = useResourceOldStore()
 const router = useRouter()
 
 const notifyUpdateAvailable = () => {
@@ -24,7 +24,7 @@ const notifyUpdateAvailable = () => {
 
 const promises = []
 
-promises.push(resourceStore.fetchStatus())
+promises.push(resourceOldStore.fetchStatus())
 
 dataFields.forEach((field) => {
   promises.push(
@@ -38,7 +38,7 @@ let notifySend = false
 userStore.refreshAccessToken().finally(() => {
   if (userStore.loggedIn) {
     promises.push(dataStore.fetchAllRemoteLastModified())
-    promises.push(resourceStore.fetchAllRemoteLastModified())
+    promises.push(resourceOldStore.fetchAllRemoteLastModified())
   }
   Promise.all(promises).finally(() => {
     dataFields.forEach((field) => {
@@ -47,7 +47,7 @@ userStore.refreshAccessToken().finally(() => {
         notifySend = true
       }
     })
-    if (resourceStore.needUpdate && !notifySend) {
+    if (resourceOldStore.needUpdate && !notifySend) {
       notifyUpdateAvailable()
       notifySend = true
     }

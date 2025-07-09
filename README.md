@@ -58,15 +58,11 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
+- fix data managment
 - pmtiles generation dokumentiern
 - re-gen (zoom, bounds)
 - style json anpassen
-  - peak in low zoom sichtbar
-  - remove remote content
-  - remove unecceserry stuff
-  - styling anpassen?
   - language
-- cliff hinzufuegen?
 - was fehlt noch im verg. zu OSM?
 
 ## Consistensy/Robustness

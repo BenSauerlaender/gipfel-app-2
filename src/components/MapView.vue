@@ -26,16 +26,16 @@ import { useRouter, useRoute } from 'vue-router'
 import maplibregl from 'maplibre-gl'
 import { Protocol } from 'pmtiles'
 import mapStyle from 'src/assets/mapStyle.json'
-import { useResourceStore } from 'src/stores/resourceStore'
+import { useResourceOldStore } from 'src/stores/resourceStoreOld'
 
-const resourceStore = useResourceStore()
+const resourceOldStore = useResourceOldStore()
 
 maplibregl.addProtocol('glyphs', async (params) => {
   const pattern = /glyphs:\/\/(.*)\/(.*)/i
   const url = params.url.match(pattern)
   const font = url[1].split(',')[0]
   const range = url[2]
-  const glyph = await resourceStore.getMapFontsGlyph(font, range)
+  const glyph = await resourceOldStore.getMapFontsGlyph(font, range)
 
   return {
     data: glyph,
