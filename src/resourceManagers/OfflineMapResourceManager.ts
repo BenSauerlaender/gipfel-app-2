@@ -58,6 +58,7 @@ export class OfflineMapResourceManager extends ResourceManager {
           },
         }).then((response) => untar(response)),
       ])
+      console.log(`Download finished. Saving ${this.id} data to IndexedDB...`)
 
       const tx = this.db.transaction(this.id, 'readwrite')
       const store = tx.objectStore(this.id)
