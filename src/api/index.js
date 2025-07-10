@@ -12,15 +12,7 @@ const api = axios.create({
   },
 })
 
-export const getData = (route) => api.get(`/api/${route}`)
-export const getlastModified = (route) => api.get(`/api/last-modified/${route}`)
-export const getMapFonts = () =>
-  api.get(`/api/map/fonts`, {
-    responseType: 'arraybuffer',
-    headers: {
-      Accept: 'application/gzip',
-    },
-  })
+export const isOnline = () => api.get('/api/health', { timeout: 5000 })
 
 // Request interceptor
 api.interceptors.request.use(

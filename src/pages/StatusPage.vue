@@ -35,8 +35,8 @@
         <q-card-section>
           <div class="row items-center q-mb-md">
             <q-icon
-              :name="dataStore.isLoaded ? 'check_circle' : 'error'"
-              :color="dataStore.isLoaded ? 'positive' : 'negative'"
+              :name="isAllLoaded ? 'check_circle' : 'error'"
+              :color="isAllLoaded ? 'positive' : 'negative'"
               size="md"
               class="q-mr-md"
             />
@@ -44,7 +44,7 @@
               <div class="text-h6">App Daten</div>
               <div class="text-caption text-grey-7">
                 {{
-                  dataStore.isLoaded
+                  isAllLoaded
                     ? 'Alle Daten wurden erfolgreich geladen'
                     : 'Einige Daten fehlen oder konnten nicht geladen werden'
                 }}
@@ -72,12 +72,12 @@
           <!-- Progress Bar -->
           <q-linear-progress
             :value="loadedDataFieldsPercentage"
-            :color="dataStore.isLoaded ? 'positive' : 'warning'"
+            :color="isAllLoaded ? 'positive' : 'warning'"
             class="q-mb-sm"
             size="8px"
           />
           <div class="text-caption text-center">
-            {{ loadedDataFields.length }} / {{ dataFields.length }} Datensätze geladen
+            {{ loadedDataFields.length }} / {{ resources.length }} Datensätze geladen
           </div>
         </q-card-section>
       </q-card>
@@ -91,54 +91,59 @@
           </div>
 
           <div class="q-gutter-md q-mt-md">
-            <q-card v-for="field in dataFields" :key="field" class="data-field-card" bordered flat>
+            <q-card
+              v-for="resource in resources"
+              :key="resource.id"
+              class="data-field-card"
+              bordered
+              flat
+            >
               <q-card-section class="q-pa-md">
                 <div class="row items-center">
                   <!-- Status Icon -->
                   <q-icon
-                    :name="getStatusIcon(field)"
-                    :color="getStatusColor(field)"
+                    :name="getStatusIcon(resource)"
+                    :color="getStatusColor(resource)"
                     size="sm"
                     class="q-mr-md"
                   />
 
                   <!-- Field Info -->
                   <div class="col">
-                    <div class="text-subtitle1 text-capitalize">{{ label(field) }}</div>
+                    <div class="text-subtitle1 text-capitalize">{{ label(resource.id) }}</div>
                     <div class="text-caption text-grey-7">
-                      Status: {{ label(dataStore.meta[field].status) || 'nicht geladen' }}
+                      Status:
+                      {{ label(resource.state) || 'nicht geladen' }}
                     </div>
-                    <div v-if="dataStore.meta[field].date" class="text-caption text-grey-7">
-                      Zuletzt aktualisiert: {{ formatDate(dataStore.meta[field].date) }}
+                    <div v-if="resource.localLastModified" class="text-caption text-grey-7">
+                      Zuletzt aktualisiert:
+                      {{ formatDate(resource.localLastModified) }}
                     </div>
-                    <div v-if="dataStore.getDataLength(field) > 0" class="text-caption text-grey-7">
-                      {{ dataStore.getDataLength(field) }}
-                      Einträge geladen
-                    </div>
+                    <div class="text-caption text-grey-7">{{ resource.entryCount }} Einträge</div>
                   </div>
 
                   <!-- Action Button -->
                   <q-btn
-                    v-if="dataStore.meta[field].status !== 'loaded' || dataStore.needUpdate(field)"
-                    :color="getActionButtonColor(field)"
-                    :label="getActionButtonLabel(field)"
-                    :icon="getActionButtonIcon(field)"
-                    @click="handleDataFieldAction(field)"
-                    :loading="loadingFields.includes(field)"
-                    :disable="loadingFields.includes(field) || userStore.loggedIn !== true"
+                    v-if="resource.state !== 'loaded' || resource.isOutdated()"
+                    :color="getActionButtonColor(resource)"
+                    :label="getActionButtonLabel(resource)"
+                    :icon="getActionButtonIcon(resource)"
+                    @click="handleDataFieldAction(resource)"
+                    :loading="loadingFields.includes(resource.id)"
+                    :disable="loadingFields.includes(resource.id) || userStore.loggedIn !== true"
                     size="sm"
                   >
-                    <q-tooltip>{{ getActionButtonTooltip(field) }}</q-tooltip>
+                    <q-tooltip>{{ getActionButtonTooltip(resource) }}</q-tooltip>
                   </q-btn>
                 </div>
 
                 <!-- Error Message -->
                 <div
-                  v-if="dataStore.meta[field].status === 'error'"
+                  v-if="resource.downloadError"
                   class="q-mt-sm q-pa-sm bg-negative text-white rounded-borders"
                 >
                   <q-icon name="error" class="q-mr-sm" />
-                  Fehler beim Laden der {{ label(field) }} Daten
+                  Fehler beim Laden der {{ label(resource.id) }} Daten
                 </div>
               </q-card-section>
             </q-card>
@@ -152,15 +157,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useDataStore, dataFields } from 'src/stores/dataStore'
-import { useUserStore } from 'src/stores/user'
 import { useResourceStore } from 'src/stores/resourceStore'
+import { useUserStore } from 'src/stores/user'
 import { date } from 'quasar'
+import { storeToRefs } from 'pinia'
 
 const router = useRouter()
-const dataStore = useDataStore()
+const resourceStore = useResourceStore()
 const userStore = useUserStore()
-const rescourceStore = useResourceStore()
 
 const label = (s) => {
   switch (s) {
@@ -178,12 +182,12 @@ const label = (s) => {
       return 'Kletterer'
     case 'loaded':
       return 'geladen'
-    case 'loading':
-      return 'wird geladen...'
     case 'downloading':
       return 'wird heruntergeladen...'
-    case 'saving':
-      return 'wird gespeichert...'
+    case 'processing':
+      return 'wird verarbeitet...'
+    case 'empty':
+      return 'nicht geladen'
     default:
       return s
   }
@@ -192,105 +196,99 @@ const label = (s) => {
 const loadingFields = ref([])
 const checkingUpdates = ref(false)
 
+const { resources, isAllLoaded } = storeToRefs(resourceStore)
+
 const loadedDataFields = computed(() =>
-  dataFields.filter((field) => dataStore.meta[field].status === 'loaded'),
+  resourceStore.resources.filter((resource) => resource.state === 'loaded'),
 )
 
-const loadedDataFieldsPercentage = computed(() => loadedDataFields.value.length / dataFields.length)
+const loadedDataFieldsPercentage = computed(
+  () => loadedDataFields.value.length / resourceStore.resources.length,
+)
 
 const formatDate = (dateString) => {
   if (!dateString) return 'error'
   return date.formatDate(new Date(dateString), 'DD.MM.YYYY HH:mm')
 }
 
-const getStatusIcon = (field) => {
-  const status = dataStore.meta[field].status
-  switch (status) {
+const getStatusIcon = (resource) => {
+  switch (resource.state) {
     case 'loaded':
       return 'check_circle'
-    case 'loading':
-      return 'sync'
     case 'downloading':
       return 'cloud_download'
-    case 'saving':
-      return 'save'
-    case 'error':
-      return 'error'
+    case 'processing':
+      return 'sync'
+    case 'empty':
     default:
       return 'radio_button_unchecked'
   }
 }
 
-const getStatusColor = (field) => {
-  const status = dataStore.meta[field].status
-  switch (status) {
+const getStatusColor = (resource) => {
+  switch (resource.state) {
     case 'loaded':
       return 'positive'
-    case 'loading':
     case 'downloading':
-    case 'saving':
+    case 'processing':
       return 'warning'
-    case 'error':
-      return 'negative'
+    case 'empty':
     default:
       return 'grey'
   }
 }
 
-const getActionButtonColor = (field) => {
-  const status = dataStore.meta[field].status
-  if (status === 'error' || !status || status === '') return 'primary'
-  if (dataStore.needUpdate(field)) return 'warning'
+const getActionButtonColor = (resource) => {
+  if (resource.state === 'empty') return 'primary'
+  if (resource.isOutdated()) return 'warning'
   return ''
 }
 
-const getActionButtonLabel = (field) => {
-  const status = dataStore.meta[field].status
-  if (status === 'error' || !status || status === '') return 'Download'
-  if (dataStore.needUpdate(field)) return 'Update'
+const getActionButtonLabel = (resource) => {
+  if (resource.state === 'empty') return 'Download'
+  if (resource.isOutdated()) return 'Update'
   return ''
 }
 
-const getActionButtonIcon = (field) => {
-  const status = dataStore.meta[field].status
-  if (status === 'error' || !status || status === '') return 'cloud_download'
-  if (dataStore.needUpdate(field)) return 'refresh'
+const getActionButtonIcon = (resource) => {
+  if (resource.state === 'empty') return 'cloud_download'
+  if (resource.isOutdated()) return 'refresh'
   return ''
 }
 
-const getActionButtonTooltip = (field) => {
-  const status = dataStore.meta[field].status
+const getActionButtonTooltip = (resource) => {
   if (userStore.loggedIn !== true) return 'Bitte zuerst einloggen'
-  if (status === 'error' || !status || status === '') return `Download ${field}`
-  if (dataStore.needUpdate(field)) return `Update ${field}`
-  return ``
+
+  if (resource.state === 'empty') return `Download ${label(resource.id)}`
+  if (resource.isOutdated()) return `Update ${label(resource.id)}`
+  return ''
 }
 
-const handleDataFieldAction = async (field) => {
-  if (loadingFields.value.includes(field)) return
+const handleDataFieldAction = async (resource) => {
+  if (loadingFields.value.includes(resource.id)) return
 
-  loadingFields.value.push(field)
-  dataStore
-    .loadDataFromApi(field)
-    .catch((error) => {
-      console.error(`Error loading ${field}:`, error)
-    })
-    .finally(() => {
-      loadingFields.value = loadingFields.value.filter((f) => f !== field)
-    })
+  loadingFields.value.push(resource.id)
+  try {
+    await resource.update()
+  } catch (error) {
+    console.error(`Error updating ${resource.id}:`, error)
+  } finally {
+    loadingFields.value = loadingFields.value.filter((f) => f !== resource.id)
+  }
 }
 
 const checkForUpdates = async () => {
   checkingUpdates.value = true
-  const promises = [
-    dataStore.fetchAllRemoteLastModified(),
-    rescourceStore.fetchAllRemoteLastModified(),
-  ]
-  await Promise.all(promises).catch((error) => {
+  try {
+    await resourceStore.checkForUpdates()
+  } catch (error) {
     console.error('Error checking for updates:', error)
-  })
-  checkingUpdates.value = false
+  } finally {
+    checkingUpdates.value = false
+  }
 }
+
+onMounted(async () => {})
 </script>
 
 <style scoped>

@@ -3,53 +3,43 @@
 </template>
 
 <script setup>
-import { useUserStore } from 'src/stores/user'
-import { dataFields, useDataStore } from 'src/stores/dataStore'
-import { useResourceOldStore } from 'src/stores/resourceStoreOld'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { useResourceStore } from './stores/resourceStore'
+import { useUserStore } from './stores/user'
+import { onMounted, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 const $q = useQuasar()
-const userStore = useUserStore()
-const dataStore = useDataStore()
-const resourceOldStore = useResourceOldStore()
+const resourceStore = useResourceStore()
 const router = useRouter()
+const userStore = useUserStore()
 
-const notifyUpdateAvailable = () => {
-  $q.notify({
-    message: 'Updates verfügbar',
-    actions: [{ label: 'Update', handler: router.push('/status') }],
-  })
+const { loggedIn } = storeToRefs(userStore)
+
+const checkForUpdatesAndNotify = async () => {
+  const res = await resourceStore.checkForUpdates()
+  if (res) {
+    $q.notify({
+      message: 'Updates verfügbar',
+      actions: [{ label: 'Update', handler: () => router.push('/status') }],
+    })
+  }
 }
 
-const promises = []
+watch(
+  () => loggedIn,
+  () => {
+    if (loggedIn) {
+      checkForUpdatesAndNotify()
+    }
+  },
+)
 
-promises.push(resourceOldStore.fetchStatus())
-
-dataFields.forEach((field) => {
-  promises.push(
-    dataStore.loadDataFromIndexedDB(field).catch((error) => {
-      console.log(`${field} data not found in IndexedDB:`)
-    }),
-  )
-})
-let notifySend = false
-
-userStore.refreshAccessToken().finally(() => {
-  if (userStore.loggedIn) {
-    promises.push(dataStore.fetchAllRemoteLastModified())
-    promises.push(resourceOldStore.fetchAllRemoteLastModified())
-  }
-  Promise.all(promises).finally(() => {
-    dataFields.forEach((field) => {
-      if (dataStore.needUpdate(field) && !notifySend) {
-        notifyUpdateAvailable()
-        notifySend = true
-      }
-    })
-    if (resourceOldStore.needUpdate && !notifySend) {
-      notifyUpdateAvailable()
-      notifySend = true
+onMounted(async () => {
+  await Promise.all([userStore.refreshAccessToken(), resourceStore.loadAll()]).then(() => {
+    if (loggedIn.value) {
+      checkForUpdatesAndNotify()
     }
   })
 })

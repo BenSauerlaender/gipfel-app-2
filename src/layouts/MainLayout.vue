@@ -33,7 +33,7 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view v-if="isLoaded || router.currentRoute.value.fullPath === '/status'" />
+      <router-view v-if="isMinimumLoaded || router.currentRoute.value.fullPath === '/status'" />
       <div v-else class="column items-center justify-center relative-position loading-container">
         <q-circular-progress indeterminate rounded size="50px" color="primary" class="q-ma-md" />
         <q-btn
@@ -44,7 +44,7 @@
         />
       </div>
       <!-- Bottom Panel Component -->
-      <BottomPanel v-if="isLoaded">
+      <BottomPanel v-if="isMinimumLoaded">
         <FilterOptions />
       </BottomPanel>
     </q-page-container>
@@ -58,14 +58,14 @@ import BottomPanel from 'components/BottomPanel.vue'
 import FilterOptions from 'components/FilterOptions.vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'
-import { useDataStore } from 'src/stores/dataStore'
+import { useResourceStore } from 'src/stores/resourceStore'
 import { storeToRefs } from 'pinia'
 
-const dataStore = useDataStore()
 const userStore = useUserStore()
+const resourceStore = useResourceStore()
 const router = useRouter()
 
-const { isLoaded } = storeToRefs(dataStore)
+const { isMinimumLoaded } = storeToRefs(resourceStore)
 const { loggedIn } = storeToRefs(userStore)
 
 const linksList = [
@@ -111,7 +111,7 @@ function toggleLeftDrawer() {
 
 onMounted(() => {
   setTimeout(() => {
-    if (!isLoaded.value) {
+    if (!isMinimumLoaded.value) {
       showStatusButton.value = true
     }
   }, 3000)
