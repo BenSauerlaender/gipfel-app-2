@@ -58,12 +58,12 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
-- fix data managment
-- pmtiles generation dokumentiern
+- pmtiles / fonts / sprite generation dokumentiern
 - re-gen (zoom, bounds)
 - style json anpassen
   - language
 - was fehlt noch im verg. zu OSM?
+- sprite und mbtiles als loadable assets
 
 ## Consistensy/Robustness
 

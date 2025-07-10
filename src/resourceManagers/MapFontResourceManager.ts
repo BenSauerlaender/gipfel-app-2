@@ -41,11 +41,11 @@ export class MapFontResourceManager extends ResourceManager {
       this.localLastModified = date
 
       this.state = 'loaded'
-      this.downloadError = null
+      this.error = null
       console.log(`${this.id} data loaded successfully`)
     } catch (error) {
       console.error(`Error updating ${this.id} data`, error)
-      this.downloadError = error
+      this.error = error
     }
   }
   // Load data from IndexedDB

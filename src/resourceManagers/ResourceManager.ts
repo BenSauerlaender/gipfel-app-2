@@ -9,7 +9,7 @@ export class ResourceManager {
   remoteLastModified: Date | null = null
   localLastModified: Date | null = null
   state: 'empty' | 'loaded' | 'downloading' | 'processing' = 'empty'
-  downloadError: Error | null = null
+  error: Error | null = null
   entryCount: number = 0
 
   constructor(id: string, db: idbD, apiUrl: string) {
@@ -43,13 +43,21 @@ export class ResourceManager {
   }
 
   async clear(): Promise<void> {
-    return this.db.clear(this.id).then(() => {
-      this.state = 'empty'
-      this.localLastModified = null
-      this.entryCount = 0
-      this.downloadError = null
-      console.log(`Cleared resource ${this.id} from IndexedDB`)
-    })
+    this.state = 'processing'
+    return this.db
+      .clear(this.id)
+      .then(() => {
+        this.state = 'empty'
+        this.localLastModified = null
+        this.entryCount = 0
+        this.error = null
+        console.log(`Cleared resource ${this.id} from IndexedDB`)
+      })
+      .catch((error) => {
+        this.state = 'empty' // Reset state on error
+        this.error = error
+        throw error
+      })
   }
 
   async update(): Promise<void> {

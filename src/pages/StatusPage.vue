@@ -57,9 +57,7 @@
                 @click="checkForUpdates"
                 icon="refresh"
                 :loading="checkingUpdates"
-                :disable="
-                  checkingUpdates || loadingFields.length > 0 || userStore.loggedIn !== true
-                "
+                :disable="checkingUpdates || isAnyResourceBusy || userStore.loggedIn !== true"
               >
                 <q-tooltip v-if="userStore.loggedIn === true"
                   >Überprüfen, ob neuere Daten online verfügbar sind</q-tooltip
@@ -88,6 +86,27 @@
           <div class="text-h6 q-mb-md row items-center">
             <q-icon name="storage" class="q-mr-sm" />
             Datensätze
+            <q-space />
+            <div class="q-gutter-sm">
+              <q-btn
+                :color="hasUnloadedResources ? 'primary' : 'warning'"
+                :label="hasUnloadedResources ? 'Alle herunterladen' : 'Alle aktualisieren'"
+                :icon="hasUnloadedResources ? 'cloud_download' : 'refresh'"
+                @click="updateAllData"
+                :loading="isAnyResourceBusy"
+                :disable="isAnyResourceBusy || userStore.loggedIn !== true"
+                size="sm"
+              >
+                <q-tooltip v-if="userStore.loggedIn === true">
+                  {{
+                    hasUnloadedResources
+                      ? 'Alle fehlenden Daten herunterladen'
+                      : 'Alle veralteten Daten aktualisieren'
+                  }}
+                </q-tooltip>
+                <q-tooltip v-else>Bitte zuerst einloggen</q-tooltip>
+              </q-btn>
+            </div>
           </div>
 
           <div class="q-gutter-md q-mt-md">
@@ -129,8 +148,8 @@
                     :label="getActionButtonLabel(resource)"
                     :icon="getActionButtonIcon(resource)"
                     @click="handleDataFieldAction(resource)"
-                    :loading="loadingFields.includes(resource.id)"
-                    :disable="loadingFields.includes(resource.id) || userStore.loggedIn !== true"
+                    :loading="isResourceBusy(resource)"
+                    :disable="isResourceBusy(resource) || userStore.loggedIn !== true"
                     size="sm"
                   >
                     <q-tooltip>{{ getActionButtonTooltip(resource) }}</q-tooltip>
@@ -139,7 +158,7 @@
 
                 <!-- Error Message -->
                 <div
-                  v-if="resource.downloadError"
+                  v-if="resource.error"
                   class="q-mt-sm q-pa-sm bg-negative text-white rounded-borders"
                 >
                   <q-icon name="error" class="q-mr-sm" />
@@ -147,6 +166,21 @@
                 </div>
               </q-card-section>
             </q-card>
+          </div>
+
+          <!-- Clear All Button at bottom -->
+          <div class="row justify-center q-mt-md">
+            <q-btn
+              color="negative"
+              label="Alle löschen"
+              icon="delete"
+              @click="clearAllData"
+              :loading="isAnyResourceBusy"
+              :disable="isAnyResourceBusy"
+              size="sm"
+            >
+              <q-tooltip>Alle lokalen Daten löschen</q-tooltip>
+            </q-btn>
           </div>
         </q-card-section>
       </q-card>
@@ -180,6 +214,8 @@ const label = (s) => {
       return 'Touren'
     case 'climbers':
       return 'Kletterer'
+    case 'map-fonts':
+      return 'Schrift für Karte'
     case 'loaded':
       return 'geladen'
     case 'downloading':
@@ -193,7 +229,6 @@ const label = (s) => {
   }
 }
 
-const loadingFields = ref([])
 const checkingUpdates = ref(false)
 
 const { resources, isAllLoaded } = storeToRefs(resourceStore)
@@ -205,6 +240,24 @@ const loadedDataFields = computed(() =>
 const loadedDataFieldsPercentage = computed(
   () => loadedDataFields.value.length / resourceStore.resources.length,
 )
+
+const hasUnloadedResources = computed(() =>
+  resourceStore.resources.some((resource) => resource.state === 'empty'),
+)
+
+const hasOutdatedResources = computed(() =>
+  resourceStore.resources.some((resource) => resource.isOutdated()),
+)
+
+const isAnyResourceBusy = computed(() =>
+  resourceStore.resources.some((resource) =>
+    ['downloading', 'processing'].includes(resource.state),
+  ),
+)
+
+const isResourceBusy = (resource) => {
+  return ['downloading', 'processing'].includes(resource.state)
+}
 
 const formatDate = (dateString) => {
   if (!dateString) return 'error'
@@ -265,15 +318,12 @@ const getActionButtonTooltip = (resource) => {
 }
 
 const handleDataFieldAction = async (resource) => {
-  if (loadingFields.value.includes(resource.id)) return
+  if (isResourceBusy(resource)) return
 
-  loadingFields.value.push(resource.id)
   try {
     await resource.update()
   } catch (error) {
     console.error(`Error updating ${resource.id}:`, error)
-  } finally {
-    loadingFields.value = loadingFields.value.filter((f) => f !== resource.id)
   }
 }
 
@@ -285,6 +335,36 @@ const checkForUpdates = async () => {
     console.error('Error checking for updates:', error)
   } finally {
     checkingUpdates.value = false
+  }
+}
+
+const clearAllData = async () => {
+  if (isAnyResourceBusy.value) return
+
+  try {
+    await resourceStore.clearAll()
+  } catch (error) {
+    console.error('Error clearing all data:', error)
+  }
+}
+
+const updateAllData = async () => {
+  if (isAnyResourceBusy.value) return
+
+  try {
+    if (hasUnloadedResources.value) {
+      // Download all resources that are not loaded
+      await Promise.all(
+        resourceStore.resources
+          .filter((resource) => resource.state === 'empty')
+          .map((resource) => resource.update()),
+      )
+    } else if (hasOutdatedResources.value) {
+      // Update all outdated resources
+      await resourceStore.updateAll()
+    }
+  } catch (error) {
+    console.error('Error updating all data:', error)
   }
 }
 
