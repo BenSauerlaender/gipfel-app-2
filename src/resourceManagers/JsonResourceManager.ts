@@ -18,7 +18,7 @@ export class JsonResourceManager<A> extends ResourceManager {
 
   async update(): Promise<void> {
     try {
-      this.state = 'downloading'
+      this.state = 'processing'
       console.log(`Loading ${this.id} data from API...`)
       const response = await api.get(`/api/${this.apiUrl}`)
 
@@ -35,7 +35,6 @@ export class JsonResourceManager<A> extends ResourceManager {
       this.data = data
       this.entryCount = this.getEntryCount()
 
-      this.state = 'processing'
       console.log(`Saving ${this.id} data to IndexedDB...`)
       await this.db.put(this.id, { id: 'data', value: { data, date } })
 
@@ -47,6 +46,10 @@ export class JsonResourceManager<A> extends ResourceManager {
     } catch (error) {
       console.error(`Error updating ${this.id} data`, error)
       this.error = error
+      this.state = 'empty'
+      this.entryCount = 0
+      this.localLastModified = null
+      this.data = null
     }
   }
   // Load data from IndexedDB

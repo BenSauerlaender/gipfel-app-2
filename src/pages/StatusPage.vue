@@ -87,7 +87,7 @@
             <q-icon name="storage" class="q-mr-sm" />
             Datensätze
             <q-space />
-            <div class="q-gutter-sm">
+            <div v-if="hasUnloadedResources || hasOutdatedResources" class="q-gutter-sm">
               <q-btn
                 :color="hasUnloadedResources ? 'primary' : 'warning'"
                 :label="hasUnloadedResources ? 'Alle herunterladen' : 'Alle aktualisieren'"
@@ -214,14 +214,12 @@ const label = (s) => {
       return 'Touren'
     case 'climbers':
       return 'Kletterer'
-    case 'map-fonts':
-      return 'Schrift für Karte'
+    case 'offline-map':
+      return 'Offline Karte'
     case 'loaded':
       return 'geladen'
-    case 'downloading':
-      return 'wird heruntergeladen...'
     case 'processing':
-      return 'wird verarbeitet...'
+      return 'wird geladen...'
     case 'empty':
       return 'nicht geladen'
     default:
@@ -250,13 +248,11 @@ const hasOutdatedResources = computed(() =>
 )
 
 const isAnyResourceBusy = computed(() =>
-  resourceStore.resources.some((resource) =>
-    ['downloading', 'processing'].includes(resource.state),
-  ),
+  resourceStore.resources.some((resource) => isResourceBusy(resource)),
 )
 
 const isResourceBusy = (resource) => {
-  return ['downloading', 'processing'].includes(resource.state)
+  return resource.state === 'processing'
 }
 
 const formatDate = (dateString) => {
@@ -268,8 +264,6 @@ const getStatusIcon = (resource) => {
   switch (resource.state) {
     case 'loaded':
       return 'check_circle'
-    case 'downloading':
-      return 'cloud_download'
     case 'processing':
       return 'sync'
     case 'empty':
@@ -282,7 +276,6 @@ const getStatusColor = (resource) => {
   switch (resource.state) {
     case 'loaded':
       return 'positive'
-    case 'downloading':
     case 'processing':
       return 'warning'
     case 'empty':

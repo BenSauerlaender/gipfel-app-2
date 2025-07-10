@@ -3,7 +3,7 @@ import { ResourceManager } from 'src/resourceManagers/ResourceManager'
 import { openDB } from 'idb'
 import { JsonResourceManager } from 'src/resourceManagers/JsonResourceManager'
 import { isOnline } from 'src/api'
-import { MapFontResourceManager } from 'src/resourceManagers/MapFontResourceManager'
+import { OfflineMapResourceManager } from 'src/resourceManagers/OfflineMapResourceManager'
 
 export interface State {
   resources: ResourceManager[]
@@ -11,7 +11,7 @@ export interface State {
 
 const jsonResources = ['ascents', 'trips', 'summits', 'climbers', 'routes', 'regions']
 
-const db = await openDB('gipfel-app', 4, {
+const db = await openDB('gipfel-app', 5, {
   upgrade(db) {
     // Create object store if it doesn't exist
     jsonResources.forEach((resource) => {
@@ -19,8 +19,8 @@ const db = await openDB('gipfel-app', 4, {
         db.createObjectStore(resource, { keyPath: 'id' })
       }
     })
-    if (!db.objectStoreNames.contains('map-fonts')) {
-      db.createObjectStore('map-fonts', { keyPath: 'id' })
+    if (!db.objectStoreNames.contains('offline-map')) {
+      db.createObjectStore('offline-map', { keyPath: 'id' })
     }
   },
 })
@@ -34,7 +34,7 @@ export const useResourceStore = defineStore('resource', {
       const resourceManager = new JsonResourceManager(resource, db, `${resource}`)
       state.resources.push(resourceManager)
     })
-    state.resources.push(new MapFontResourceManager('map-fonts', db, 'map/fonts'))
+    state.resources.push(new OfflineMapResourceManager('offline-map', db, 'map'))
     return state
   },
 

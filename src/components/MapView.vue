@@ -25,7 +25,6 @@ import { useFilterStore } from 'src/stores/filterStore'
 import { useRouter, useRoute } from 'vue-router'
 import maplibregl from 'maplibre-gl'
 import { Protocol } from 'pmtiles'
-import mapStyle from 'src/assets/mapStyle.json'
 import { useResourceStore } from 'src/stores/resourceStore'
 
 const resourceStore = useResourceStore()
@@ -35,10 +34,27 @@ maplibregl.addProtocol('glyphs', async (params) => {
   const url = params.url.match(pattern)
   const font = url[1].split(',')[0]
   const range = url[2]
-  const glyph = await resourceStore.getResourceById('map-fonts').getMapFontsGlyph(font, range)
+  const glyph = await resourceStore.getResourceById('offline-map').getMapFontsGlyph(font, range)
 
   return {
     data: glyph,
+  }
+})
+maplibregl.addProtocol('sprite', async (params) => {
+  console.log(params)
+  if (params.type === 'json') {
+    const json = await resourceStore.getResourceById('offline-map').spriteJson
+    return {
+      data: json,
+    }
+  } else if (params.type === 'image') {
+    const bitmap = await resourceStore.getResourceById('offline-map').spritePNG
+
+    // Create ImageBitmap from the blob
+    console.log('Sprite image bitmap:', bitmap)
+    return {
+      data: bitmap,
+    }
   }
 })
 
@@ -154,9 +170,12 @@ onMounted(() => {
 })
 
 const initMap = () => {
+  const mapStyle = resourceStore.getResourceById('offline-map').styleJson
+  console.log('Map style:', mapStyle)
   // Set pmtiles source for vector tiles
   mapStyle.sources.openmaptiles.url = 'pmtiles://./' + mapFileName
   mapStyle.glyphs = 'glyphs://{fontstack}/{range}'
+  mapStyle.sprite = 'sprite://src/assets/sprite'
   //mapStyle.glyphs = 'http://localhost:9000/fonts/{fontstack}/{range}.pbf'
   mapStyle.center = [14.155593920476328, 50.92857467871431]
   mapStyle.zoom = 11

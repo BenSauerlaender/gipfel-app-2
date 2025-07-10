@@ -8,7 +8,7 @@ export class ResourceManager {
   apiUrl: string
   remoteLastModified: Date | null = null
   localLastModified: Date | null = null
-  state: 'empty' | 'loaded' | 'downloading' | 'processing' = 'empty'
+  state: 'empty' | 'loaded' | 'processing' = 'empty'
   error: Error | null = null
   entryCount: number = 0
 
@@ -16,6 +16,14 @@ export class ResourceManager {
     this.id = id
     this.db = db
     this.apiUrl = apiUrl
+  }
+
+  clearPrivateFields(): void {
+    this.remoteLastModified = null
+    this.localLastModified = null
+    this.state = 'empty'
+    this.error = null
+    this.entryCount = 0
   }
 
   async checkForUpdates(): Promise<boolean> {
@@ -47,10 +55,7 @@ export class ResourceManager {
     return this.db
       .clear(this.id)
       .then(() => {
-        this.state = 'empty'
-        this.localLastModified = null
-        this.entryCount = 0
-        this.error = null
+        this.clearPrivateFields()
         console.log(`Cleared resource ${this.id} from IndexedDB`)
       })
       .catch((error) => {
