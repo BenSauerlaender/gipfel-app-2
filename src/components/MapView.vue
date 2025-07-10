@@ -57,6 +57,20 @@ maplibregl.addProtocol('sprite', async (params) => {
     }
   }
 })
+maplibregl.addProtocol('tiles', async (params) => {
+  const pattern = /tiles:\/\/(\d+)\/(\d+)\/(\d+)\.pbf/i
+  const url = params.url.match(pattern)
+  if (!url) {
+    throw new Error('Invalid tiles URL format')
+  }
+  const z = parseInt(url[1])
+  const x = parseInt(url[2])
+  const y = parseInt(url[3])
+  const tileData = await resourceStore.getResourceById('offline-map').getMapTile(z, x, y)
+  return {
+    data: new Uint8Array(tileData.data), // Ensure data is in Uint8Array format
+  }
+})
 
 // Register pmtiles protocol
 const protocol = new Protocol()
@@ -163,9 +177,25 @@ const popupHtml = (summit) => {
             <div><span class="">Begehungen: </span><span class="text-bold">${ascents}</span></div>
             <div class="row justify-center q-mt-sm"><a href="/#/summits/${summit._id}">details</a></div></div>`
 }
+
+const isInit = ref(false)
+
 onMounted(() => {
   nextTick(() => {
-    initMap()
+    if (resourceStore.getResourceById('offline-map').state === 'loaded') {
+      initMap()
+      isInit.value = true
+    } else {
+      watch(
+        () => resourceStore.getResourceById('offline-map').state,
+        (state) => {
+          if (state === 'loaded' && !isInit.value) {
+            initMap()
+            isInit.value = true
+          }
+        },
+      )
+    }
   })
 })
 
@@ -174,6 +204,12 @@ const initMap = () => {
   console.log('Map style:', mapStyle)
   // Set pmtiles source for vector tiles
   mapStyle.sources.openmaptiles.url = 'pmtiles://./' + mapFileName
+  mapStyle.sources.openmaptiles = {
+    type: 'vector',
+    tiles: ['tiles://{z}/{x}/{y}.pbf'],
+    minzoom: 0,
+    maxzoom: 14,
+  }
   mapStyle.glyphs = 'glyphs://{fontstack}/{range}'
   mapStyle.sprite = 'sprite://src/assets/sprite'
   //mapStyle.glyphs = 'http://localhost:9000/fonts/{fontstack}/{range}.pbf'

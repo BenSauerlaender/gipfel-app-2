@@ -141,19 +141,51 @@
                     <div class="text-caption text-grey-7">{{ resource.entryCount }} Einträge</div>
                   </div>
 
-                  <!-- Action Button -->
-                  <q-btn
-                    v-if="resource.state !== 'loaded' || resource.isOutdated()"
-                    :color="getActionButtonColor(resource)"
-                    :label="getActionButtonLabel(resource)"
-                    :icon="getActionButtonIcon(resource)"
-                    @click="handleDataFieldAction(resource)"
-                    :loading="isResourceBusy(resource)"
-                    :disable="isResourceBusy(resource) || userStore.loggedIn !== true"
-                    size="sm"
-                  >
-                    <q-tooltip>{{ getActionButtonTooltip(resource) }}</q-tooltip>
-                  </q-btn>
+                  <!-- Action Buttons -->
+                  <div class="q-gutter-sm">
+                    <!-- Reload Button -->
+                    <q-btn
+                      color="info"
+                      icon="cached"
+                      @click="handleReloadResource(resource)"
+                      :loading="isResourceBusy(resource)"
+                      :disable="isResourceBusy(resource)"
+                      size="sm"
+                      round
+                      flat
+                    >
+                      <q-tooltip>Lokale Daten neu laden</q-tooltip>
+                    </q-btn>
+
+                    <!-- Clear Button -->
+                    <q-btn
+                      v-if="resource.state === 'loaded' || resource.entryCount > 0"
+                      color="negative"
+                      icon="delete"
+                      @click="handleClearResource(resource)"
+                      :loading="isResourceBusy(resource)"
+                      :disable="isResourceBusy(resource)"
+                      size="sm"
+                      round
+                      flat
+                    >
+                      <q-tooltip>{{ label(resource.id) }} Daten löschen</q-tooltip>
+                    </q-btn>
+
+                    <!-- Download/Update Button -->
+                    <q-btn
+                      v-if="resource.state !== 'loaded' || resource.isOutdated()"
+                      :color="getActionButtonColor(resource)"
+                      :label="getActionButtonLabel(resource)"
+                      :icon="getActionButtonIcon(resource)"
+                      @click="handleDataFieldAction(resource)"
+                      :loading="isResourceBusy(resource)"
+                      :disable="isResourceBusy(resource) || userStore.loggedIn !== true"
+                      size="sm"
+                    >
+                      <q-tooltip>{{ getActionButtonTooltip(resource) }}</q-tooltip>
+                    </q-btn>
+                  </div>
                 </div>
 
                 <!-- Error Message -->
@@ -317,6 +349,26 @@ const handleDataFieldAction = async (resource) => {
     await resource.update()
   } catch (error) {
     console.error(`Error updating ${resource.id}:`, error)
+  }
+}
+
+const handleReloadResource = async (resource) => {
+  if (isResourceBusy(resource)) return
+
+  try {
+    await resource.load()
+  } catch (error) {
+    console.error(`Error reloading ${resource.id}:`, error)
+  }
+}
+
+const handleClearResource = async (resource) => {
+  if (isResourceBusy(resource)) return
+
+  try {
+    await resource.clear()
+  } catch (error) {
+    console.error(`Error clearing ${resource.id}:`, error)
   }
 }
 
