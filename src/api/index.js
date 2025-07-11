@@ -1,10 +1,9 @@
 import axios from 'axios'
 import { useUserStore } from 'src/stores/user'
 import router from 'src/router'
-import { route } from 'quasar/wrappers'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.DEV ? 'http://localhost:3000' : import.meta.env.VITE_PROD_API_BASE_URL,
   timeout: 10000,
   withCredentials: true, // Important: Include cookies in requests
   headers: {
@@ -12,7 +11,7 @@ const api = axios.create({
   },
 })
 
-export const isOnline = () => api.get('/api/health', { timeout: 5000 })
+export const isOnline = () => api.get('/health', { timeout: 5000 })
 
 // Request interceptor
 api.interceptors.request.use(
