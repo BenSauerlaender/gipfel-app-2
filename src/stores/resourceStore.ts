@@ -4,39 +4,19 @@ import { openDB } from 'idb'
 import { JsonResourceManager } from 'src/resourceManagers/JsonResourceManager'
 import { isOnline } from 'src/api'
 import { OfflineMapResourceManager } from 'src/resourceManagers/OfflineMapResourceManager'
+import type { IDBPDatabase as idbD } from 'idb'
 
 export interface State {
+  db: idbD | null
   resources: ResourceManager[]
 }
-
 const jsonResources = ['ascents', 'trips', 'summits', 'climbers', 'routes', 'regions']
 
-const db = await openDB('gipfel-app', 5, {
-  upgrade(db) {
-    // Create object store if it doesn't exist
-    jsonResources.forEach((resource) => {
-      if (!db.objectStoreNames.contains(resource)) {
-        db.createObjectStore(resource, { keyPath: 'id' })
-      }
-    })
-    if (!db.objectStoreNames.contains('offline-map')) {
-      db.createObjectStore('offline-map', { keyPath: 'id' })
-    }
-  },
-})
-
 export const useResourceStore = defineStore('resource', {
-  state: () => {
-    const state: State = {
-      resources: [],
-    }
-    jsonResources.forEach((resource) => {
-      const resourceManager = new JsonResourceManager(resource, db, `${resource}`)
-      state.resources.push(resourceManager)
-    })
-    state.resources.push(new OfflineMapResourceManager('offline-map', db, 'map'))
-    return state
-  },
+  state: () => ({
+    db: null,
+    resources: [],
+  }),
 
   getters: {
     getResourceById:
@@ -82,6 +62,26 @@ export const useResourceStore = defineStore('resource', {
     },
     async loadAll(this: State): Promise<void> {
       await Promise.all(this.resources.map((resource) => resource.load()))
+    },
+    async init(this: State): Promise<void> {
+      this.db = await openDB('gipfel-app', 5, {
+        upgrade(db) {
+          // Create object store if it doesn't exist
+          jsonResources.forEach((resource) => {
+            if (!db.objectStoreNames.contains(resource)) {
+              db.createObjectStore(resource, { keyPath: 'id' })
+            }
+          })
+          if (!db.objectStoreNames.contains('offline-map')) {
+            db.createObjectStore('offline-map', { keyPath: 'id' })
+          }
+        },
+      })
+      jsonResources.forEach((resource) => {
+        const resourceManager = new JsonResourceManager(resource, this.db, `${resource}`)
+        this.resources.push(resourceManager)
+      })
+      this.resources.push(new OfflineMapResourceManager('offline-map', this.db, 'map'))
     },
   },
 })
