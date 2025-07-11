@@ -20,7 +20,7 @@ export class JsonResourceManager<A> extends ResourceManager {
     try {
       this.state = 'processing'
       console.log(`Loading ${this.id} data from API...`)
-      const response = await api.get(`/api/${this.apiUrl}`)
+      const response = await api.get(`/resources/${this.apiUrl}`)
 
       if (!response || !response.data || !response.data.data || response.status !== 200) {
         throw new Error(`No data received for ${this.id}`)

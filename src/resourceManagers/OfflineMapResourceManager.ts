@@ -24,7 +24,7 @@ export class OfflineMapResourceManager extends ResourceManager {
    * Common abstraction for API requests
    */
   private async apiRequest(endpoint: string, options: any = {}): Promise<any> {
-    const response = await api.get(`/api/${this.apiUrl}/${endpoint}`, options)
+    const response = await api.get(`/resources/${this.apiUrl}/${endpoint}`, options)
 
     if (!response || !response.data || response.status !== 200) {
       throw new Error(`No data received for ${this.id} endpoint: ${endpoint}`)
