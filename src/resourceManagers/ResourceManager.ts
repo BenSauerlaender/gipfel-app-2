@@ -28,7 +28,7 @@ export class ResourceManager {
 
   async checkForUpdates(): Promise<boolean> {
     try {
-      const lastModifiedResponse = await api.get(`/api/last-modified/${this.apiUrl}`)
+      const lastModifiedResponse = await api.get(`/resources/last-modified/${this.apiUrl}`)
       if (!lastModifiedResponse || !lastModifiedResponse.data) {
         this.remoteLastModified = null
       }
