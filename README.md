@@ -44,7 +44,12 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
--deploy?
+-deploy
+
+- map: zoom and bounds restriction
+- data mngmt: auto download, notify ...
+- map: also online map as fallback?
+- add documentation
 
 ## Consistensy/Robustness
 
@@ -82,3 +87,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
   - RP wird nicht beachtet
   - Grad mit Unterstuetzung wird nicht beachtet
   - Normaler Grad wird nicht beachtet, wenn es auch einen Sprung Grad gibt
+
+### deploy
+
+quasar build -m pwa
+rsync -avzP --delete -e "ssh" ./dist/pwa/ appuser@gipfelapp.ben-sauerlaender.de:/var/www/gipfelapp/pwa/
