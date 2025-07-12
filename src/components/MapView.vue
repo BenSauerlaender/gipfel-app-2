@@ -29,11 +29,25 @@ import { useResourceStore } from 'src/stores/resourceStore'
 
 const resourceStore = useResourceStore()
 
+const allFonts = ref(new Set()) // only for VITE_DEBUG_PRINT_USED_FONTS
+
 maplibregl.addProtocol('glyphs', async (params) => {
   const pattern = /glyphs:\/\/(.*)\/(.*)/i
   const url = params.url.match(pattern)
   const font = url[1].split(',')[0]
   const range = url[2]
+
+  if (import.meta.env.VITE_DEBUG_PRINT_USED_FONTS) {
+    const fontString = `"${font}"/"${range}.pbf"`
+    if (!allFonts.value.has(fontString)) {
+      allFonts.value.add(fontString)
+      console.log(
+        'all font:\n',
+        Array.from(allFonts.value.values()).reduce((acc, cur) => acc + '\n' + cur),
+      )
+    }
+  }
+
   const glyph = await resourceStore.getResourceById('offline-map').getMapFontsGlyph(font, range)
 
   return {

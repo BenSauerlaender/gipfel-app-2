@@ -3,9 +3,10 @@ import { useUserStore } from 'src/stores/user'
 import router from 'src/router'
 
 const api = axios.create({
-  baseURL: import.meta.env.DEV
-    ? 'http://localhost:3000/api'
-    : import.meta.env.VITE_PROD_API_BASE_URL,
+  baseURL:
+    import.meta.env.VITE_DEBUG_USE_PROD_API === 'true'
+      ? 'https://gipfelapp.ben-sauerlaender.de/api'
+      : 'http://localhost:3000/api',
   timeout: 10000,
   withCredentials: true, // Important: Include cookies in requests
   headers: {

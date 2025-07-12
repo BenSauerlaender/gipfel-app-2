@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'
 
@@ -50,6 +50,15 @@ const usernameError = ref('')
 const passwordError = ref('')
 const userStore = useUserStore()
 const router = useRouter()
+
+watch(
+  () => userStore.loggedIn,
+  (loggedIn) => {
+    if (loggedIn) {
+      router.push('/status')
+    }
+  },
+)
 
 async function onSubmit() {
   error.value = ''

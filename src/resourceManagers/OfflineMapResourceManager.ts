@@ -3,6 +3,12 @@
 import api from 'src/api'
 import { ResourceManager } from './ResourceManager'
 import untar from 'js-untar'
+import { decompressSync } from 'fflate'
+
+function isGzip(buffer: ArrayBuffer | Uint8Array): boolean {
+  const arr = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer)
+  return arr[0] === 0x1f && arr[1] === 0x8b
+}
 
 export class OfflineMapResourceManager extends ResourceManager {
   fontFileCount: number = 0
@@ -42,7 +48,10 @@ export class OfflineMapResourceManager extends ResourceManager {
           headers: {
             Accept: 'application/gzip',
           },
-        }).then((response) => untar(response)),
+        })
+          .then((res) => new Uint8Array(res))
+          .then((res) => (isGzip(res) ? decompressSync(res) : res))
+          .then((unit8) => untar(unit8.buffer)),
         this.apiRequest('sprite.pngFIX', {
           responseType: 'blob',
           headers: {
@@ -56,9 +65,23 @@ export class OfflineMapResourceManager extends ResourceManager {
           headers: {
             Accept: 'application/gzip',
           },
-        }).then((response) => untar(response)),
+        })
+          .then((res) => new Uint8Array(res))
+          .then((res) => (isGzip(res) ? decompressSync(res) : res))
+          .then((unit8) => untar(unit8.buffer)),
       ])
       console.log(`Download finished. Saving ${this.id} data to IndexedDB...`)
+      console.log(`Fonts: `, fontFiles)
+      console.log(`Sprite PNG: `, spritePNG)
+      console.log(`Sprite JSON: `, spriteJson)
+      console.log(`Style JSON: `, styleJson)
+      console.log(`Tiles: `, tileFiles)
+
+      if (spritePNG instanceof Blob) {
+        this.spritePNG = await createImageBitmap(spritePNG)
+      } else {
+        this.spritePNG = spritePNG
+      }
 
       const tx = this.db.transaction(this.id, 'readwrite')
       const store = tx.objectStore(this.id)

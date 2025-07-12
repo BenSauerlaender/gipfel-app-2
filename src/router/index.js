@@ -40,10 +40,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
       if (userStore.loggedIn == true) {
         return '/status'
       } else {
-        await userStore.refreshAccessToken()
-        if (userStore.loggedIn) {
-          return '/status'
-        }
+        userStore.refreshAccessToken()
       }
     }
   })

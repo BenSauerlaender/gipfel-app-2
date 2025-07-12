@@ -77,6 +77,7 @@ export const useResourceStore = defineStore('resource', {
           }
         },
       })
+      console.log('Opened IndexedDB for gipfel-app')
       jsonResources.forEach((resource) => {
         const resourceManager = new JsonResourceManager(resource, this.db, `${resource}`)
         this.resources.push(resourceManager)
