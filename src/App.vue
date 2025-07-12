@@ -17,33 +17,19 @@ const router = useRouter()
 
 const { loggedIn } = storeToRefs(userStore)
 
-const checkForUpdatesAndNotify = async () => {
-  resourceStore.checkForUpdates().then((res) => {
-    if (res) {
-      $q.notify({
-        message: 'Updates verfügbar',
-        actions: [{ label: 'Update', handler: () => router.push('/status') }],
-      })
-    }
-  })
-}
-
 watch(
   () => loggedIn,
   () => {
     if (loggedIn) {
-      checkForUpdatesAndNotify()
+      resourceStore.checkForUpdates().then((res) => {
+        if (res) {
+          $q.notify({
+            message: 'Updates verfügbar',
+            actions: [{ label: 'Update', handler: () => router.push('/status') }],
+          })
+        }
+      })
     }
   },
 )
-
-onMounted(() => {
-  nextTick(() => {
-    Promise.all([userStore.refreshAccessToken(), resourceStore.loadAll()]).then(() => {
-      if (loggedIn.value) {
-        checkForUpdatesAndNotify()
-      }
-    })
-  })
-})
 </script>

@@ -70,12 +70,6 @@ export class OfflineMapResourceManager extends ResourceManager {
           .then((res) => (isGzip(res) ? decompressSync(res) : res))
           .then((unit8) => untar(unit8.buffer)),
       ])
-      console.log(`Download finished. Saving ${this.id} data to IndexedDB...`)
-      console.log(`Fonts: `, fontFiles)
-      console.log(`Sprite PNG: `, spritePNG)
-      console.log(`Sprite JSON: `, spriteJson)
-      console.log(`Style JSON: `, styleJson)
-      console.log(`Tiles: `, tileFiles)
 
       if (spritePNG instanceof Blob) {
         this.spritePNG = await createImageBitmap(spritePNG)

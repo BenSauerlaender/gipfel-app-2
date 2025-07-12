@@ -37,7 +37,7 @@ maplibregl.addProtocol('glyphs', async (params) => {
   const font = url[1].split(',')[0]
   const range = url[2]
 
-  if (import.meta.env.VITE_DEBUG_PRINT_USED_FONTS) {
+  if (import.meta.env.VITE_DEBUG_PRINT_USED_FONTS === 'true') {
     const fontString = `"${font}"/"${range}.pbf"`
     if (!allFonts.value.has(fontString)) {
       allFonts.value.add(fontString)
@@ -217,18 +217,17 @@ const initMap = () => {
   const mapStyle = resourceStore.getResourceById('offline-map').styleJson
   console.log('Map style:', mapStyle)
   // Set pmtiles source for vector tiles
-  mapStyle.sources.openmaptiles.url = 'pmtiles://./' + mapFileName
   mapStyle.sources.openmaptiles = {
     type: 'vector',
     tiles: ['tiles://{z}/{x}/{y}.pbf'],
-    minzoom: 0,
+    minzoom: 0, //TODO: check on server
     maxzoom: 14,
   }
   mapStyle.glyphs = 'glyphs://{fontstack}/{range}'
   mapStyle.sprite = 'sprite://src/assets/sprite'
-  //mapStyle.glyphs = 'http://localhost:9000/fonts/{fontstack}/{range}.pbf'
   mapStyle.center = [14.155593920476328, 50.92857467871431]
   mapStyle.zoom = 11
+  //TODO: add correct attribtution claim
   if (selectedSummit) {
     mapStyle.center = [selectedSummit.gpsPosition.lng, selectedSummit.gpsPosition.lat]
     mapStyle.zoom = 17
@@ -238,6 +237,11 @@ const initMap = () => {
     style: mapStyle,
     center: mapStyle.center,
     zoom: mapStyle.zoom,
+    minZoom: 10,
+    maxBounds: [
+      [13.5, 50.6], // Southwest corner
+      [14.8, 51.2], // Northeast corner
+    ],
   })
   map.value.on('load', () => {
     addSummitLayer()
