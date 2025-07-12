@@ -43,7 +43,7 @@ export class OfflineMapResourceManager extends ResourceManager {
             Accept: 'application/gzip',
           },
         }).then((response) => untar(response)),
-        this.apiRequest('sprite.png', {
+        this.apiRequest('sprite.pngFIX', {
           responseType: 'blob',
           headers: {
             Accept: 'image/png',

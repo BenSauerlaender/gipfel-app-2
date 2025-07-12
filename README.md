@@ -62,6 +62,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - per direketem url aufruf http://localhost:9000/#/routes/6851d0442e8d5658ef9f2621
   - Zurueck button -> beendet die Seite
   - Expected behavior: fuehrt zu summitDetail
+- update notification funktioniert nicht (boot/initStore)
 
 ## Performance
 
