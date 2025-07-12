@@ -4,7 +4,7 @@ import router from 'src/router'
 
 const api = axios.create({
   baseURL:
-    import.meta.env.VITE_DEBUG_USE_PROD_API === 'true'
+    import.meta.env.VITE_DEBUG_USE_PROD_API === 'true' || import.meta.env.PROD
       ? 'https://gipfelapp.ben-sauerlaender.de/api'
       : 'http://localhost:3000/api',
   timeout: 10000,
