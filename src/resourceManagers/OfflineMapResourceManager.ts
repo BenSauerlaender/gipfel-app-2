@@ -37,21 +37,21 @@ export class OfflineMapResourceManager extends ResourceManager {
       this.state = 'processing'
       console.log(`Loading ${this.id} data from API...`)
       const [fontFiles, spritePNG, spriteJson, styleJson, tileFiles] = await Promise.all([
-        this.apiRequest('fonts', {
+        this.apiRequest('fonts.tar.gz', {
           responseType: 'arraybuffer',
           headers: {
             Accept: 'application/gzip',
           },
         }).then((response) => untar(response)),
-        this.apiRequest('sprite/png', {
+        this.apiRequest('sprite.png', {
           responseType: 'blob',
           headers: {
             Accept: 'image/png',
           },
         }),
-        this.apiRequest('sprite/json'),
-        this.apiRequest('style'),
-        this.apiRequest('tiles', {
+        this.apiRequest('sprite.json'),
+        this.apiRequest('style.json'),
+        this.apiRequest('tiles.tar.gz', {
           responseType: 'arraybuffer',
           headers: {
             Accept: 'application/gzip',
