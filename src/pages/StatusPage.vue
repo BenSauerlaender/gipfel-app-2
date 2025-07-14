@@ -16,7 +16,11 @@
             <div class="col">
               <div class="text-h6">Login Status</div>
               <div class="text-caption text-grey-7">
-                {{ userStore.loggedIn ? 'Erfolgreich angemeldet' : 'nicht angemeldet' }}
+                {{
+                  userStore.loggedIn
+                    ? 'Als ' + userStore.user.username + ' angemeldet'
+                    : 'nicht angemeldet'
+                }}
               </div>
             </div>
             <q-btn
@@ -423,14 +427,5 @@ onMounted(async () => {})
 
 .data-field-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-pre {
-  background: #f5f5f5;
-  padding: 12px;
-  border-radius: 4px;
-  overflow-x: auto;
-  font-size: 11px;
-  line-height: 1.4;
 }
 </style>

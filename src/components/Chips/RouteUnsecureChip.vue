@@ -6,6 +6,7 @@ const { getPaletteColor } = colors
 
 const props = defineProps({
   color: { type: String, required: false },
+  dense: { type: Boolean, required: false, default: true },
 })
 
 const chipStyle = computed(() => ({
@@ -15,7 +16,7 @@ const chipStyle = computed(() => ({
 </script>
 
 <template>
-  <q-chip v-once :style="chipStyle" dense>
+  <q-chip v-once :style="chipStyle" :dense="props.dense">
     <q-icon name="priority_high" />
   </q-chip>
 </template>

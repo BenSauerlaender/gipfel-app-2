@@ -1,10 +1,10 @@
 <template>
-  <q-card style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">
+  <q-card class="statCard">
+    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
+      <div class="q-mr-md text-h4 statCardMainNumber">
         {{ props.trips.reduce((acc, trip) => acc + trip.days.length, 0) }}
       </div>
-      <div class="text-h6 text-grey-9">Tage am Fels</div>
+      <div class="text-h6 text-grey-9">Tage</div>
     </q-card-section>
 
     <q-separator />
@@ -21,6 +21,8 @@ import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, TimeScale, BarElement, Tooltip, Legend } from 'chart.js'
 import 'chartjs-adapter-date-fns'
 import { de } from 'date-fns/locale'
+import { colors } from 'quasar'
+const { getPaletteColor } = colors
 
 Chart.register(CategoryScale, LinearScale, TimeScale, BarElement, Tooltip, Legend)
 
@@ -63,9 +65,9 @@ const chartData = computed(() => {
       {
         label: 'Anzahl',
         data: data,
-        backgroundColor: '#36A2EB',
+        backgroundColor: getPaletteColor('red'),
         borderWidth: 1,
-        borderColor: '#fff',
+        borderColor: getPaletteColor('offwhite1'),
         barThickness: '20',
         borderRadius: 4,
       },

@@ -1,8 +1,8 @@
 <template>
-  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+  <div class="col-12 col-sm-6">
     <q-card class="filter-card">
       <q-card-section>
-        <div class="text-h8">Gebiet, Gipfel, Weg</div>
+        <div class="filter-header">Gebiet, Gipfel, Weg</div>
         <q-select
           v-model="selectedRegion"
           use-input
@@ -224,14 +224,4 @@ const selectedRoute = computed({
 })
 </script>
 
-<style scoped>
-.filter-card {
-  height: 100%;
-  transition: all 0.3s ease;
-}
-
-.filter-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-</style>
+<style scoped></style>

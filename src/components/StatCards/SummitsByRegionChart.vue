@@ -1,7 +1,7 @@
 <template>
-  <q-card style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">{{ summits.length }}</div>
+  <q-card class="statCard" style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
+      <div class="q-mr-md text-h4 statCardMainNumber">{{ summits.length }}</div>
       <div class="text-h6 text-grey-9">Gipfel</div>
     </q-card-section>
 
@@ -12,7 +12,7 @@
         <Bar :data="chartData" :options="chartOptions" />
       </div>
       <div class="q-mt-md row justify-center">
-        <q-btn color="primary" label="Alle Gipfel anzeigen" to="/stats/summits" flat icon="list" />
+        <q-btn no-caps flat dense label="Alle anzeigen" to="/stats/summits" icon="list" />
       </div>
     </q-card-section>
   </q-card>
@@ -22,6 +22,8 @@
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
+import { colors } from 'quasar'
+const { getPaletteColor } = colors
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -52,16 +54,24 @@ const chartData = computed(() => {
 
   // Generate colors for each region
   const colors = [
-    '#FF6384',
-    '#36A2EB',
-    '#FFCE56',
-    '#4BC0C0',
-    '#9966FF',
-    '#FF9F40',
-    '#FF6384',
-    '#C9CBCF',
+    getPaletteColor('scale-red3'),
+    getPaletteColor('scale-red4'),
+    getPaletteColor('scale-red5'),
+    getPaletteColor('scale-red6'),
+    getPaletteColor('scale-red7'),
+    getPaletteColor('scale-red8'),
   ]
-  const backgroundColor = labels.map((_, index) => colors[index % colors.length])
+  function seededRandom(seed) {
+    let x = Math.sin(seed++) * 10000
+    return x - Math.floor(x)
+  }
+  const seed = 421
+  const shuffledColors = [...colors]
+  for (let i = shuffledColors.length - 1; i > 0; i--) {
+    const j = Math.floor(seededRandom(seed + i) * (i + 1))
+    ;[shuffledColors[i], shuffledColors[j]] = [shuffledColors[j], shuffledColors[i]]
+  }
+  const backgroundColor = labels.map((_, index) => shuffledColors[index % shuffledColors.length])
 
   return {
     labels: labels,
@@ -71,7 +81,8 @@ const chartData = computed(() => {
         data: data,
         backgroundColor: backgroundColor,
         borderWidth: 1,
-        borderColor: '#fff',
+        borderColor: getPaletteColor('offwhite1'),
+        borderRadius: 10,
       },
     ],
   }

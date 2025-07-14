@@ -3,6 +3,7 @@ import { getGradeColor } from 'src/helper/route'
 const props = defineProps({
   grade: { type: String, required: true },
   color: { type: String, required: false },
+  dense: { type: Boolean, required: false, default: true },
 })
 </script>
 
@@ -10,7 +11,7 @@ const props = defineProps({
   <q-chip
     v-once
     :style="{ backgroundColor: props.color ?? getGradeColor(props.grade), color: 'white' }"
-    dense
+    :dense="props.dense"
     >{{ props.grade }}</q-chip
   >
 </template>

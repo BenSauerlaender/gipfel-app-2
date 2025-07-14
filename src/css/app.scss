@@ -33,6 +33,7 @@ body {
 }
 #pageContainer {
   background-color: $offwhite2;
+  min-height: 100vh;
 }
 .q-card,
 .q-tab-panels,
@@ -73,7 +74,76 @@ body {
   }
 }
 
-.statsMainNumber {
-  color: $darkgreen;
-  font-weight: 900;
+.statCard {
+  border-radius: 15px;
+  //border: 5px solid $offwhite3;
+
+  .statCardHeader {
+    //border-radius: 0 !important;
+    background-color: $offwhite3;
+  }
+
+  .statCardMainNumber {
+    color: $darkgreen;
+    font-weight: 900;
+  }
+  .q-btn {
+    font-weight: 300;
+    color: $offblack2;
+  }
+}
+
+.q-table__card {
+  color: $offblack2;
+}
+
+.q-table th {
+  font-weight: 800;
+  color: $red;
+  font-size: 1rem;
+  border-bottom: 2px solid $red;
+  span {
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: $red;
+  }
+}
+
+.q-table__top {
+  .q-table__control {
+    background-color: $red;
+    border-radius: 5rem;
+    input {
+      color: $offwhite1;
+      font-weight: 700;
+    }
+    .q-icon {
+      color: $offwhite1;
+    }
+    padding-left: 15px;
+    padding-right: 10px;
+  }
+  .field__native input {
+    color: $offwhite1;
+  }
+}
+.table-green {
+  .q-table__top .q-table__control {
+    border: 2px solid $darkgreen;
+    background-color: inherit;
+    input,
+    .q-icon {
+      color: $darkgreen;
+    }
+  }
+  .q-table th {
+    color: $darkgreen;
+  }
+}
+
+.page-container > .q-card {
+  border-radius: 2rem;
+}
+.page-container > .action-buttons {
+  margin-bottom: 10px;
 }

@@ -46,11 +46,10 @@
           color="primary"
         />
       </div>
-      <!-- Bottom Panel Component -->
-      <BottomPanel v-if="isMinimumLoaded">
-        <FilterOptions />
-      </BottomPanel>
     </q-page-container>
+    <BottomPanel v-if="isMinimumLoaded">
+      <FilterOptions />
+    </BottomPanel>
   </q-layout>
 </template>
 
@@ -80,20 +79,20 @@ const linksList = [
   },
   {
     title: 'Statistiken',
-    caption: 'über Einträge',
+    caption: 'Und Diagramme',
     icon: 'bar_chart',
     link: '/stats',
   },
 
   {
-    title: 'Gebiete',
-    caption: 'Alle Gebiete',
+    title: 'Alle Gebiete',
+    caption: 'im Überblick',
     icon: 'interests',
     link: '/regions',
   },
   {
-    title: 'Gipfel',
-    caption: 'Alle Gipfel',
+    title: 'Alle Gipfel',
+    caption: 'im Überblick',
     icon: 'terrain',
     link: '/summits',
   },
@@ -125,10 +124,5 @@ onMounted(() => {
 .loading-container {
   z-index: 1000;
   height: calc(100vh - 660px);
-}
-
-/* Add bottom padding to ensure content can scroll past the bottom panel */
-#q-page-container {
-  padding-bottom: 600px; /* Maximum height of the bottom panel */
 }
 </style>

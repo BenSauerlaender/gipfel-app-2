@@ -1,23 +1,22 @@
 <template>
   <div class="q-pa-md page-container">
     <q-card>
-      <q-card-section>
-        <div class="text-h2 text-weight-regular">Gipfel</div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="row justify-center">
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ summits.length }}</span> Gipfel
-          </div>
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ summitPercentage }}%</span>
-            begangen
-          </div>
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Einträge
-          </div>
-        </div>
+      <q-card-section class="row justify-between items-center bg-offwhite3">
+        <span class="text-h2 text-darkgreen text-weight-bold q-ml-md">Gipfel</span>
+        <span class="row justify-center items-center bg-offwhite3">
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ summits.length }}</span>
+            <span class="text-lightgreen">Gipfel</span>
+          </span>
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ summitPercentage }}%</span>
+            <span class="text-lightgreen">Begangen</span>
+          </span>
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ ascentCount }}</span>
+            <span class="text-lightgreen">Einträge</span>
+          </span>
+        </span>
       </q-card-section>
       <q-separator />
       <q-card-section>
@@ -47,7 +46,7 @@ const summitPercentage = computed(() =>
 )
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page-container {
   max-width: 1200px;
   margin: 0 auto;

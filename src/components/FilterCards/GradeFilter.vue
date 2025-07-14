@@ -1,8 +1,8 @@
 <template>
-  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+  <div class="col-12 col-sm-6">
     <q-card class="filter-card">
       <q-card-section>
-        <div class="text-h8">Schwierigkeitsgrad</div>
+        <div class="filter-header">Schwierigkeitsgrad</div>
         <q-range
           v-model="range"
           :min="minGrade"
@@ -12,10 +12,7 @@
           :right-label-value="NORMAL_SCALA[range.max]"
           label-always
           label
-          switch-label-side
-          drag-range
-          color="primary"
-          class="q-mt-lg"
+          color="darkgreen"
         />
       </q-card-section>
     </q-card>
@@ -49,14 +46,4 @@ watch(range, (newValue) => {
 })
 </script>
 
-<style scoped>
-.filter-card {
-  height: 100%;
-  transition: all 0.3s ease;
-}
-
-.filter-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-</style>
+<style scoped></style>

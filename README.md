@@ -46,13 +46,12 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 ## Consistensy/Robustness
 
-- use ColorUtils for all colors
 - use DomUtils for height of Map and BottomPanel
 - filter bereich als footer?
 
 ## Design
 
-- pwa anzeigename aendern _!_
+- pwa anzeigename aendern (erledigt?)
 
 ## Design 2
 
@@ -60,6 +59,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - logo rework
 - logo aus topbar in drawer
 - drawer zwischen top und bottom bar
+- status und login/out mit in drawer?
 - rework mobile view
 
 ## Features
@@ -69,10 +69,10 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - MapView HeatMap Style Or Cluster?
 - Online map fallback
 - DEV Debug features? console log anzeigen...
-- Datengroesse auf die Statusseite _!_
+- Datengroesse auf die Statusseite
 - Tagebuch trips einklappen
-- tabellen on mobile dense (kleinere schrift, spalten zusammenfassen) _!_
-- Abk. fuer Gebiete und dann in Klammern dahinter _!_
+- tabellen on mobile dense (kleinere schrift, spalten zusammenfassen)
+- Abk. fuer Gebiete und dann in Klammern dahinter
 - Status Page: gescheite download balken
 - animations / transitions ?
 
@@ -83,11 +83,9 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
   - Expected behavior: fuehrt zu summitDetail
 - update notification funktioniert nicht (boot/initStore)
 - status page: download/reload button wenn resource bussy fixen _!_
-- StatsRoute and StatssSummits Falsche berechnung der grossen Zahl _!_
-- mobile: filter: slider tooltips visuel out of box _!_
-- mobile: filter: ausklapp handle zu klein und lagged _!_
-- filter: platzfreihaltung nicht schoen (margin auf der page) _!_
-- slider mittelhandle nervt _!_
+- mobile: filter: slider tooltips visuel out of box
+- mobile: filter: ausklapp handle zu klein und lagged
+- filter: Vorstieg kaputt _!_
 
 ## Performance
 

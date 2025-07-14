@@ -1,7 +1,7 @@
 <template>
-  <q-card style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">
+  <q-card class="statCard" style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
+      <div class="q-mr-md text-h4 statCardMainNumber">
         {{ ascents.length > 0 ? sortedClimbers[0][1].total : 0 }}
       </div>
       <div class="text-h6 text-grey-9">
@@ -93,24 +93,28 @@ const chartData = computed(() => {
         data: sortedClimbers.value.map(([, stats]) => stats.other),
         backgroundColor: getPaletteColor('lightgreen'),
         stack: 'Stack 0',
+        borderRadius: 10,
       },
       {
         label: 'Vorstieg',
         data: sortedClimbers.value.map(([, stats]) => stats.lead),
         backgroundColor: getPaletteColor('darkgreen'),
         stack: 'Stack 0',
+        borderRadius: 10,
       },
       {
         label: 'Solo',
         data: sortedClimbers.value.map(([, stats]) => stats.solo),
         backgroundColor: getPaletteColor('red'),
         stack: 'Stack 0',
+        borderRadius: 10,
       },
       {
         label: 'v.o.g.',
         data: sortedClimbers.value.map(([, stats]) => stats.topRope),
         backgroundColor: getPaletteColor('yellow'),
         stack: 'Stack 0',
+        borderRadius: 10,
       },
     ],
   }

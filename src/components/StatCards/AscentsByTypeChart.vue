@@ -1,14 +1,14 @@
 <template>
-  <q-card style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">{{ props.ascents.length }}</div>
+  <q-card class="statCard" style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
+      <div class="q-mr-md text-h4 statCardMainNumber">{{ props.ascents.length }}</div>
       <div class="text-h6 text-grey-9">Einträge</div>
     </q-card-section>
 
     <q-separator />
 
     <q-card-section>
-      <Doughnut :data="chartData" :options="chartOptions" />
+      <Doughnut style="height: 200px" :data="chartData" :options="chartOptions" />
     </q-card-section>
   </q-card>
 </template>
@@ -53,15 +53,16 @@ const chartData = computed(() => {
           getPaletteColor('yellow'),
         ],
         borderWidth: 2,
-        borderColor: '#fff',
+        borderColor: getPaletteColor('offwhite1'),
+        borderRadius: 5,
       },
     ],
   }
 })
 
 const chartOptions = {
-  responsive: true,
   maintainAspectRatio: false,
+  responsive: true,
   plugins: {
     legend: {
       position: 'bottom',
@@ -73,3 +74,4 @@ const chartOptions = {
   },
 }
 </script>
+<style scoped></style>

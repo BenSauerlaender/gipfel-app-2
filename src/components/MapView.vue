@@ -3,13 +3,13 @@
   <div id="map" class="mapContainer"></div>
   <!-- Controls for filtering summits -->
   <div class="controlContainer q-pa-sm">
-    <q-card class="" flat bordered style="border-radius: 18px">
+    <q-card class="q-mt-md" flat bordered style="border-radius: 18px">
       <!-- Toggle to show/hide not ascended summits -->
       <q-toggle
         class="q-pr-md"
         v-model="showNotAscended"
         checked-icon="check"
-        color="blue-7"
+        color="blue"
         unchecked-icon="clear"
         label="Alle Gipfel"
       />

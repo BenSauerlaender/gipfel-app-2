@@ -1,7 +1,7 @@
 <template>
-  <q-card style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">{{ routes.length }}</div>
+  <q-card class="statCard" style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
+      <div class="q-mr-md text-h4 statCardMainNumber">{{ props.routes.length }}</div>
       <div class="text-h6 text-grey-9">Wege</div>
     </q-card-section>
 
@@ -12,7 +12,7 @@
         <Bar :data="chartData" :options="chartOptions" />
       </div>
       <div class="q-mt-md row justify-center">
-        <q-btn color="primary" label="Alle Wege anzeigen" to="/stats/routes" flat icon="list" />
+        <q-btn no-caps dense flat label="Alle anzeigen" to="/stats/routes" icon="list" />
       </div>
     </q-card-section>
   </q-card>
@@ -66,6 +66,7 @@ const chartData = computed(() => {
         backgroundColor: labels.map((label) => getGradeColor(label)),
         borderWidth: 1,
         borderColor: '#fff',
+        borderRadius: 5,
       },
     ],
   }

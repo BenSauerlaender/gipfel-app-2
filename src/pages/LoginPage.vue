@@ -1,6 +1,6 @@
 <template>
-  <div class="q-pa-md flex flex-center column" style="min-height: 100vh">
-    <q-card class="q-pa-lg" style="width: 350px; max-width: 90vw">
+  <div class="q-pa-md flex flex-center column bg-offwhite2" style="min-height: 100vh">
+    <q-card class="q-pa-lg bg-offwhite1" style="width: 350px; max-width: 90vw">
       <q-card-section>
         <div class="text-h6">Anmelden</div>
       </q-card-section>

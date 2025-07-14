@@ -1,5 +1,6 @@
 <template>
   <q-table
+    class="table-green"
     :rows="ascents"
     :columns="columns"
     row-key="_id"

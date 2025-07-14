@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md container">
     <div class="row q-col-gutter-md">
       <DateFilter />
       <GradeFilter />
@@ -22,4 +22,24 @@ import LeadClimberFilter from './FilterCards/LeadClimberFilter.vue'
 import RouteTagFilter from './FilterCards/RouteTagFilter.vue'
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+:deep(.filter-card) {
+  background-color: $offwhite3;
+  border-radius: 1.5rem;
+  .filter-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: $darkgreen;
+  }
+  .q-range {
+    width: 90%;
+    margin: 48px 16px 0px 16px;
+  }
+  height: 100%;
+}
+</style>

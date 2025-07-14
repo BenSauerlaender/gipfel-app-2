@@ -1,74 +1,75 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card v-if="summit">
-      <q-card-section>
-        <div class="row justify-between">
-          <div class="row items-center">
-            <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-            <div class="text-h5 q-ml-md">
-              {{ summit.name }}
-              <span class="text-grey-6"
-                >(<router-link
-                  style="text-decoration: none; color: inherit"
-                  :to="`/regions/${summit.regionID}`"
-                  >{{ summit.regionName }}</router-link
-                >)</span
-              >
-            </div>
-          </div>
-          <q-btn flat round color="primary" icon="map" @click="router.push('/map/' + summit._id)">
-            <q-tooltip> Auf Karte ansehen </q-tooltip>
-          </q-btn>
+    <div class="row justify-between items-center action-buttons">
+      <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
+      <q-btn
+        outline
+        rounded
+        size="sm"
+        color="darkgreen"
+        icon="map"
+        @click="router.push('/map/' + summit._id)"
+      >
+        <q-tooltip> Auf Karte ansehen </q-tooltip>
+      </q-btn>
+    </div>
+    <q-card class="bg-offwhite3">
+      <q-card-section class="row justify-between items-center bg-offwhite3">
+        <div class="column q-ml-md">
+          <span class="text-h6 text-weight-light text-lightgreen q-ml-xs">
+            <router-link
+              style="text-decoration: none; color: inherit"
+              :to="`/regions/${summit.regionID}`"
+              >{{ summit.regionName }}</router-link
+            >
+          </span>
+          <span class="text-h2 text-darkgreen text-weight-bold">{{ summit.name }}</span>
         </div>
+        <span class="row justify-center items-end bg-offwhite3">
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ routes.length }}</span>
+            <span class="text-lightgreen">Gipfel</span>
+          </span>
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ routePercentage }}%</span>
+            <span class="text-lightgreen">Begangen</span>
+          </span>
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ ascentCount }}</span>
+            <span class="text-lightgreen">Einträge</span>
+          </span>
+        </span>
       </q-card-section>
+      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+        <q-tab name="routes" icon="book" label="Wege" />
+        <q-tab name="ascents" icon="table_chart" label="Einträge" />
+      </q-tabs>
       <q-separator />
-      <q-card-section>
-        <div class="row justify-center">
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ routes.length }}</span> Wege
-          </div>
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ routePercentage }}%</span>
-            begangen
-          </div>
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Einträge
-          </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
-          <q-tab name="routes" icon="book" label="Wege" />
-          <q-tab name="ascents" icon="table_chart" label="Einträge" />
-        </q-tabs>
-        <q-separator />
-        <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="routes">
-            <RouteTable
-              :routes="routes"
-              :columns="['name', 'grade', 'stars', 'unsecure', 'ascents', 'ttScore']"
-              :defaultSort="['name', 'asc']"
-            />
-          </q-tab-panel>
-          <q-tab-panel name="ascents">
-            <AscentTable
-              :ascents="ascents"
-              :columns="[
-                'date',
-                'route',
-                'grade',
-                'stars',
-                'unsecure',
-                'ascentType',
-                'climbers',
-                'isAborted',
-                'notes',
-              ]"
-            />
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card-section>
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="routes">
+          <RouteTable
+            :routes="routes"
+            :columns="['name', 'grade', 'stars', 'unsecure', 'ascents', 'ttScore']"
+            :defaultSort="['name', 'asc']"
+          />
+        </q-tab-panel>
+        <q-tab-panel name="ascents">
+          <AscentTable
+            :ascents="ascents"
+            :columns="[
+              'date',
+              'route',
+              'grade',
+              'stars',
+              'unsecure',
+              'ascentType',
+              'climbers',
+              'isAborted',
+              'notes',
+            ]"
+          />
+        </q-tab-panel>
+      </q-tab-panels>
     </q-card>
   </div>
 </template>

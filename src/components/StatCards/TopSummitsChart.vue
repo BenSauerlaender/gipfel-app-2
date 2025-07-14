@@ -1,7 +1,7 @@
 <template>
-  <q-card style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">
+  <q-card class="statCard" style="height: 100%">
+    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
+      <div class="q-mr-md text-h4 statCardMainNumber">
         {{ ascents.length > 0 ? sortedSummits[0][1].total : 0 }}x
       </div>
       <div class="text-h6 text-grey-9">

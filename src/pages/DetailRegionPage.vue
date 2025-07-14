@@ -1,62 +1,65 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card v-if="region">
-      <q-card-section>
-        <div class="row items-center">
-          <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-          <div class="text-h5 q-ml-md">{{ region.name }}</div>
-        </div>
+    <div class="row items-center action-buttons">
+      <q-btn
+        size="sm"
+        rounded
+        padding="xs md"
+        color="darkgreen"
+        outline
+        icon="arrow_back"
+        @click="router.back()"
+      />
+    </div>
+    <q-card v-if="region" class="bg-offwhite3">
+      <q-card-section class="row justify-between items-center bg-offwhite3">
+        <span class="text-h2 text-darkgreen text-weight-bold q-ml-md">{{ region.name }}</span>
+        <span class="row justify-center items-center bg-offwhite3">
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ summits.length }}</span>
+            <span class="text-lightgreen">Gipfel</span>
+          </span>
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ summitPercentage }}%</span>
+            <span class="text-lightgreen">Begangen</span>
+          </span>
+          <span class="q-ma-md column text-center">
+            <span class="text-h4 text-weight-bolder text-red">{{ ascentCount }}</span>
+            <span class="text-lightgreen">Einträge</span>
+          </span>
+        </span>
       </q-card-section>
+      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+        <q-tab name="summits" icon="book" label="Gipfel" />
+        <q-tab name="ascents" icon="table_chart" label="Einträge" />
+      </q-tabs>
       <q-separator />
-      <q-card-section>
-        <div class="row justify-center">
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ region.summitCount }}</span>
-            Gipfel
-          </div>
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ summitPercentage }}%</span>
-            begangen
-          </div>
-          <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Einträge
-          </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
-          <q-tab name="summits" icon="book" label="Gipfel" />
-          <q-tab name="ascents" icon="table_chart" label="Einträge" />
-        </q-tabs>
-        <q-separator />
-        <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="summits">
-            <SummitTable
-              :summits="summits"
-              :columns="['name', 'routes', 'ascents']"
-              :defaultSort="['name', 'asc']"
-            />
-          </q-tab-panel>
-          <q-tab-panel name="ascents">
-            <AscentTable
-              :ascents="ascents"
-              :columns="[
-                'date',
-                'route',
-                'summit',
-                'grade',
-                'stars',
-                'unsecure',
-                'ascentType',
-                'climbers',
-                'isAborted',
-                'notes',
-              ]"
-            />
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card-section>
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="summits">
+          <SummitTable
+            :summits="summits"
+            :columns="['name', 'routes', 'ascents']"
+            :defaultSort="['name', 'asc']"
+          />
+        </q-tab-panel>
+        <q-tab-panel name="ascents">
+          <AscentTable
+            :ascents="ascents"
+            :columns="[
+              'date',
+              'route',
+              'summit',
+              'grade',
+              'stars',
+              'unsecure',
+              'ascentType',
+              'climbers',
+              'isAborted',
+              'notes',
+            ]"
+          />
+        </q-tab-panel>
+      </q-tab-panels>
     </q-card>
   </div>
 </template>

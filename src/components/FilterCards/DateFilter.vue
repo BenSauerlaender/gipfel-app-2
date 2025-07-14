@@ -1,8 +1,8 @@
 <template>
-  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+  <div class="col-12 col-sm-6">
     <q-card class="filter-card">
       <q-card-section>
-        <div class="text-h8">Zeitraum</div>
+        <div class="filter-header">Zeitraum</div>
         <q-range
           v-model="range"
           :min="0"
@@ -12,10 +12,7 @@
           :right-label-value="allDates[range.max].toLocaleDateString('de-DE')"
           label-always
           label
-          switch-label-side
-          drag-range
-          color="primary"
-          class="q-mt-lg"
+          color="darkgreen"
         />
       </q-card-section>
     </q-card>
@@ -51,14 +48,4 @@ watch(range, (newValue) => {
 })
 </script>
 
-<style scoped>
-.filter-card {
-  height: 100%;
-  transition: all 0.3s ease;
-}
-
-.filter-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-</style>
+<style scoped></style>
