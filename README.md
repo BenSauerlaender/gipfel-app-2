@@ -86,6 +86,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - mobile: filter: slider tooltips visuel out of box
 - mobile: filter: ausklapp handle zu klein und lagged
 - filter: Vorstieg kaputt _!_
+- filter: Karte updated nicht _!_
 
 ## Performance
 

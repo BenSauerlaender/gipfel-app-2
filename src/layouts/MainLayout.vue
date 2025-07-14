@@ -36,15 +36,12 @@
     </q-drawer>
 
     <q-page-container id="pageContainer">
-      <router-view v-if="isMinimumLoaded || router.currentRoute.value.fullPath === '/status'" />
+      <router-view
+        v-if="isMinimumLoaded || ['/status', '/login'].includes(router.currentRoute.value.fullPath)"
+      />
       <div v-else class="column items-center justify-center relative-position loading-container">
         <q-circular-progress indeterminate rounded size="50px" color="primary" class="q-ma-md" />
-        <q-btn
-          v-if="showStatusButton"
-          @click="router.push('/status')"
-          label="Check Status"
-          color="primary"
-        />
+        <q-btn @click="router.push('/status')" label="Check Status" color="primary" />
       </div>
     </q-page-container>
     <BottomPanel v-if="isMinimumLoaded">
@@ -105,19 +102,9 @@ const linksList = [
 ]
 
 const leftDrawerOpen = ref(false)
-const showStatusButton = ref(false)
-
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
-
-onMounted(() => {
-  setTimeout(() => {
-    if (!isMinimumLoaded.value) {
-      showStatusButton.value = true
-    }
-  }, 3000)
-})
 </script>
 
 <style lang="scss">

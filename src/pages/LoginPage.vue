@@ -1,6 +1,6 @@
 <template>
-  <div class="q-pa-md flex flex-center column bg-offwhite2" style="min-height: 100vh">
-    <q-card class="q-pa-lg bg-offwhite1" style="width: 350px; max-width: 90vw">
+  <div class="q-pa-md flex flex-center column bg-offwhite2" style="min-height: 70vh">
+    <q-card class="q-pa-lg bg-offwhite1" style="width: 350px; max-width: 90vw; border-radius: 2rem">
       <q-card-section>
         <div class="text-h6">Anmelden</div>
       </q-card-section>
@@ -25,6 +25,7 @@
           />
           <div v-if="error" class="text-negative q-mb-md">{{ error }}</div>
           <q-btn
+            style="border-radius: 0.8rem"
             type="submit"
             color="primary"
             label="Anmelden"
