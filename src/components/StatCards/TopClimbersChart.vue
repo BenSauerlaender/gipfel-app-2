@@ -1,11 +1,11 @@
 <template>
   <q-card style="height: 100%">
     <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold text-blue-7">
+      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">
         {{ ascents.length > 0 ? sortedClimbers[0][1].total : 0 }}
       </div>
       <div class="text-h6 text-grey-9">
-        Begehungen von {{ ascents.length > 0 ? sortedClimbers[0][1].name : 'Niemand' }}
+        Einträge mit {{ ascents.length > 0 ? sortedClimbers[0][1].name : 'Niemand' }}
       </div>
     </q-card-section>
 
@@ -23,6 +23,8 @@ import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { useDataStore } from 'src/stores/dataStore'
 import { useFilterStore } from 'src/stores/filterStore'
+import { colors } from 'quasar'
+const { getPaletteColor } = colors
 
 const dataStore = useDataStore()
 
@@ -87,27 +89,27 @@ const chartData = computed(() => {
     labels: labels,
     datasets: [
       {
+        label: 'Nachstieg',
+        data: sortedClimbers.value.map(([, stats]) => stats.other),
+        backgroundColor: getPaletteColor('lightgreen'),
+        stack: 'Stack 0',
+      },
+      {
         label: 'Vorstieg',
         data: sortedClimbers.value.map(([, stats]) => stats.lead),
-        backgroundColor: '#FF6384',
+        backgroundColor: getPaletteColor('darkgreen'),
         stack: 'Stack 0',
       },
       {
         label: 'Solo',
         data: sortedClimbers.value.map(([, stats]) => stats.solo),
-        backgroundColor: '#36A2EB',
+        backgroundColor: getPaletteColor('red'),
         stack: 'Stack 0',
       },
       {
         label: 'v.o.g.',
         data: sortedClimbers.value.map(([, stats]) => stats.topRope),
-        backgroundColor: '#FFCE56',
-        stack: 'Stack 0',
-      },
-      {
-        label: 'Nachstieg',
-        data: sortedClimbers.value.map(([, stats]) => stats.other),
-        backgroundColor: '#4BC0C0',
+        backgroundColor: getPaletteColor('yellow'),
         stack: 'Stack 0',
       },
     ],

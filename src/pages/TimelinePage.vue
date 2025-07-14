@@ -2,7 +2,7 @@
   <div class="page-container">
     <q-card>
       <q-tabs v-model="tab" class="text-blue-7" align="justify">
-        <q-tab name="timeline" icon="book" label="Tagebuch" />
+        <q-tab name="timeline" icon="book" label="Chronik" />
         <q-tab name="table" icon="table_chart" label="Tabelle" />
       </q-tabs>
       <q-separator />
@@ -12,7 +12,7 @@
           <div class="row justify-center">
             <div>
               <q-card-section>
-                <q-timeline color="secondary" layout="dense" side="right" class="col-10">
+                <q-timeline color="scss" layout="dense" side="right" class="col-10">
                   <div v-if="f_PopulatedTrips.length === 0">
                     <div class="text-h6">Keine Einträge gefunden</div>
                   </div>

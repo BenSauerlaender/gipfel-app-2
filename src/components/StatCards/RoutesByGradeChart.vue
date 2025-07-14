@@ -1,7 +1,7 @@
 <template>
   <q-card style="height: 100%">
     <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ routes.length }}</div>
+      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">{{ routes.length }}</div>
       <div class="text-h6 text-grey-9">Wege</div>
     </q-card-section>
 

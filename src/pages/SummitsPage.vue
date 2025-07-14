@@ -15,7 +15,7 @@
             begangen
           </div>
           <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Begehungen
+            <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Einträge
           </div>
         </div>
       </q-card-section>

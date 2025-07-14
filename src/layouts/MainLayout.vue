@@ -1,10 +1,13 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar id="toolbar" class="row justify-between items-center">
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Gipfel App </q-toolbar-title>
+        <div class="row items-center">
+          <q-img src="~assets/logo1-background-1024.png" style="width: 25px" />
+          <q-toolbar-title shrink> Gipfel App </q-toolbar-title>
+        </div>
 
         <q-btn round flat icon="more_vert">
           <q-menu auto-close :offset="[110, 0]">
@@ -32,7 +35,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container id="pageContainer">
       <router-view v-if="isMinimumLoaded || router.currentRoute.value.fullPath === '/status'" />
       <div v-else class="column items-center justify-center relative-position loading-container">
         <q-circular-progress indeterminate rounded size="50px" color="primary" class="q-ma-md" />
@@ -70,14 +73,14 @@ const { loggedIn } = storeToRefs(userStore)
 
 const linksList = [
   {
-    title: 'Tagebuch',
-    caption: 'Alle Begehungen',
+    title: 'Gipfelbuch',
+    caption: 'Alle Einträge',
     icon: 'auto_stories',
     link: '/timeline',
   },
   {
     title: 'Statistiken',
-    caption: 'über Begehungen',
+    caption: 'über Einträge',
     icon: 'bar_chart',
     link: '/stats',
   },
@@ -118,14 +121,14 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss">
 .loading-container {
   z-index: 1000;
   height: calc(100vh - 660px);
 }
 
 /* Add bottom padding to ensure content can scroll past the bottom panel */
-:deep(.q-page-container) {
+#q-page-container {
   padding-bottom: 600px; /* Maximum height of the bottom panel */
 }
 </style>

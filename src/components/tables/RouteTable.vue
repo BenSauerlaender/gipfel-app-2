@@ -140,7 +140,7 @@ const columns = [
   },
   { name: 'stars', label: 'Sterne', field: (row) => row.stars, align: 'center', sortable: true },
   { name: 'unsecure', label: '!', field: (row) => row.unsecure, align: 'left', sortable: true },
-  { name: 'ascents', label: 'Begehungen', field: 'ascents', align: 'left', sortable: true },
+  { name: 'ascents', label: 'Einträge', field: 'ascents', align: 'left', sortable: true },
   {
     name: 'ttScore',
     label: 'TT Bewertung',

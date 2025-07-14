@@ -1,7 +1,7 @@
 <template>
   <q-card style="height: 100%">
     <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold text-blue-7">
+      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">
         {{ props.trips.reduce((acc, trip) => acc + trip.days.length, 0) }}
       </div>
       <div class="text-h6 text-grey-9">Tage am Fels</div>
@@ -85,7 +85,7 @@ const chartOptions = {
       intersect: false,
       callbacks: {
         label: (context) => {
-          return `Tage: ${context.raw.days} | Begehungen: ${context.raw.y}`
+          return `Tage: ${context.raw.days} | Einträge: ${context.raw.y}`
         },
         title: (tooltipItems) => {
           return tooltipItems[0].raw.tripName

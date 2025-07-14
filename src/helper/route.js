@@ -1,3 +1,6 @@
+import { colors } from 'quasar'
+const { getPaletteColor } = colors
+
 const getRouteGrade = (route) => {
   if (route.difficulty.jump) {
     return route.difficulty.jump
@@ -41,37 +44,36 @@ const NORMAL_SCALA = [
   'XIIc',
 ]
 const COLORS = {
-  I: '#aad576',
-  II: '#73a942',
-  III: '#538d22',
-  IV: '#245501',
+  I: getPaletteColor('scale-green1'),
+  II: getPaletteColor('scale-green2'),
+  III: getPaletteColor('scale-green3'),
+  IV: getPaletteColor('scale-green4'),
+  V: getPaletteColor('scale-red1'),
+  VI: getPaletteColor('scale-red2'),
+  VIIa: getPaletteColor('scale-red3'),
+  VIIb: getPaletteColor('scale-red3'),
+  VIIc: getPaletteColor('scale-red3'),
+  VIIIa: getPaletteColor('scale-red4'),
+  VIIIb: getPaletteColor('scale-red4'),
+  VIIIc: getPaletteColor('scale-red4'),
+  IXa: getPaletteColor('scale-red5'),
+  IXb: getPaletteColor('scale-red5'),
+  IXc: getPaletteColor('scale-red5'),
+  Xa: getPaletteColor('scale-red6'),
+  Xb: getPaletteColor('scale-red6'),
+  Xc: getPaletteColor('scale-red6'),
+  XIa: getPaletteColor('scale-red7'),
+  XIb: getPaletteColor('scale-red7'),
+  XIc: getPaletteColor('scale-red7'),
+  XIIa: getPaletteColor('scale-red8'),
+  XIIb: getPaletteColor('scale-red8'),
+  XIIc: getPaletteColor('scale-red8'),
 
-  V: '#faa307',
-  VI: '#f48c06',
-  VIIa: '#e85d04',
-  VIIb: '#e85d04',
-  VIIc: '#e85d04',
-  VIIIa: '#dc2f02',
-  VIIIb: '#dc2f02',
-  VIIIc: '#dc2f02',
-  IXa: '#d00000',
-  IXb: '#d00000',
-  IXc: '#d00000',
-  Xa: '#9d0208',
-  Xb: '#9d0208',
-  Xc: '#9d0208',
-  XIa: '#6a040f',
-  XIb: '#6a040f',
-  XIc: '#6a040f',
-  XIIa: '#370617',
-  XIIb: '#370617',
-  XIIc: '#370617',
-
-  1: '#aad576',
-  2: '#538d22',
-  3: '#faa307',
-  4: '#e85d04',
-  5: '#9d0208',
+  1: getPaletteColor('scale-green1'),
+  2: getPaletteColor('scale-green3'),
+  3: getPaletteColor('scale-red1'),
+  4: getPaletteColor('scale-red3'),
+  5: getPaletteColor('scale-red6'),
 }
 
 const sortRouteByGrades = (a, b) => {

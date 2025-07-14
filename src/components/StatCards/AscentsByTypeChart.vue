@@ -1,8 +1,8 @@
 <template>
   <q-card style="height: 100%">
     <q-card-section class="flex items-center justify-start no-wrap">
-      <div class="q-mr-md text-h4 text-weight-bold text-blue-7">{{ props.ascents.length }}</div>
-      <div class="text-h6 text-grey-9">Begehungen</div>
+      <div class="q-mr-md text-h4 text-weight-bold statsMainNumber">{{ props.ascents.length }}</div>
+      <div class="text-h6 text-grey-9">Einträge</div>
     </q-card-section>
 
     <q-separator />
@@ -17,6 +17,8 @@
 import { computed } from 'vue'
 import { Doughnut } from 'vue-chartjs'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
+import { colors } from 'quasar'
+const { getPaletteColor } = colors
 
 Chart.register(ArcElement, Tooltip, Legend)
 
@@ -45,7 +47,11 @@ const chartData = computed(() => {
     datasets: [
       {
         data: [leadCount, soloCount, topRopeCount],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        backgroundColor: [
+          getPaletteColor('darkgreen'),
+          getPaletteColor('red'),
+          getPaletteColor('yellow'),
+        ],
         borderWidth: 2,
         borderColor: '#fff',
       },

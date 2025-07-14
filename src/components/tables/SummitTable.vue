@@ -90,7 +90,7 @@ const columns = [
     align: 'left',
     sortable: true,
   },
-  { name: 'ascents', label: 'Begehungen', field: 'ascents', align: 'left', sortable: true },
+  { name: 'ascents', label: 'Einträge', field: 'ascents', align: 'left', sortable: true },
 ].filter((column) => props.columns.includes(column.name))
 
 const summits = computed(() => {

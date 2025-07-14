@@ -235,7 +235,7 @@ const userStore = useUserStore()
 const label = (s) => {
   switch (s) {
     case 'ascents':
-      return 'Begehungen'
+      return 'Einträge'
     case 'routes':
       return 'Wege'
     case 'summits':

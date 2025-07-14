@@ -32,7 +32,7 @@
             begangen
           </div>
           <div class="col-12 col-sm-3 text-center">
-            <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Begehungen
+            <span class="text-h4 text-weight-bold text-blue-7">{{ ascentCount }}</span> Einträge
           </div>
         </div>
       </q-card-section>
@@ -40,7 +40,7 @@
       <q-card-section>
         <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
           <q-tab name="routes" icon="book" label="Wege" />
-          <q-tab name="ascents" icon="table_chart" label="Begehungen" />
+          <q-tab name="ascents" icon="table_chart" label="Einträge" />
         </q-tabs>
         <q-separator />
         <q-tab-panels v-model="tab" animated>

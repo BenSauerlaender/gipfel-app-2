@@ -1,13 +1,16 @@
 <script setup>
+import { colors } from 'quasar'
 import { computed } from 'vue'
+
+const { getPaletteColor } = colors
 
 const props = defineProps({
   color: { type: String, required: false },
 })
 
 const chipStyle = computed(() => ({
-  backgroundColor: props.color ?? 'red',
-  color: 'white',
+  backgroundColor: props.color ?? getPaletteColor('red'),
+  color: getPaletteColor('offwhite1'),
 }))
 </script>
 

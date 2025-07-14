@@ -30,7 +30,7 @@
           </div>
           <div class="col-12 col-sm-5 text-center">
             <span class="text-h4 text-weight-bold text-blue-7">{{ ascents.length }}</span>
-            Begehungen
+            Einträge
           </div>
         </div>
       </q-card-section>

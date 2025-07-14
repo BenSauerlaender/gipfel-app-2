@@ -44,23 +44,37 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
--deploy
-
-- map: zoom and bounds restriction
-- data mngmt: auto download, notify ...
-- map: also online map as fallback?
-- add documentation
-
 ## Consistensy/Robustness
 
 - use ColorUtils for all colors
 - use DomUtils for height of Map and BottomPanel
+- filter bereich als footer?
+
+## Design
+
+- pwa anzeigename aendern _!_
+
+## Design 2
+
+- Chartjs styling (Tooltips, weisse render in circluar chart)
+- logo rework
+- logo aus topbar in drawer
+- drawer zwischen top und bottom bar
+- rework mobile view
 
 ## Features
 
-- use URL parameter for tabViews
+- use URL parameter for tabViews (oder doch nicht?)
 - On Mobile: getLocation in MapView
 - MapView HeatMap Style Or Cluster?
+- Online map fallback
+- DEV Debug features? console log anzeigen...
+- Datengroesse auf die Statusseite _!_
+- Tagebuch trips einklappen
+- tabellen on mobile dense (kleinere schrift, spalten zusammenfassen) _!_
+- Abk. fuer Gebiete und dann in Klammern dahinter _!_
+- Status Page: gescheite download balken
+- animations / transitions ?
 
 ## BUG
 
@@ -68,18 +82,20 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
   - Zurueck button -> beendet die Seite
   - Expected behavior: fuehrt zu summitDetail
 - update notification funktioniert nicht (boot/initStore)
+- status page: download/reload button wenn resource bussy fixen _!_
+- StatsRoute and StatssSummits Falsche berechnung der grossen Zahl _!_
+- mobile: filter: slider tooltips visuel out of box _!_
+- mobile: filter: ausklapp handle zu klein und lagged _!_
+- filter: platzfreihaltung nicht schoen (margin auf der page) _!_
+- slider mittelhandle nervt _!_
 
 ## Performance
 
 - Tagebuch performance analysieren.
+- Map tiles komplett in cache?
+- Die Resourcemanager in Service Worker?
 
-### PWA
-
-- Service Workers
-
-## Electron
-
-## Capacitor
+## Dokumentation
 
 # Limitations:
 

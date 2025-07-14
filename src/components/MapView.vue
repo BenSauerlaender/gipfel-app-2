@@ -188,7 +188,7 @@ const popupHtml = (summit) => {
   return `<div class=q-px-sm><div class="text-bold text-subtitle2">${summit.name}</div>
             <div><span class="">Wege: </span><span class="text-bold">${routeCount}</span></div>
             <div><span class="">begangen: </span><span class="text-bold">${routePercentage}%</span></div>
-            <div><span class="">Begehungen: </span><span class="text-bold">${ascents}</span></div>
+            <div><span class="">Einträge: </span><span class="text-bold">${ascents}</span></div>
             <div class="row justify-center q-mt-sm"><a href="/#/summits/${summit._id}">details</a></div></div>`
 }
 

@@ -19,13 +19,13 @@ const icons = {
   3: 'sym_o_stat_3',
 }
 const colorsDict = {
-  '-3': getPaletteColor('deep-orange-9'),
-  '-2': getPaletteColor('deep-orange-7'),
-  '-1': getPaletteColor('deep-orange-4'),
-  0: getPaletteColor('grey-4'),
-  1: getPaletteColor('light-green-4'),
-  2: getPaletteColor('light-green-7'),
-  3: getPaletteColor('light-green-9'),
+  '-3': getPaletteColor('scale-red3'),
+  '-2': getPaletteColor('scale-red2'),
+  '-1': getPaletteColor('scale-red1'),
+  0: getPaletteColor('offwhite3'),
+  1: getPaletteColor('scale-green1'),
+  2: getPaletteColor('scale-green2'),
+  3: getPaletteColor('scale-green3'),
 }
 </script>
 

@@ -1,1 +1,79 @@
-// app global css in SCSS form
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  src: url(./fonts/Inter-Italic-VariableFont_opsz\,wght.ttf);
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  src: url(./fonts/Inter-VariableFont_opsz\,wght.ttf);
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  src: url(./fonts/Nunito-Italic-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  src: url(./fonts/Nunito-VariableFont_wght.ttf);
+}
+
+body {
+  font-family: 'Nunito';
+  color: $offblack2;
+}
+
+#toolbar {
+  background-color: $darkgreen;
+  color: $offwhite1;
+  .q-toolbar__title {
+    font-weight: 900;
+  }
+}
+#pageContainer {
+  background-color: $offwhite2;
+}
+.q-card,
+.q-tab-panels,
+.q-table__container,
+.q-menu {
+  background-color: $offwhite1;
+}
+.q-tab {
+  background-color: $offwhite3;
+  color: $darkgreen;
+}
+.q-tab__label {
+  font-weight: 800;
+}
+
+.q-tab--inactive {
+  opacity: 1;
+  color: $lightgreen;
+}
+.q-timeline__heading-title {
+  color: $darkgreen;
+  font-weight: 900;
+}
+.q-timeline__dot {
+  color: $lightgreen;
+}
+
+.q-drawer {
+  background-color: $offwhite1;
+  color: $darkgreen;
+
+  .q-item__label:not(.q-item__label--caption) {
+    font-weight: 800;
+  }
+  .q-item.q-router-link--active,
+  .q-item--active {
+    color: $red;
+  }
+}
+
+.statsMainNumber {
+  color: $darkgreen;
+  font-weight: 900;
+}

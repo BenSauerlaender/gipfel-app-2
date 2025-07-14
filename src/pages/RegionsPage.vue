@@ -62,7 +62,7 @@ const columns = [
   { name: 'summits', label: 'Gipfel', field: 'summits', align: 'left', sortable: true },
   {
     name: 'ascents',
-    label: 'Begehungen',
+    label: 'Einträge',
     field: (row) => (row.ascents > 0 ? row.ascents : '-'),
     align: 'left',
     sortable: true,
