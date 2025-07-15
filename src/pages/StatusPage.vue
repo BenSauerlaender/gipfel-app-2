@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-center">
+  <div class="row justify-center bg-offwhite1">
     <div class="col-12 col-md-8 col-lg-6">
       <h4 class="text-h4 q-mb-lg text-center">Status Übersicht</h4>
 

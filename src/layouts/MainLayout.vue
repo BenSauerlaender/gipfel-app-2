@@ -115,6 +115,6 @@ function toggleLeftDrawer() {
   height: calc(100vh - 660px);
 }
 #pageContainer > div {
-  margin-bottom: 10vh;
+  padding-bottom: 3vh;
 }
 </style>
