@@ -1,22 +1,20 @@
 <template>
-  <div class="col-12 col-sm-6">
-    <q-card class="filter-card">
-      <q-card-section>
-        <div class="filter-header">Zeitraum</div>
-        <q-range
-          v-model="range"
-          :min="0"
-          :max="allDates.length - 1"
-          :step="1"
-          :left-label-value="allDates[range.min].toLocaleDateString('de-DE')"
-          :right-label-value="allDates[range.max].toLocaleDateString('de-DE')"
-          label-always
-          label
-          color="darkgreen"
-        />
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="filter-card">
+    <q-card-section>
+      <div class="filter-header">Zeitraum</div>
+      <q-range
+        v-model="range"
+        :min="0"
+        :max="allDates.length - 1"
+        :step="1"
+        :left-label-value="allDates[range.min].toLocaleDateString('de-DE')"
+        :right-label-value="allDates[range.max].toLocaleDateString('de-DE')"
+        label-always
+        label
+        color="darkgreen"
+      />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>

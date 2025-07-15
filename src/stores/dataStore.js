@@ -55,6 +55,16 @@ export const useDataStore = defineStore('data', {
       return map
     },
     f_Ascents(state) {
+      const isClimberIDaValidClimber = (ascent, climberID) => {
+        if (filterStore.filters.ascents.allowedTypes.includes('aborted')) {
+          return ascent.climbers.some((c) => c._id === climberID)
+        } else {
+          return ascent.climbers
+            .filter((c) => c.isAborted === false)
+            .some((c) => c._id === climberID)
+        }
+      }
+
       const filterStore = useFilterStore()
       if (!filterStore.applyFilter) return state.ascents
       return state.ascents
@@ -90,17 +100,13 @@ export const useDataStore = defineStore('data', {
           return true
         })
         .filter((ascent) => {
-          const isAllowed = (climber) =>
-            filterStore.filters.ascents.allowedTypes.includes('aborted') ||
-            climber.isAborted === false
-
           if (filterStore.filters.climbers.selected.length == 0) {
             return true
           }
           if (
             filterStore.filters.climbers.mode === 'or' &&
             !filterStore.filters.climbers.selected.some((climber) =>
-              ascent.climbers.filter(isAllowed).some((c) => c._id === climber),
+              isClimberIDaValidClimber(ascent, climber),
             )
           ) {
             return false
@@ -108,7 +114,7 @@ export const useDataStore = defineStore('data', {
           if (
             filterStore.filters.climbers.mode === 'and' &&
             !filterStore.filters.climbers.selected.every((climber) =>
-              ascent.climbers.filter(isAllowed).some((c) => c._id === climber),
+              isClimberIDaValidClimber(ascent, climber),
             )
           ) {
             return false
@@ -116,7 +122,7 @@ export const useDataStore = defineStore('data', {
           if (
             filterStore.filters.climbers.mode === 'exact' &&
             (!filterStore.filters.climbers.selected.every((climber) =>
-              ascent.climbers.filter(isAllowed).some((c) => c._id === climber),
+              isClimberIDaValidClimber(ascent, climber),
             ) ||
               ascent.climbers.length !== filterStore.filters.climbers.selected.length)
           ) {
@@ -125,7 +131,7 @@ export const useDataStore = defineStore('data', {
           if (
             filterStore.filters.climbers.mode === 'not' &&
             filterStore.filters.climbers.selected.some((climber) =>
-              ascent.climbers.filter(isAllowed).some((c) => c._id === climber),
+              isClimberIDaValidClimber(ascent, climber),
             )
           ) {
             return false
@@ -133,14 +139,17 @@ export const useDataStore = defineStore('data', {
           return true
         })
         .filter((ascent) => {
-          if (ascent.leadClimber === null) return true
-          if (
-            filterStore.filters.climbers.lead !== null &&
-            ascent.leadClimber._id !== filterStore.filters.climbers.lead
+          if (!filterStore.filters.climbers.lead) return true
+
+          if (ascent.leadClimber && ascent.leadClimber._id === filterStore.filters.climbers.lead) {
+            return true
+          } else if (
+            ascent.isSolo &&
+            isClimberIDaValidClimber(ascent, filterStore.filters.climbers.lead)
           ) {
-            return false
+            return true
           }
-          return true
+          return false
         })
         .filter((ascent) => {
           if (filterStore.filters.route.route !== null) {

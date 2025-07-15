@@ -4,7 +4,7 @@ export const useFilterStore = defineStore('filter', {
   state: () => ({
     filters: {
       ascents: {
-        allowedTypes: ['lead', 'solo', 'topRope', 'aborted'],
+        allowedTypes: ['lead', 'solo', 'topRope'], // 'aborted' is not included by default
         dateMin: null,
         dateMax: null,
       },
@@ -33,7 +33,7 @@ export const useFilterStore = defineStore('filter', {
         },
       },
     },
-    applyFilter: true,
+    applyFilter: false,
   }),
   getters: {},
   actions: {},

@@ -93,7 +93,7 @@
             <q-space />
             <div v-if="hasUnloadedResources || hasOutdatedResources" class="q-gutter-sm">
               <q-btn
-                :color="hasUnloadedResources ? 'primary' : 'warning'"
+                :color="hasUnloadedResources ? 'primary' : 'lightgreen'"
                 :label="hasUnloadedResources ? 'Alle herunterladen' : 'Alle aktualisieren'"
                 :icon="hasUnloadedResources ? 'cloud_download' : 'refresh'"
                 @click="updateAllData"
@@ -146,14 +146,16 @@
                   </div>
 
                   <!-- Action Buttons -->
-                  <div class="q-gutter-sm">
+                  <div v-if="resource.state === 'processing'" class="q-gutter-sm">
+                    <q-spinner size="sm" color="lightgreen"></q-spinner>
+                  </div>
+                  <div v-else class="q-gutter-sm">
                     <!-- Reload Button -->
                     <q-btn
+                      v-if="resource.state === 'loaded'"
                       color="info"
                       icon="cached"
                       @click="handleReloadResource(resource)"
-                      :loading="isResourceBusy(resource)"
-                      :disable="isResourceBusy(resource)"
                       size="sm"
                       round
                       flat
@@ -163,12 +165,10 @@
 
                     <!-- Clear Button -->
                     <q-btn
-                      v-if="resource.state === 'loaded' || resource.entryCount > 0"
+                      v-if="resource.state === 'loaded'"
                       color="negative"
                       icon="delete"
                       @click="handleClearResource(resource)"
-                      :loading="isResourceBusy(resource)"
-                      :disable="isResourceBusy(resource)"
                       size="sm"
                       round
                       flat
@@ -183,8 +183,7 @@
                       :label="getActionButtonLabel(resource)"
                       :icon="getActionButtonIcon(resource)"
                       @click="handleDataFieldAction(resource)"
-                      :loading="isResourceBusy(resource)"
-                      :disable="isResourceBusy(resource) || userStore.loggedIn !== true"
+                      :disable="userStore.loggedIn !== true"
                       size="sm"
                     >
                       <q-tooltip>{{ getActionButtonTooltip(resource) }}</q-tooltip>

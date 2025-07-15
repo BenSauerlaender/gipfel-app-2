@@ -1,18 +1,16 @@
 <template>
-  <div class="col-12 col-sm-6 col-md-3">
-    <q-card class="filter-card">
-      <q-card-section>
-        <div class="filter-header">Vorstieg</div>
-        <q-select
-          v-model="selectedClimber"
-          :options="climberOptions"
-          class="q-mt-md"
-          label="Vorsteiger"
-          clearable
-        />
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="filter-card">
+    <q-card-section>
+      <div class="filter-header">Vorstieg</div>
+      <q-select
+        v-model="selectedClimber"
+        :options="climberOptions"
+        class="q-mt-md"
+        label="Vorsteiger"
+        clearable
+      />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>

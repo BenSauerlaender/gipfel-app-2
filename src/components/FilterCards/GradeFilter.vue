@@ -1,22 +1,20 @@
 <template>
-  <div class="col-12 col-sm-6">
-    <q-card class="filter-card">
-      <q-card-section>
-        <div class="filter-header">Schwierigkeitsgrad</div>
-        <q-range
-          v-model="range"
-          :min="minGrade"
-          :max="maxGrade"
-          :step="1"
-          :left-label-value="NORMAL_SCALA[range.min]"
-          :right-label-value="NORMAL_SCALA[range.max]"
-          label-always
-          label
-          color="darkgreen"
-        />
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="filter-card">
+    <q-card-section>
+      <div class="filter-header">Schwierigkeitsgrad</div>
+      <q-range
+        v-model="range"
+        :min="minGrade"
+        :max="maxGrade"
+        :step="1"
+        :left-label-value="NORMAL_SCALA[range.min]"
+        :right-label-value="NORMAL_SCALA[range.max]"
+        label-always
+        label
+        color="darkgreen"
+      />
+    </q-card-section>
+  </q-card>
 </template>
 
 //only for normals not jumps

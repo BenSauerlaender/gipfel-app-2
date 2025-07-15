@@ -44,7 +44,9 @@
         <q-btn @click="router.push('/status')" label="Check Status" color="primary" />
       </div>
     </q-page-container>
-    <BottomPanel v-if="isMinimumLoaded">
+    <BottomPanel
+      v-if="isMinimumLoaded && !['/status', '/login'].includes(router.currentRoute.value.fullPath)"
+    >
       <FilterOptions />
     </BottomPanel>
   </q-layout>
@@ -111,5 +113,8 @@ function toggleLeftDrawer() {
 .loading-container {
   z-index: 1000;
   height: calc(100vh - 660px);
+}
+#pageContainer > div {
+  margin-bottom: 10vh;
 }
 </style>

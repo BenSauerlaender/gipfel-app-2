@@ -1,57 +1,55 @@
 <template>
-  <div class="col-12 col-sm-6">
-    <q-card class="filter-card">
-      <q-card-section>
-        <div class="filter-header">Gebiet, Gipfel, Weg</div>
-        <q-select
-          v-model="selectedRegion"
-          use-input
-          clearable
-          input-debounce="0"
-          label="Gebiet"
-          :options="regionOptions"
-          @filter="regionFilter"
-        >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-        <q-select
-          v-model="selectedSummit"
-          use-input
-          clearable
-          input-debounce="0"
-          label="Gipfel"
-          :options="summitOptions"
-          @filter="summitFilter"
-        >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-        <q-select
-          v-model="selectedRoute"
-          use-input
-          clearable
-          :disable="selectedSummit == null"
-          input-debounce="0"
-          label="Weg"
-          :options="routeOptions"
-          @filter="routeFilter"
-        >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="filter-card">
+    <q-card-section>
+      <div class="filter-header">Gebiet, Gipfel, Weg</div>
+      <q-select
+        v-model="selectedRegion"
+        use-input
+        clearable
+        input-debounce="0"
+        label="Gebiet"
+        :options="regionOptions"
+        @filter="regionFilter"
+      >
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey"> No results </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+      <q-select
+        v-model="selectedSummit"
+        use-input
+        clearable
+        input-debounce="0"
+        label="Gipfel"
+        :options="summitOptions"
+        @filter="summitFilter"
+      >
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey"> No results </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+      <q-select
+        v-model="selectedRoute"
+        use-input
+        clearable
+        :disable="selectedSummit == null"
+        input-debounce="0"
+        label="Weg"
+        :options="routeOptions"
+        @filter="routeFilter"
+      >
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey"> No results </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>

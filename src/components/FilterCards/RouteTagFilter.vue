@@ -1,18 +1,16 @@
 <template>
-  <div class="col-12 col-sm-6 col-md-3">
-    <q-card class="filter-card">
-      <q-card-section>
-        <div class="filter-header">Weg-Tags</div>
-        <q-select v-model="starMode" :options="starModeOptions" class="q-mt-md" label="Sterne" />
-        <q-select
-          v-model="unsecureMode"
-          :options="unsecureModeOptions"
-          class="q-mt-md"
-          label="Unsicher"
-        />
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="filter-card">
+    <q-card-section>
+      <div class="filter-header">Weg-Tags</div>
+      <q-select v-model="starMode" :options="starModeOptions" class="q-mt-md" label="Sterne" />
+      <q-select
+        v-model="unsecureMode"
+        :options="unsecureModeOptions"
+        class="q-mt-md"
+        label="Unsicher"
+      />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>

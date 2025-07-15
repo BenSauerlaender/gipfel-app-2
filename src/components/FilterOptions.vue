@@ -1,13 +1,27 @@
 <template>
   <div class="q-pa-md container">
     <div class="row q-col-gutter-md">
-      <DateFilter />
-      <GradeFilter />
-      <AscentTypeFilter />
-      <ClimberFilter />
-      <LeadClimberFilter />
-      <RouteFilter />
-      <RouteTagFilter />
+      <div class="col-12 col-sm-6 col-md-8">
+        <DateFilter />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <GradeFilter />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <ClimberFilter />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <LeadClimberFilter />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <AscentTypeFilter />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <RouteFilter />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <RouteTagFilter />
+      </div>
     </div>
   </div>
 </template>
@@ -24,7 +38,7 @@ import RouteTagFilter from './FilterCards/RouteTagFilter.vue'
 
 <style lang="scss" scoped>
 .container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: auto;
 }
 

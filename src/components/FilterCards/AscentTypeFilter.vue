@@ -1,19 +1,17 @@
 <template>
-  <div class="col-12 col-sm-6 col-md-3">
-    <q-card class="filter-card">
-      <q-card-section>
-        <div class="filter-header">Begehungsarten</div>
-      </q-card-section>
-      <q-card-section>
-        <q-option-group
-          v-model="ascentsAllowedTypes"
-          :options="ascentTypeOptions"
-          color="primary"
-          type="checkbox"
-        />
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="filter-card">
+    <q-card-section>
+      <div class="filter-header">Begehungsarten</div>
+    </q-card-section>
+    <q-card-section>
+      <q-option-group
+        v-model="ascentsAllowedTypes"
+        :options="ascentTypeOptions"
+        color="primary"
+        type="checkbox"
+      />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>

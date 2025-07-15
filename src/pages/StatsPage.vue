@@ -1,38 +1,31 @@
 <template>
-  <router-view v-slot="{ Component }">
-    <template v-if="Component">
-      <component :is="Component" />
-    </template>
-    <template v-else>
-      <div class="stats-section q-pa-md">
-        <div>
-          <div class="row q-col-gutter-md">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-              <AscentsByTypeChart :ascents="f_Ascents" />
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-              <RoutesByGradeChart :routes="uniqueRoutes" />
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-              <SummitsByRegionChart :summits="uniqueSummits" />
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-6">
-              <TopSummitsChart :ascents="f_Ascents" />
-            </div>
-            <div class="col-12 col-sm-12 col-md-8 col-lg-6">
-              <TopClimbersChart
-                :ascents="f_Ascents"
-                :allowAborted="filterStore.filters.ascents.allowedTypes.includes('aborted')"
-              />
-            </div>
-            <div class="col-12">
-              <AscentsByDayChart :trips="f_PopulatedTrips" />
-            </div>
-          </div>
+  <div class="stats-section q-pa-md">
+    <div>
+      <div class="row q-col-gutter-md">
+        <div class="col-12 col-sm-6 col-md-4">
+          <AscentsByTypeChart :ascents="f_Ascents" />
+        </div>
+        <div class="col-12 col-sm-6 col-md-4">
+          <RoutesByGradeChart :routes="uniqueRoutes" />
+        </div>
+        <div class="col-12 col-sm-6 col-md-4">
+          <SummitsByRegionChart :summits="uniqueSummits" />
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <TopSummitsChart :ascents="f_Ascents" />
+        </div>
+        <div class="col-12 col-sm-12 col-md-6">
+          <TopClimbersChart
+            :ascents="f_Ascents"
+            :allowAborted="filterStore.filters.ascents.allowedTypes.includes('aborted')"
+          />
+        </div>
+        <div class="col-12">
+          <AscentsByDayChart :trips="f_PopulatedTrips" />
         </div>
       </div>
-    </template>
-  </router-view>
+    </div>
+  </div>
 </template>
 
 <script setup>

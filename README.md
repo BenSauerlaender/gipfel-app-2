@@ -75,17 +75,14 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - Abk. fuer Gebiete und dann in Klammern dahinter
 - Status Page: gescheite download balken
 - animations / transitions ?
+- gendern?
 
 ## BUG
 
 - per direketem url aufruf http://localhost:9000/#/routes/6851d0442e8d5658ef9f2621
   - Zurueck button -> beendet die Seite
   - Expected behavior: fuehrt zu summitDetail
-- update notification funktioniert nicht (boot/initStore)
-- status page: download/reload button wenn resource bussy fixen _!_
 - mobile: filter: slider tooltips visuel out of box
-- mobile: filter: ausklapp handle zu klein und lagged
-- filter: Vorstieg kaputt _!_
 - filter: Karte updated nicht _!_
 
 ## Performance

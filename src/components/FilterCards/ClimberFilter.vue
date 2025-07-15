@@ -1,26 +1,19 @@
 <template>
-  <div class="col-12 col-sm-6 col-md-3">
-    <q-card class="filter-card">
-      <q-card-section>
-        <div class="filter-header">Bergsteiger</div>
-        <q-select
-          v-model="selectedClimbers"
-          :options="climberOptions"
-          multiple
-          use-chips
-          class="q-mt-md"
-          label="Bergsteiger"
-          clearable
-        />
-        <q-select
-          v-model="climberMode"
-          :options="climberModeOptions"
-          class="q-mt-md"
-          label="Modus"
-        />
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="filter-card">
+    <q-card-section>
+      <div class="filter-header">Bergsteiger</div>
+      <q-select
+        v-model="selectedClimbers"
+        :options="climberOptions"
+        multiple
+        use-chips
+        class="q-mt-md"
+        label="Bergsteiger"
+        clearable
+      />
+      <q-select v-model="climberMode" :options="climberModeOptions" class="q-mt-md" label="Modus" />
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>

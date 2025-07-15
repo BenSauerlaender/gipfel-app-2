@@ -7,12 +7,11 @@ import { useRouter } from 'vue-router'
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli-vite/boot-files
 
-export default defineBoot(async ({ app }) => {
+export default defineBoot(async ({ app, router }) => {
   const userStore = useUserStore()
   const resourceStore = useResourceStore()
   console.log(app)
   const $q = app._context.app.config.globalProperties.$q
-  const router = useRouter()
   console.log('Booting resource store...')
   resourceStore.init().then(() => {
     resourceStore.loadAll().then(() => {

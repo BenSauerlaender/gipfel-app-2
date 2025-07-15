@@ -90,8 +90,6 @@ maplibregl.addProtocol('tiles', async (params) => {
 const protocol = new Protocol()
 maplibregl.addProtocol('pmtiles', protocol.tile)
 
-const mapFileName = 'sachsen2.pmtiles' //filename in /public folder
-
 const dataStore = useDataStore()
 const filterStore = useFilterStore()
 
