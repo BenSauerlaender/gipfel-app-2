@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <q-card>
+    <q-card class="page-card">
       <q-tabs v-model="tab" class="text-blue-7" align="justify">
         <q-tab name="timeline" icon="book" label="Chronik" />
         <q-tab name="table" icon="table_chart" label="Tabelle" />
@@ -67,11 +67,6 @@ const tab = ref('timeline')
 <style scoped lang="scss">
 .space {
   height: 40px;
-}
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 10px;
 }
 
 .q-tab--inactive {

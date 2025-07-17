@@ -3,8 +3,8 @@
     <div class="row justify-between items-center action-buttons">
       <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
     </div>
-    <q-card class="bg-offwhite3">
-      <q-card-section class="row justify-between items-center bg-offwhite3">
+    <q-card class="page-card">
+      <q-card-section class="row justify-between items-center">
         <div class="column q-ml-md">
           <span class="text-h6 text-weight-light text-lightgreen q-ml-xs">
             <router-link
@@ -13,8 +13,8 @@
               >{{ route.summitName }}</router-link
             >
           </span>
-          <span class="text-h2 text-darkgreen text-weight-bold row items-start"
-            ><span>{{ route.name }}</span>
+          <span class="row items-start"
+            ><span class="page-header">{{ route.name }}</span>
             <RouteGradeChip
               v-memo="[getRouteGrade(route)]"
               :grade="getRouteGrade(route)"
@@ -35,7 +35,7 @@
             />
           </span>
         </div>
-        <span class="row justify-center items-center bg-offwhite3">
+        <span class="row justify-center items-center">
           <span class="q-ma-md column text-center">
             <span class="text-h4 text-weight-bolder text-red">{{ ascents.length }}</span>
             <span class="text-lightgreen">Einträge</span>
@@ -89,9 +89,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-</style>
+<style scoped></style>

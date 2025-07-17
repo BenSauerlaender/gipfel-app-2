@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card>
-      <q-card-section class="header">
-        <div class="q-pl-md">Gebiete</div>
-      </q-card-section>
+    <q-card class="page-card">
       <q-card-section>
+        <div class="page-header q-pl-md">Gebiete</div>
+      </q-card-section>
+      <q-card-section class="bg-offwhite1">
         <q-table
           ref="regionsTable"
           :rows="regions"
@@ -95,15 +95,4 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  .header {
-    background-color: $offwhite3;
-    color: $darkgreen;
-    font-weight: 700;
-    font-size: 3.7rem;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

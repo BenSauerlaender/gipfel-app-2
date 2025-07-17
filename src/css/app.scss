@@ -31,9 +31,48 @@ body {
     font-weight: 900;
   }
 }
-#pageContainer {
+.q-page-container {
   background-color: $offwhite2;
   min-height: 100vh;
+}
+.page-container {
+  max-width: $breakpoint-sm-max;
+  margin: 0 auto;
+  padding-bottom: 3vh;
+
+  & > .q-card {
+    border-radius: 2rem;
+    background-color: $offwhite3;
+  }
+
+  & > .action-buttons {
+    padding: 10px 16px 10px 10px;
+  }
+  @media (max-width: $breakpoint-xs-max) {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    & > .page-card {
+      border-radius: 0px;
+      box-shadow: none;
+    }
+    & > .action-buttons {
+      background-color: $lightgreen;
+    }
+  }
+}
+.page-header {
+  color: $darkgreen;
+  font-weight: 700;
+  font-size: 3.75rem;
+  line-height: 3.75rem;
+  @media (max-width: $breakpoint-xs-max) {
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
 }
 .q-card,
 .q-tab-panels,
@@ -42,7 +81,6 @@ body {
   background-color: $offwhite1;
 }
 .q-tab {
-  background-color: $offwhite3;
   color: $darkgreen;
 }
 .q-tab__label {
@@ -139,11 +177,4 @@ body {
   .q-table th {
     color: $darkgreen;
   }
-}
-
-.page-container > .q-card {
-  border-radius: 2rem;
-}
-.page-container > .action-buttons {
-  margin-bottom: 10px;
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card>
+    <q-card class="page-card">
       <q-card-section class="row justify-between items-center bg-offwhite3">
-        <span class="text-h2 text-darkgreen text-weight-bold q-ml-md">Gipfel</span>
+        <span class="page-header q-ml-md">Gipfel</span>
         <span class="row justify-center items-center bg-offwhite3">
           <span class="q-ma-md column text-center">
             <span class="text-h4 text-weight-bolder text-red">{{ summits.length }}</span>
@@ -19,7 +19,7 @@
         </span>
       </q-card-section>
       <q-separator />
-      <q-card-section>
+      <q-card-section class="bg-offwhite1">
         <SummitTable :summits="summits" :defaultSort="['name', 'asc']" />
       </q-card-section>
     </q-card>
@@ -46,9 +46,4 @@ const summitPercentage = computed(() =>
 )
 </script>
 
-<style lang="scss" scoped>
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-</style>
+<style lang="scss" scoped></style>

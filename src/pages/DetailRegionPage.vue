@@ -11,10 +11,10 @@
         @click="router.back()"
       />
     </div>
-    <q-card v-if="region" class="bg-offwhite3">
-      <q-card-section class="row justify-between items-center bg-offwhite3">
-        <span class="text-h2 text-darkgreen text-weight-bold q-ml-md">{{ region.name }}</span>
-        <span class="row justify-center items-center bg-offwhite3">
+    <q-card class="page-card">
+      <q-card-section class="row justify-between items-center">
+        <span class="text-h2 page-header q-ml-md">{{ region.name }}</span>
+        <span class="row justify-center items-center">
           <span class="q-ma-md column text-center">
             <span class="text-h4 text-weight-bolder text-red">{{ summits.length }}</span>
             <span class="text-lightgreen">Gipfel</span>
@@ -106,9 +106,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-</style>
+<style scoped></style>

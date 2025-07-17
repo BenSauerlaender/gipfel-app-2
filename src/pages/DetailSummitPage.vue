@@ -13,9 +13,9 @@
         <q-tooltip> Auf Karte ansehen </q-tooltip>
       </q-btn>
     </div>
-    <q-card class="bg-offwhite3">
-      <q-card-section class="row justify-between items-center bg-offwhite3">
-        <div class="column q-ml-md">
+    <q-card class="page-card">
+      <q-card-section class="row justify-between items-center">
+        <div class="column q-ml-md full-width">
           <span class="text-h6 text-weight-light text-lightgreen q-ml-xs">
             <router-link
               style="text-decoration: none; color: inherit"
@@ -23,9 +23,9 @@
               >{{ summit.regionName }}</router-link
             >
           </span>
-          <span class="text-h2 text-darkgreen text-weight-bold">{{ summit.name }}</span>
+          <span class="page-header">{{ summit.name }}</span>
         </div>
-        <span class="row justify-center items-end bg-offwhite3">
+        <span class="row justify-center items-end">
           <span class="q-ma-md column text-center">
             <span class="text-h4 text-weight-bolder text-red">{{ routes.length }}</span>
             <span class="text-lightgreen">Gipfel</span>
@@ -127,9 +127,4 @@ onBeforeRouteLeave((to, from) => {
 })
 </script>
 
-<style scoped>
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-</style>
+<style scoped></style>

@@ -35,7 +35,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container id="pageContainer">
+    <q-page-container>
       <router-view
         v-if="isMinimumLoaded || ['/status', '/login'].includes(router.currentRoute.value.fullPath)"
       />
@@ -113,8 +113,5 @@ function toggleLeftDrawer() {
 .loading-container {
   z-index: 1000;
   height: calc(100vh - 660px);
-}
-#pageContainer > div {
-  padding-bottom: 3vh;
 }
 </style>

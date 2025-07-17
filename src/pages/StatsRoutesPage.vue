@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card>
+    <q-card class="page-card">
       <q-card-section>
         <div class="row items-center">
           <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
@@ -8,7 +8,7 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section>
+      <q-card-section class="bg-offwhite1">
         <RouteTable
           :routes="routes"
           :columns="[
@@ -49,9 +49,4 @@ const routes = computed(() => {
 })
 </script>
 
-<style scoped>
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-</style>
+<style scoped></style>
