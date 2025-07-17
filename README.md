@@ -76,6 +76,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - Status Page: gescheite download balken
 - animations / transitions ?
 - gendern?
+- Site language = de
 
 ## BUG
 
@@ -84,6 +85,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
   - Expected behavior: fuehrt zu summitDetail
 - mobile: filter: slider tooltips visuel out of box
 - filter: Karte updated nicht _!_
+- auf anderen Bildschirmen ist loader der kaputt 
 
 ## Performance
 

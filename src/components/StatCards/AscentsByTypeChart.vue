@@ -43,7 +43,7 @@ const chartData = computed(() => {
   const topRopeCount = props.ascents.filter((ascent) => ascent.isTopRope).length
 
   return {
-    labels: ['Klassisch', 'Solo', 'von oben gesichert'],
+    labels: ['Klassisch', 'Solo', 'v.o.g.'],
     datasets: [
       {
         data: [leadCount, soloCount, topRopeCount],
