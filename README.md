@@ -44,6 +44,9 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
+- create Base Stat card for consisten header.. stlyling
+- create base page-card for consisten header... styling
+
 ## Consistensy/Robustness
 
 - use DomUtils for height of Map and BottomPanel
@@ -85,7 +88,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
   - Expected behavior: fuehrt zu summitDetail
 - mobile: filter: slider tooltips visuel out of box
 - filter: Karte updated nicht _!_
-- auf anderen Bildschirmen ist loader der kaputt 
+- auf anderen Bildschirmen ist loader der kaputt
 
 ## Performance
 

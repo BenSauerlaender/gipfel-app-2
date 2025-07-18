@@ -1,20 +1,10 @@
 <template>
-  <q-card class="statCard" style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
-      <div class="q-mr-md text-h4 statCardMainNumber">
-        {{ ascents.length > 0 ? sortedClimbers[0][1].total : 0 }}
-      </div>
-      <div class="text-h6 text-grey-9">
-        Einträge mit {{ ascents.length > 0 ? sortedClimbers[0][1].name : 'Niemand' }}
-      </div>
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-section>
-      <Bar :data="chartData" :options="chartOptions" />
-    </q-card-section>
-  </q-card>
+  <BaseStatCard
+    :header-number="ascents.length > 0 ? sortedClimbers[0][1].total : 0"
+    :header-text="`Einträge mit ${ascents.length > 0 ? sortedClimbers[0][1].name : 'Niemand'}`"
+  >
+    <Bar :data="chartData" :options="chartOptions" />
+  </BaseStatCard>
 </template>
 
 <script setup>
@@ -22,8 +12,9 @@ import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { useDataStore } from 'src/stores/dataStore'
-import { useFilterStore } from 'src/stores/filterStore'
 import { colors } from 'quasar'
+import BaseStatCard from './BaseStatCard.vue'
+
 const { getPaletteColor } = colors
 
 const dataStore = useDataStore()

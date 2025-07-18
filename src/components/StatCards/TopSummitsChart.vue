@@ -1,20 +1,10 @@
 <template>
-  <q-card class="statCard" style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
-      <div class="q-mr-md text-h4 statCardMainNumber">
-        {{ ascents.length > 0 ? sortedSummits[0][1].total : 0 }}x
-      </div>
-      <div class="text-h6 text-grey-9">
-        {{ ascents.length > 0 ? sortedSummits[0][0] : 'Nix' }}
-      </div>
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-section>
-      <Bar :data="chartData" :options="chartOptions" />
-    </q-card-section>
-  </q-card>
+  <BaseStatCard
+    :header-number="ascents.length > 0 ? `${sortedSummits[0][1].total}x` : '0x'"
+    :header-text="ascents.length > 0 ? sortedSummits[0][0] : 'Nix'"
+  >
+    <Bar :data="chartData" :options="chartOptions" />
+  </BaseStatCard>
 </template>
 
 <script setup>
@@ -22,6 +12,7 @@ import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { NORMAL_SCALA, getGradeColor } from 'src/helper/route'
+import BaseStatCard from './BaseStatCard.vue'
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -72,8 +63,6 @@ const chartData = computed(() => {
         data: sortedSummits.value.map(([, data]) => data[grade] || 0),
         backgroundColor: getGradeColor(grade),
         stack: 'Stack 0',
-        borderWidth: 1,
-        borderColor: '#fff',
         borderRadius: 4,
       }
     }
@@ -106,7 +95,7 @@ const chartOptions = {
           return 'Gesamt: ' + total
         },
       },
-      filter: (tooltipItem, data) => {
+      filter: (tooltipItem) => {
         return tooltipItem.parsed.y > 0
       },
     },

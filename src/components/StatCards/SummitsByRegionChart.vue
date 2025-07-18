@@ -1,21 +1,12 @@
 <template>
-  <q-card class="statCard" style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
-      <div class="q-mr-md text-h4 statCardMainNumber">{{ summits.length }}</div>
-      <div class="text-h6 text-grey-9">Gipfel</div>
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-section>
-      <div>
-        <Bar :data="chartData" :options="chartOptions" />
-      </div>
-      <div class="q-mt-md row justify-center">
-        <q-btn no-caps flat dense label="Alle anzeigen" to="/stats/summits" icon="list" />
-      </div>
-    </q-card-section>
-  </q-card>
+  <BaseStatCard :header-number="summits.length" header-text="Gipfel">
+    <div>
+      <Bar :data="chartData" :options="chartOptions" />
+    </div>
+    <div class="q-mt-md row justify-center">
+      <q-btn no-caps flat dense label="Alle anzeigen" to="/stats/summits" icon="list" />
+    </div>
+  </BaseStatCard>
 </template>
 
 <script setup>
@@ -23,6 +14,8 @@ import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js'
 import { colors } from 'quasar'
+import BaseStatCard from './BaseStatCard.vue'
+
 const { getPaletteColor } = colors
 
 Chart.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)

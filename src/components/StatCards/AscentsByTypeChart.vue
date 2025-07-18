@@ -1,16 +1,7 @@
 <template>
-  <q-card class="statCard" style="height: 100%">
-    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
-      <div class="q-mr-md text-h4 statCardMainNumber">{{ props.ascents.length }}</div>
-      <div class="text-h6 text-grey-9">Einträge</div>
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-section>
-      <Doughnut style="height: 200px" :data="chartData" :options="chartOptions" />
-    </q-card-section>
-  </q-card>
+  <BaseStatCard :header-number="props.ascents.length" header-text="Einträge">
+    <Doughnut style="height: 200px" :data="chartData" :options="chartOptions" />
+  </BaseStatCard>
 </template>
 
 <script setup>
@@ -18,6 +9,8 @@ import { computed } from 'vue'
 import { Doughnut } from 'vue-chartjs'
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
 import { colors } from 'quasar'
+import BaseStatCard from './BaseStatCard.vue'
+
 const { getPaletteColor } = colors
 
 Chart.register(ArcElement, Tooltip, Legend)

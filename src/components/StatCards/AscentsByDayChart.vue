@@ -1,18 +1,10 @@
 <template>
-  <q-card class="statCard">
-    <q-card-section class="flex items-center justify-start no-wrap statCardHeader">
-      <div class="q-mr-md text-h4 statCardMainNumber">
-        {{ props.trips.reduce((acc, trip) => acc + trip.days.length, 0) }}
-      </div>
-      <div class="text-h6 text-grey-9">Tage</div>
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-section>
-      <Bar :data="chartData" :options="chartOptions" />
-    </q-card-section>
-  </q-card>
+  <BaseStatCard
+    :header-number="props.trips.reduce((acc, trip) => acc + trip.days.length, 0)"
+    header-text="Tage"
+  >
+    <Bar :data="chartData" :options="chartOptions" />
+  </BaseStatCard>
 </template>
 
 <script setup>
@@ -22,6 +14,8 @@ import { Chart, CategoryScale, LinearScale, TimeScale, BarElement, Tooltip, Lege
 import 'chartjs-adapter-date-fns'
 import { de } from 'date-fns/locale'
 import { colors } from 'quasar'
+import BaseStatCard from './BaseStatCard.vue'
+
 const { getPaletteColor } = colors
 
 Chart.register(CategoryScale, LinearScale, TimeScale, BarElement, Tooltip, Legend)
