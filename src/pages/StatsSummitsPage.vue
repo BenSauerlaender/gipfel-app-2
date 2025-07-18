@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card class="page-card">
+    <BasePageCard>
       <q-card-section>
         <div class="row items-center">
           <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
@@ -11,12 +11,13 @@
       <q-card-section class="bg-offwhite1">
         <SummitTable :summits="summits" :defaultSort="['ascents', 'desc']" />
       </q-card-section>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
 <script setup>
 import SummitTable from 'src/components/tables/SummitTable.vue'
+import BasePageCard from 'src/components/BasePageCard.vue'
 import { computed } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { useRouter } from 'vue-router'

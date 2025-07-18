@@ -13,38 +13,26 @@
         <q-tooltip> Auf Karte ansehen </q-tooltip>
       </q-btn>
     </div>
-    <q-card class="page-card">
-      <q-card-section class="row justify-between items-center">
-        <div class="column q-ml-md full-width">
-          <span class="text-h6 text-weight-light text-lightgreen q-ml-xs">
-            <router-link
-              style="text-decoration: none; color: inherit"
-              :to="`/regions/${summit.regionID}`"
-              >{{ summit.regionName }}</router-link
-            >
-          </span>
-          <span class="page-header">{{ summit.name }}</span>
-        </div>
-        <span class="row justify-center items-end">
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ routes.length }}</span>
-            <span class="text-lightgreen">Gipfel</span>
-          </span>
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ routePercentage }}%</span>
-            <span class="text-lightgreen">Begangen</span>
-          </span>
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ ascentCount }}</span>
-            <span class="text-lightgreen">Einträge</span>
-          </span>
-        </span>
-      </q-card-section>
-      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
-        <q-tab name="routes" icon="book" label="Wege" />
-        <q-tab name="ascents" icon="table_chart" label="Einträge" />
-      </q-tabs>
-      <q-separator />
+    <BasePageCard
+      :title="summit.name"
+      :stats="[routes.length, routePercentage + '%', ascentCount]"
+      :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
+    >
+      <template #subtitle>
+        <router-link
+          style="text-decoration: none; color: inherit"
+          :to="`/regions/${summit.regionID}`"
+          >{{ summit.regionName }}</router-link
+        >
+      </template>
+
+      <template #tabs>
+        <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+          <q-tab name="routes" icon="book" label="Wege" />
+          <q-tab name="ascents" icon="table_chart" label="Einträge" />
+        </q-tabs>
+      </template>
+
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="routes">
           <RouteTable
@@ -70,13 +58,14 @@
           />
         </q-tab-panel>
       </q-tab-panels>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
 <script setup>
 import AscentTable from 'src/components/tables/AscentTable.vue'
 import RouteTable from 'src/components/tables/RouteTable.vue'
+import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
@@ -111,7 +100,7 @@ onMounted(() => {
   }
 })
 
-onBeforeRouteLeave((to, from) => {
+onBeforeRouteLeave((to) => {
   // Prüfe die History-Länge
   if (window.history.length > 1) {
     // Es gibt eine vorherige Seite

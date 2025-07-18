@@ -1,6 +1,8 @@
 <template>
-  <div class="q-pa-md page-container">
-    <q-card class="page-card">
+  <div
+    class="q-pa-<script setup> import RouteTable from 'src/components/tables/RouteTable.vue' import BasePageCard from 'src/components/BasePageCard.vue' import { computed } from 'vue'page-container"
+  >
+    <BasePageCard>
       <q-card-section>
         <div class="row items-center">
           <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
@@ -24,18 +26,17 @@
           :defaultSort="['ascents', 'desc']"
         />
       </q-card-section>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
 <script setup>
 import RouteTable from 'src/components/tables/RouteTable.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const routesTable = ref(null)
 const dataStore = useDataStore()
 
 const routes = computed(() => {

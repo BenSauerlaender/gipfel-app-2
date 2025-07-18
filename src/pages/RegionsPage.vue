@@ -1,9 +1,6 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card class="page-card">
-      <q-card-section>
-        <div class="page-header q-pl-md">Gebiete</div>
-      </q-card-section>
+    <BasePageCard title="Gebiete">
       <q-card-section class="bg-offwhite1">
         <q-table
           ref="regionsTable"
@@ -44,11 +41,12 @@
           </template>
         </q-table>
       </q-card-section>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
 <script setup>
+import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 

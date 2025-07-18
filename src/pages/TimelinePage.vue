@@ -1,11 +1,13 @@
 <template>
   <div class="page-container">
-    <q-card class="page-card">
-      <q-tabs v-model="tab" class="text-blue-7" align="justify">
-        <q-tab name="timeline" icon="book" label="Chronik" />
-        <q-tab name="table" icon="table_chart" label="Tabelle" />
-      </q-tabs>
-      <q-separator />
+    <BasePageCard>
+      <template #tabs>
+        <q-tabs v-model="tab" class="text-blue-7" align="justify">
+          <q-tab name="timeline" icon="book" label="Chronik" />
+          <q-tab name="table" icon="table_chart" label="Tabelle" />
+        </q-tabs>
+      </template>
+
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="timeline">
           <div class="space"></div>
@@ -46,16 +48,17 @@
           />
         </q-tab-panel>
       </q-tab-panels>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
 <script setup>
 import { useDataStore } from 'src/stores/dataStore'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 import AscentTable from 'src/components/tables/AscentTable.vue'
+import BasePageCard from 'src/components/BasePageCard.vue'
 
 const dataStore = useDataStore()
 
@@ -67,8 +70,5 @@ const tab = ref('timeline')
 <style scoped lang="scss">
 .space {
   height: 40px;
-}
-
-.q-tab--inactive {
 }
 </style>

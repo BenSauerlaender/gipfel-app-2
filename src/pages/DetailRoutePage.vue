@@ -3,46 +3,35 @@
     <div class="row justify-between items-center action-buttons">
       <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
     </div>
-    <q-card class="page-card">
-      <q-card-section class="row justify-between items-center">
-        <div class="column q-ml-md">
-          <span class="text-h6 text-weight-light text-lightgreen q-ml-xs">
-            <router-link
-              style="text-decoration: none; color: inherit"
-              :to="`/summits/${route.summitID}`"
-              >{{ route.summitName }}</router-link
-            >
-          </span>
-          <span class="row items-start"
-            ><span class="page-header">{{ route.name }}</span>
-            <RouteGradeChip
-              v-memo="[getRouteGrade(route)]"
-              :grade="getRouteGrade(route)"
-              dense="false"
-            />
-            <RouteStarsChip
-              v-memo="[route.stars]"
-              v-if="route.stars > 0"
-              :stars="route.stars"
-              dense="false"
-            />
-            <RouteUnsecureChip v-if="route.unsecure" dense="false" />
-            <RouteTTScoreChip
-              v-if="route.teufelsturmScore"
-              :score="route.teufelsturmScore"
-              :ttrouteid="route.teufelsturmId"
-              dense="false"
-            />
-          </span>
-        </div>
-        <span class="row justify-center items-center">
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ ascents.length }}</span>
-            <span class="text-lightgreen">Einträge</span>
-          </span>
-        </span>
-      </q-card-section>
-      <q-separator />
+    <BasePageCard :title="route.name" :stats="[ascents.length]" :stat-labels="['Einträge']">
+      <template #subtitle>
+        <router-link
+          style="text-decoration: none; color: inherit"
+          :to="`/summits/${route.summitID}`"
+          >{{ route.summitName }}</router-link
+        >
+      </template>
+      <template #titleChips>
+        <RouteGradeChip
+          v-memo="[getRouteGrade(route)]"
+          :grade="getRouteGrade(route)"
+          dense="false"
+        />
+        <RouteStarsChip
+          v-memo="[route.stars]"
+          v-if="route.stars > 0"
+          :stars="route.stars"
+          dense="false"
+        />
+        <RouteUnsecureChip v-if="route.unsecure" dense="false" />
+        <RouteTTScoreChip
+          v-if="route.teufelsturmScore"
+          :score="route.teufelsturmScore"
+          :ttrouteid="route.teufelsturmId"
+          dense="false"
+        />
+      </template>
+
       <q-card-section class="bg-offwhite1">
         <AscentTable
           :ascents="ascents"
@@ -50,7 +39,7 @@
           :defaultSort="['date', 'asc']"
         />
       </q-card-section>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
@@ -59,11 +48,12 @@ import AscentTable from 'src/components/tables/AscentTable.vue'
 import RouteGradeChip from 'src/components/Chips/RouteGradeChip.vue'
 import RouteStarsChip from 'src/components/Chips/RouteStarsChip.vue'
 import RouteUnsecureChip from 'src/components/Chips/RouteUnsecureChip.vue'
+import RouteTTScoreChip from 'src/components/Chips/RouteTTScoreChip.vue'
+import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
-import { computed, ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { getRouteGrade } from 'src/helper/route'
-import RouteTTScoreChip from 'src/components/Chips/RouteTTScoreChip.vue'
 
 const router = useRouter()
 

@@ -11,29 +11,18 @@
         @click="router.back()"
       />
     </div>
-    <q-card class="page-card">
-      <q-card-section class="row justify-between items-center">
-        <span class="text-h2 page-header q-ml-md">{{ region.name }}</span>
-        <span class="row justify-center items-center">
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ summits.length }}</span>
-            <span class="text-lightgreen">Gipfel</span>
-          </span>
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ summitPercentage }}%</span>
-            <span class="text-lightgreen">Begangen</span>
-          </span>
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ ascentCount }}</span>
-            <span class="text-lightgreen">Einträge</span>
-          </span>
-        </span>
-      </q-card-section>
-      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
-        <q-tab name="summits" icon="book" label="Gipfel" />
-        <q-tab name="ascents" icon="table_chart" label="Einträge" />
-      </q-tabs>
-      <q-separator />
+    <BasePageCard
+      :title="region.name"
+      :stats="[summits.length, summitPercentage + '%', ascentCount]"
+      :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
+    >
+      <template #tabs>
+        <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+          <q-tab name="summits" icon="book" label="Gipfel" />
+          <q-tab name="ascents" icon="table_chart" label="Einträge" />
+        </q-tabs>
+      </template>
+
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="summits">
           <SummitTable
@@ -60,13 +49,14 @@
           />
         </q-tab-panel>
       </q-tab-panels>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
 <script setup>
 import AscentTable from 'src/components/tables/AscentTable.vue'
 import SummitTable from 'src/components/tables/SummitTable.vue'
+import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'

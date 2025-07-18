@@ -1,33 +1,20 @@
 <template>
   <div class="q-pa-md page-container">
-    <q-card class="page-card">
-      <q-card-section class="row justify-between items-center bg-offwhite3">
-        <span class="page-header q-ml-md">Gipfel</span>
-        <span class="row justify-center items-center bg-offwhite3">
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ summits.length }}</span>
-            <span class="text-lightgreen">Gipfel</span>
-          </span>
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ summitPercentage }}%</span>
-            <span class="text-lightgreen">Begangen</span>
-          </span>
-          <span class="q-ma-md column text-center">
-            <span class="text-h4 text-weight-bolder text-red">{{ ascentCount }}</span>
-            <span class="text-lightgreen">Einträge</span>
-          </span>
-        </span>
-      </q-card-section>
-      <q-separator />
+    <BasePageCard
+      title="Gipfel"
+      :stats="[summits.length, summitPercentage + '%', ascentCount]"
+      :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
+    >
       <q-card-section class="bg-offwhite1">
         <SummitTable :summits="summits" :defaultSort="['name', 'asc']" />
       </q-card-section>
-    </q-card>
+    </BasePageCard>
   </div>
 </template>
 
 <script setup>
 import SummitTable from 'src/components/tables/SummitTable.vue'
+import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed } from 'vue'
 
