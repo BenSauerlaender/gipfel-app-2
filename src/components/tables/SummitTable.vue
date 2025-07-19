@@ -95,9 +95,9 @@ const columns = [
 
 const summits = computed(() => {
   const summits = props.summits.map((summit) => {
-    const routesWithAscents = dataStore.routes[summit._id].filter(
-      (route) => dataStore.f_AscentsPerRoute[route._id] > 0,
-    ).length
+    const routesWithAscents = dataStore
+      .routesBySummitID(summit._id)
+      .filter((route) => dataStore.f_AscentsPerRoute[route._id] > 0).length
     const routeCount = summit.routeCount
     const routePercentage =
       routeCount == 0 ? 0.0 : ((routesWithAscents / routeCount) * 100).toFixed(1)

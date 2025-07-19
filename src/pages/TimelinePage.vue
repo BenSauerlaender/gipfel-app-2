@@ -1,12 +1,10 @@
 <template>
   <div class="page-container">
     <BasePageCard>
-      <template #tabs>
-        <q-tabs v-model="tab" class="text-blue-7" align="justify">
-          <q-tab name="timeline" icon="book" label="Chronik" />
-          <q-tab name="table" icon="table_chart" label="Tabelle" />
-        </q-tabs>
-      </template>
+      <q-tabs v-model="tab" class="text-blue-7" align="justify">
+        <q-tab name="timeline" icon="book" label="Chronik" />
+        <q-tab name="table" icon="table_chart" label="Tabelle" />
+      </q-tabs>
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="timeline">

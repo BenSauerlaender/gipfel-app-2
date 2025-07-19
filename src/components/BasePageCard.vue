@@ -4,7 +4,7 @@
       v-if="title || subtitle || stats.length > 0 || $slots.titleChips"
       class="row justify-between items-center"
     >
-      <div class="column q-ml-md" :class="{ 'full-width': stats.length === 0 }">
+      <div class="column q-ml-md">
         <span
           v-if="subtitle || $slots.subtitle"
           class="text-h6 text-weight-light text-lightgreen q-ml-xs"
@@ -24,11 +24,6 @@
         </span>
       </span>
     </q-card-section>
-
-    <slot name="tabs" />
-
-    <q-separator v-if="title || subtitle || stats.length > 0 || $slots.tabs" />
-
     <slot />
   </q-card>
 </template>

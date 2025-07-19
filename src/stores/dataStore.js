@@ -18,6 +18,12 @@ export const useDataStore = defineStore('data', {
     routes(state) {
       return useResourceStore().getResourceById('routes').data || {}
     },
+    routesBySummitID(state) {
+      return (summitID) => {
+        const routes = useResourceStore().getResourceById('routes').data || {}
+        return routes[summitID] || []
+      }
+    },
     summits(state) {
       return useResourceStore().getResourceById('summits').data || []
     },

@@ -15,7 +15,7 @@
     </div>
     <BasePageCard
       :title="summit.name"
-      :stats="[routes.length, routePercentage + '%', ascentCount]"
+      :stats="[routes?.length, routePercentage + '%', ascentCount]"
       :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
     >
       <template #subtitle>
@@ -26,12 +26,10 @@
         >
       </template>
 
-      <template #tabs>
-        <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
-          <q-tab name="routes" icon="book" label="Wege" />
-          <q-tab name="ascents" icon="table_chart" label="Einträge" />
-        </q-tabs>
-      </template>
+      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+        <q-tab name="routes" icon="book" label="Wege" />
+        <q-tab name="ascents" icon="table_chart" label="Einträge" />
+      </q-tabs>
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="routes">
@@ -77,7 +75,7 @@ const dataStore = useDataStore()
 const summit = computed(() =>
   dataStore.summits.find((summit) => summit._id === useRoute().params.id),
 )
-const routes = computed(() => dataStore.routes[useRoute().params.id])
+const routes = computed(() => dataStore.routesBySummitID(useRoute().params.id))
 const ascentCount = computed(() => dataStore.f_AscentsPerSummit[summit.value._id] ?? 0)
 const routeWithAscentsCount = computed(
   () => routes.value.filter((route) => dataStore.f_AscentsPerRoute[route._id] > 0).length,

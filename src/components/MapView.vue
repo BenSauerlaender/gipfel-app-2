@@ -55,7 +55,6 @@ maplibregl.addProtocol('glyphs', async (params) => {
   }
 })
 maplibregl.addProtocol('sprite', async (params) => {
-  console.log(params)
   if (params.type === 'json') {
     const json = await resourceStore.getResourceById('offline-map').spriteJson
     return {
@@ -176,9 +175,9 @@ const getSummitsGeoJSON = () => {
 
 // Generates HTML for the popup of each summit marker
 const popupHtml = (summit) => {
-  const routesWithAscents = dataStore.routes[summit._id].filter(
-    (route) => dataStore.f_AscentsPerRoute[route._id] > 0,
-  ).length
+  const routesWithAscents = dataStore
+    .routesBySummitID(summit._id)
+    .filter((route) => dataStore.f_AscentsPerRoute[route._id] > 0).length
   const routeCount = summit.routeCount
   const routePercentage =
     routeCount == 0 ? 0.0 : ((routesWithAscents / routeCount) * 100).toFixed(1)

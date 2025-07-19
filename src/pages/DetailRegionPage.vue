@@ -16,12 +16,10 @@
       :stats="[summits.length, summitPercentage + '%', ascentCount]"
       :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
     >
-      <template #tabs>
-        <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
-          <q-tab name="summits" icon="book" label="Gipfel" />
-          <q-tab name="ascents" icon="table_chart" label="Einträge" />
-        </q-tabs>
-      </template>
+      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+        <q-tab name="summits" icon="book" label="Gipfel" />
+        <q-tab name="ascents" icon="table_chart" label="Einträge" />
+      </q-tabs>
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="summits">

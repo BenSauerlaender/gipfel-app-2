@@ -10,7 +10,6 @@ import { useRouter } from 'vue-router'
 export default defineBoot(async ({ app, router }) => {
   const userStore = useUserStore()
   const resourceStore = useResourceStore()
-  console.log(app)
   const $q = app._context.app.config.globalProperties.$q
   console.log('Booting resource store...')
   resourceStore.init().then(() => {
