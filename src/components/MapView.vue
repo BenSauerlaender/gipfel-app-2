@@ -217,7 +217,7 @@ const initMap = () => {
   mapStyle.sources.openmaptiles = {
     type: 'vector',
     tiles: ['tiles://{z}/{x}/{y}.pbf'],
-    minzoom: 0, //TODO: check on server
+    minzoom: 0,
     maxzoom: 14,
   }
   mapStyle.glyphs = 'glyphs://{fontstack}/{range}'
@@ -225,7 +225,7 @@ const initMap = () => {
   mapStyle.center = [14.155593920476328, 50.92857467871431]
   mapStyle.zoom = 11
   //TODO: add correct attribtution claim
-  if (selectedSummit) {
+  if (selectedSummit && selectedSummit.gpsPosition?.lat && selectedSummit.gpsPosition?.lng) {
     mapStyle.center = [selectedSummit.gpsPosition.lng, selectedSummit.gpsPosition.lat]
     mapStyle.zoom = 17
   }
@@ -242,7 +242,7 @@ const initMap = () => {
   })
   map.value.on('load', () => {
     addSummitLayer()
-    if (selectedSummit) {
+    if (selectedSummit && selectedSummit.gpsPosition?.lat && selectedSummit.gpsPosition?.lng) {
       const popup = new maplibregl.Popup({ closeOnClick: true })
         .setLngLat(selectedSummit.gpsPosition)
         .setHTML(popupHtml(selectedSummit))

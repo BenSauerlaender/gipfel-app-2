@@ -44,26 +44,23 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
-- create Base Stat card for consisten header.. stlyling
-- create base page-card for consisten header... styling
+- Style base page-card for mobile
+  - use ... for to long titles
+- fix timeline styling on mobile
+- verify update functionallaty is working
+- dense tables on mobile
 
 ## Consistensy/Robustness
 
 - use DomUtils for height of Map and BottomPanel
 - filter bereich als footer?
 
-## Design
+## Design Updates
 
-- pwa anzeigename aendern (erledigt?)
-
-## Design 2
-
-- Chartjs styling (Tooltips, weisse render in circluar chart)
-- logo rework
-- logo aus topbar in drawer
-- drawer zwischen top und bottom bar
+- logo rework ?
+- logo aus topbar in drawer ?
+- drawer zwischen top und bottom bar ?
 - status und login/out mit in drawer?
-- rework mobile view
 
 ## Features
 
@@ -79,7 +76,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - Status Page: gescheite download balken
 - animations / transitions ?
 - gendern?
-- Site language = de
+- add a version number in status page
 
 ## BUG
 
@@ -87,8 +84,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
   - Zurueck button -> beendet die Seite
   - Expected behavior: fuehrt zu summitDetail
 - mobile: filter: slider tooltips visuel out of box
-- filter: Karte updated nicht _!_
-- auf anderen Bildschirmen ist loader der kaputt
+- auf anderen Bildschirmen ist loader der kaputt !
+- timeline table dont show summit
 
 ## Performance
 

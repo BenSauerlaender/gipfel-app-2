@@ -3,6 +3,7 @@
     <div class="row justify-between items-center action-buttons">
       <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
       <q-btn
+        v-if="summit.gpsPosition?.lng && summit.gpsPosition?.lat"
         outline
         rounded
         size="sm"

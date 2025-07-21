@@ -1,7 +1,7 @@
 {
   "name": "gipfel-app-2",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "Die GipfelApp fürs Klettern in der Sächsischen Schweiz",
   "productName": "GipfelApp",
   "author": "Ben Sauerländer <ben.sauerlaender@student.htw-berlin.de>",
   "type": "module",

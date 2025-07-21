@@ -6,7 +6,7 @@ const { getPaletteColor } = colors
 const props = defineProps({
   score: { type: String, required: true },
   color: { type: String, required: false },
-  ttrouteid: { type: String, required: false },
+  ttrouteid: { type: Number, required: false },
   dense: { type: Boolean, required: false, default: true },
 })
 const icons = {
