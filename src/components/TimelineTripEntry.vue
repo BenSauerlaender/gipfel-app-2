@@ -10,7 +10,7 @@
     <div
       v-for="(ascent, ascentIdx) in day.ascents"
       :key="ascent._id"
-      class="row items-center q-ma-sm"
+      class="row items-center q-my-sm"
       :class="
         (ascent.isSolo ? 'solo' : '') +
         (ascent.isTopRope ? 'topRope' : '') +
@@ -50,8 +50,7 @@
         :grade="getRouteGrade(ascent.route)"
         :color="ascent.isAborted ? colors.aborted : undefined"
       />
-
-      <q-icon name="chevron_right" color="grey-7" />
+      <span style="margin-left: -3px"><q-icon name="chevron_right" color="grey-7" /></span>
 
       <template v-if="ascent.leadClimber">
         <span class="lead-climber">{{ ascent.leadClimber.firstName }}</span>
@@ -61,7 +60,7 @@
         <span class="climber q-ml-xs" :class="c.isAborted ? 'aborted' : ''">
           {{ c.isAborted ? '(' + c.firstName + ')' : c.firstName }}
         </span>
-        <span v-if="idx < climbers(ascent).length - 1">,</span>
+        <span style="margin-left: 0px" v-if="idx < climbers(ascent).length - 1">,</span>
       </template>
       <span v-if="ascent.isSolo === true" class="q-ml-xs solo-hint">(solo)</span>
       <span v-if="ascent.isTopRope === true" class="q-ml-xs topRope-hint">(v.o.g.)</span>

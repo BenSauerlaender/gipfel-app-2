@@ -7,26 +7,20 @@
       </q-tabs>
 
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="timeline">
+        <q-tab-panel name="timeline" class="no-x-scroll">
           <div class="space"></div>
-          <div class="row justify-center">
-            <div>
-              <q-card-section>
-                <q-timeline color="scss" layout="dense" side="right" class="col-10">
-                  <div v-if="f_PopulatedTrips.length === 0">
-                    <div class="text-h6">Keine Einträge gefunden</div>
-                  </div>
-                  <div v-else>
-                    <TimelineTripEntry
-                      v-for="trip in f_PopulatedTrips.toReversed()"
-                      :key="trip.days[0].date"
-                      :trip="trip"
-                    />
-                  </div>
-                </q-timeline>
-              </q-card-section>
+          <q-timeline color="scss" layout="dense" side="right" class="col-10">
+            <div v-if="f_PopulatedTrips.length === 0">
+              <div class="text-h6">Keine Einträge gefunden</div>
             </div>
-          </div>
+            <div v-else>
+              <TimelineTripEntry
+                v-for="trip in f_PopulatedTrips.toReversed()"
+                :key="trip.days[0].date"
+                :trip="trip"
+              />
+            </div>
+          </q-timeline>
         </q-tab-panel>
         <q-tab-panel name="table">
           <AscentTable
@@ -52,7 +46,7 @@
 
 <script setup>
 import { useDataStore } from 'src/stores/dataStore'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 import AscentTable from 'src/components/tables/AscentTable.vue'
@@ -63,10 +57,24 @@ const dataStore = useDataStore()
 const { f_Ascents, f_PopulatedTrips } = storeToRefs(dataStore)
 
 const tab = ref('timeline')
+
+onMounted(() => {
+  const el = document.querySelector('.no-x-scroll').getParentElement
+  if (el) {
+    el.style.overflowX = 'hidden'
+  }
+})
 </script>
 
 <style scoped lang="scss">
 .space {
   height: 40px;
+}
+
+.q-timeline {
+  margin-left: calc(0.5 * (100% - $breakpoint-xs-max));
+  @media (max-width: $breakpoint-xs-max) {
+    margin-left: 0px;
+  }
 }
 </style>

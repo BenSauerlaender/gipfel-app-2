@@ -49,6 +49,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - fix timeline styling on mobile
 - verify update functionallaty is working
 - dense tables on mobile
+- set color for mobile status bar
+- set url parameter? for tab view
 
 ## Consistensy/Robustness
 

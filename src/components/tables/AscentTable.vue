@@ -126,14 +126,14 @@ const columns = [
   {
     name: 'summit',
     label: 'Gipfel',
-    field: (row) => row.route?.summit?.name,
+    field: (row) => row.route?.summitName,
     align: 'left',
     sortable: true,
   },
   {
     name: 'region',
     label: 'Gebiet',
-    field: (row) => row.route?.summit?.region?.name,
+    field: (row) => row.route?.summit?.regionName,
     align: 'left',
     sortable: true,
   },
