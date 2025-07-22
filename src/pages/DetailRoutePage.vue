@@ -15,20 +15,20 @@
         <RouteGradeChip
           v-memo="[getRouteGrade(route)]"
           :grade="getRouteGrade(route)"
-          dense="false"
+          :dense="false"
         />
         <RouteStarsChip
           v-memo="[route.stars]"
           v-if="route.stars > 0"
           :stars="route.stars"
-          dense="false"
+          :dense="false"
         />
-        <RouteUnsecureChip v-if="route.unsecure" dense="false" />
+        <RouteUnsecureChip v-if="route.unsecure" :dense="false" />
         <RouteTTScoreChip
           v-if="route.teufelsturmScore"
           :score="route.teufelsturmScore"
           :ttrouteid="route.teufelsturmId"
-          dense="false"
+          :dense="false"
         />
       </template>
 
