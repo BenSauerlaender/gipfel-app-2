@@ -1,12 +1,12 @@
 <template>
   <div class="page-container">
     <BasePageCard>
-      <q-tabs v-model="tab" class="text-blue-7" align="justify">
+      <q-tabs v-model="activeTab" class="text-blue-7" align="justify">
         <q-tab name="timeline" icon="book" label="Chronik" />
         <q-tab name="table" icon="table_chart" label="Tabelle" />
       </q-tabs>
 
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels v-model="activeTab" animated>
         <q-tab-panel name="timeline" class="no-x-scroll">
           <div class="space"></div>
           <q-timeline color="scss" layout="dense" side="right" class="col-10">
@@ -46,20 +46,25 @@
 
 <script setup>
 import { useDataStore } from 'src/stores/dataStore'
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 import AscentTable from 'src/components/tables/AscentTable.vue'
 import BasePageCard from 'src/components/BasePageCard.vue'
+import { useTabQuery } from 'src/composables/useTabQuery'
+
+const availableTabs = ['timeline', 'table']
+const defaultTab = 'timeline'
+
+const { activeTab } = useTabQuery(availableTabs, defaultTab)
 
 const dataStore = useDataStore()
 
 const { f_Ascents, f_PopulatedTrips } = storeToRefs(dataStore)
 
-const tab = ref('timeline')
-
 onMounted(() => {
-  const el = document.querySelector('.no-x-scroll').getParentElement
+  //a hack to fix horizontal scroll on mobile in timeline tab
+  const el = document.querySelector('.no-x-scroll')?.parentElement
   if (el) {
     el.style.overflowX = 'hidden'
   }

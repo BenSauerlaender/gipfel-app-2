@@ -16,12 +16,12 @@
       :stats="[summits.length, summitPercentage + '%', ascentCount]"
       :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
     >
-      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+      <q-tabs v-model="activeTab" class="text-blue-7 q-mt-md" inline-label align="justify">
         <q-tab name="summits" icon="book" label="Gipfel" />
         <q-tab name="ascents" icon="table_chart" label="Einträge" />
       </q-tabs>
 
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels v-model="activeTab" animated>
         <q-tab-panel name="summits">
           <SummitTable
             :summits="summits"
@@ -58,12 +58,13 @@ import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useTabQuery } from 'src/composables/useTabQuery'
 
 const router = useRouter()
 
 const dataStore = useDataStore()
 
-const tab = ref('summits')
+const { activeTab } = useTabQuery(['summits', 'ascents'], 'summits')
 
 const region = computed(() =>
   dataStore.regions.find((region) => region._id === useRoute().params.id),

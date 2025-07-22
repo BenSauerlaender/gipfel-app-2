@@ -27,12 +27,12 @@
         >
       </template>
 
-      <q-tabs v-model="tab" class="text-blue-7 q-mt-md" inline-label align="justify">
+      <q-tabs v-model="activeTab" class="text-blue-7 q-mt-md" inline-label align="justify">
         <q-tab name="routes" icon="book" label="Wege" />
         <q-tab name="ascents" icon="table_chart" label="Einträge" />
       </q-tabs>
 
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels v-model="activeTab" animated>
         <q-tab-panel name="routes">
           <RouteTable
             :routes="routes"
@@ -68,6 +68,7 @@ import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
+import { useTabQuery } from 'src/composables/useTabQuery'
 
 const router = useRouter()
 
@@ -87,7 +88,7 @@ const routePercentage = computed(() =>
     : ((routeWithAscentsCount.value / summit.value.routeCount) * 100).toFixed(1),
 )
 
-const tab = ref('routes')
+const { activeTab } = useTabQuery(['routes', 'ascents'], 'routes')
 
 const ascents = computed(() =>
   dataStore.f_Ascents.filter((ascent) => ascent.route.summitID === summit.value._id),
