@@ -14,11 +14,14 @@
               <div class="text-h6">Keine Einträge gefunden</div>
             </div>
             <div v-else>
-              <TimelineTripEntry
-                v-for="trip in f_PopulatedTrips.toReversed()"
-                :key="trip.days[0].date"
-                :trip="trip"
-              />
+              <q-infinite-scroll @load="onLoad" :offset="900" style="max-height: 80vh">
+                <template v-slot:loading></template>
+                <TimelineTripEntry
+                  v-for="trip in tripItems"
+                  :key="trip.days[0].date"
+                  :trip="trip"
+                />
+              </q-infinite-scroll>
             </div>
           </q-timeline>
         </q-tab-panel>
@@ -46,7 +49,7 @@
 
 <script setup>
 import { useDataStore } from 'src/stores/dataStore'
-import { onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 import AscentTable from 'src/components/tables/AscentTable.vue'
@@ -61,12 +64,31 @@ const { activeTab } = useTabQuery(availableTabs, defaultTab)
 const dataStore = useDataStore()
 
 const { f_Ascents, f_PopulatedTrips } = storeToRefs(dataStore)
+const allTripItems = computed(() => f_PopulatedTrips.value.toReversed())
+const tripItems = ref([])
+const onLoad = (index, done) => {
+  if (tripItems.value.length >= allTripItems.value.length) {
+    done()
+    return
+  }
+  const currentLength = tripItems.value.length
+  const newItems = allTripItems.value.slice(currentLength, currentLength + 3)
+  if (newItems.length > 0) {
+    tripItems.value.push(...newItems)
+  }
+  done()
+}
 
 onMounted(() => {
   //a hack to fix horizontal scroll on mobile in timeline tab
   const el = document.querySelector('.no-x-scroll')?.parentElement
   if (el) {
     el.style.overflowX = 'hidden'
+  }
+
+  const infiniteScrollLoading = document.querySelector('.q-infinite-scroll__loading')
+  if (infiniteScrollLoading) {
+    infiniteScrollLoading.remove()
   }
 })
 </script>
