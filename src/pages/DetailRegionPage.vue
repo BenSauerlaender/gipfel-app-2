@@ -16,7 +16,7 @@
       :stats="[summits.length, summitPercentage + '%', ascentCount]"
       :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
     >
-      <q-tabs v-model="activeTab" class="text-blue-7 q-mt-md" inline-label align="justify">
+      <q-tabs v-model="activeTab" class="text-blue-7" inline-label align="justify">
         <q-tab name="summits" icon="book" label="Gipfel" />
         <q-tab name="ascents" icon="table_chart" label="Einträge" />
       </q-tabs>
@@ -95,4 +95,10 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@media (min-width: $breakpoint-xs-max) {
+  .q-tabs {
+    margin-top: 1rem;
+  }
+}
+</style>

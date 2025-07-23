@@ -52,25 +52,9 @@ body {
     padding: 0;
     height: 100%;
     width: 100%;
-    & > .page-card {
-      border-radius: 0px;
-      box-shadow: none;
-    }
     & > .action-buttons {
       background-color: $lightgreen;
     }
-  }
-}
-.page-header {
-  color: $darkgreen;
-  font-weight: 700;
-  font-size: 3.75rem;
-  line-height: 3.75rem;
-  @media (max-width: $breakpoint-xs-max) {
-    font-size: 2.5rem;
-    line-height: 2.5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 }
 .q-card,
