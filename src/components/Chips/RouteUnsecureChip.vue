@@ -16,7 +16,7 @@ const chipStyle = computed(() => ({
 </script>
 
 <template>
-  <q-chip v-once :style="chipStyle" :dense="props.dense">
+  <q-chip :style="chipStyle" :dense="props.dense">
     <q-icon name="priority_high" />
   </q-chip>
 </template>

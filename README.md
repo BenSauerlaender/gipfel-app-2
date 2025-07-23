@@ -46,16 +46,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 - Style base page-card for mobile
   - use ... for to long titles
-- fix timeline styling on mobile
-- verify update functionallaty is working
 - dense tables on mobile
-- set color for mobile status bar
-- set url parameter? for tab view
-
-## Consistensy/Robustness
-
-- use DomUtils for height of Map and BottomPanel
-- filter bereich als footer?
+- Abk. fuer Gebiete und dann in Klammern dahinter
 
 ## Design Updates
 
@@ -66,15 +58,12 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 ## Features
 
-- use URL parameter for tabViews (oder doch nicht?)
 - On Mobile: getLocation in MapView
 - MapView HeatMap Style Or Cluster?
 - Online map fallback
 - DEV Debug features? console log anzeigen...
 - Datengroesse auf die Statusseite
 - Tagebuch trips einklappen
-- tabellen on mobile dense (kleinere schrift, spalten zusammenfassen)
-- Abk. fuer Gebiete und dann in Klammern dahinter
 - Status Page: gescheite download balken
 - animations / transitions ?
 - gendern?
@@ -82,12 +71,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 ## BUG
 
-- per direketem url aufruf http://localhost:9000/#/routes/6851d0442e8d5658ef9f2621
-  - Zurueck button -> beendet die Seite
-  - Expected behavior: fuehrt zu summitDetail
-- mobile: filter: slider tooltips visuel out of box
-- auf anderen Bildschirmen ist loader der kaputt !
-- timeline table dont show summit
+- auf anderen Bildschirmen ist loader der kaputt (immer noch?)
+- ttscore=0 in detailroute heading invisible
 
 ## Performance
 

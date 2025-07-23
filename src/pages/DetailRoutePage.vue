@@ -12,23 +12,15 @@
         >
       </template>
       <template #titleChips>
-        <RouteGradeChip
-          v-memo="[getRouteGrade(route)]"
-          :grade="getRouteGrade(route)"
-          :dense="false"
-        />
-        <RouteStarsChip
-          v-memo="[route.stars]"
-          v-if="route.stars > 0"
-          :stars="route.stars"
-          :dense="false"
-        />
-        <RouteUnsecureChip v-if="route.unsecure" :dense="false" />
+        <RouteGradeChip :grade="getRouteGrade(route)" :dense="$q.screen.lt.sm" />
+        <RouteStarsChip v-if="route.stars > 0" :stars="route.stars" :dense="$q.screen.lt.sm" />
+        <RouteUnsecureChip v-if="route.unsecure" :dense="$q.screen.lt.sm" />
         <RouteTTScoreChip
           v-if="route.teufelsturmScore"
           :score="route.teufelsturmScore"
           :ttrouteid="route.teufelsturmId"
-          :dense="false"
+          :dense="$q.screen.lt.sm"
+          :altc="true"
         />
       </template>
 
@@ -54,6 +46,8 @@ import { useDataStore } from 'src/stores/dataStore'
 import { computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { getRouteGrade } from 'src/helper/route'
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
 
 const router = useRouter()
 

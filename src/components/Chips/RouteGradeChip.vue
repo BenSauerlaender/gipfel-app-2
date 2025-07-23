@@ -1,5 +1,7 @@
 <script setup>
 import { getGradeColor } from 'src/helper/route'
+import { colors } from 'quasar'
+const { getPaletteColor } = colors
 const props = defineProps({
   grade: { type: String, required: true },
   color: { type: String, required: false },
@@ -9,8 +11,10 @@ const props = defineProps({
 
 <template>
   <q-chip
-    v-once
-    :style="{ backgroundColor: props.color ?? getGradeColor(props.grade), color: 'white' }"
+    :style="{
+      backgroundColor: props.color ?? getGradeColor(props.grade),
+      color: getPaletteColor('offwhite1'),
+    }"
     :dense="props.dense"
     >{{ props.grade }}</q-chip
   >

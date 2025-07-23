@@ -13,7 +13,7 @@
         </span>
         <span v-if="title && $slots.titleChips" class="row items-start">
           <span class="page-header">{{ title }}</span>
-          <slot name="titleChips" />
+          <span><slot name="titleChips" /></span>
         </span>
         <div v-else-if="title" class="page-header q-pl-md">{{ title }}</div>
       </div>

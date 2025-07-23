@@ -10,7 +10,6 @@ const props = defineProps({
 
 <template>
   <q-chip
-    v-once
     v-if="props.stars > 0"
     :style="{
       backgroundColor: props.color ?? getPaletteColor('blue'),
