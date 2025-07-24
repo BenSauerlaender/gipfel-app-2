@@ -1,13 +1,9 @@
 <template>
   <div class="page-container">
-    <BasePageCard>
-      <q-card-section>
-        <div class="row items-center">
-          <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-          <div class="text-h5 q-ml-md">Begangene Gipfel</div>
-        </div>
-      </q-card-section>
-      <q-separator />
+    <div class="row items-center action-buttons">
+      <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
+    </div>
+    <BasePageCard title="Begangene Gipfel">
       <q-card-section class="bg-offwhite1">
         <SummitTable :summits="summits" :defaultSort="['ascents', 'desc']" />
       </q-card-section>

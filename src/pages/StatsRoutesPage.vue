@@ -1,13 +1,9 @@
 <template>
-  <div>
-    <BasePageCard>
-      <q-card-section>
-        <div class="row items-center">
-          <q-btn round color="primary" icon="arrow_back" @click="router.back()" />
-          <div class="text-h5 q-ml-md">Begangene Wege</div>
-        </div>
-      </q-card-section>
-      <q-separator />
+  <div class="page-container">
+    <div class="row items-center action-buttons">
+      <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
+    </div>
+    <BasePageCard title="Begangene Wege">
       <q-card-section class="bg-offwhite1">
         <RouteTable
           :routes="routes"
@@ -29,6 +25,7 @@
 </template>
 
 <script setup>
+import BasePageCard from 'src/components/BasePageCard.vue'
 import RouteTable from 'src/components/tables/RouteTable.vue'
 import { computed } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'

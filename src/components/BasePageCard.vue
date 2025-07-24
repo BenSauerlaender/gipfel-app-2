@@ -26,6 +26,14 @@
 </template>
 
 <style lang="scss" scoped>
+.page-card {
+  margin: 0px 16px;
+  @media (max-width: $breakpoint-xs-max) {
+    margin: 0px;
+    border-radius: 0px;
+    box-shadow: none;
+  }
+}
 .page-heading {
   color: $darkgreen;
   flex-wrap: unset;
@@ -91,19 +99,10 @@
     }
   }
 }
-
-@media (max-width: $breakpoint-xs-max) {
-  .page-card {
-    border-radius: 0px;
-    box-shadow: none;
-  }
-}
 </style>
 
 <script setup>
 import { nextTick, onMounted, onUnmounted } from 'vue'
-import { useQuasar } from 'quasar'
-const $q = useQuasar()
 
 defineProps({
   title: {
