@@ -13,7 +13,8 @@
           <span v-if="$slots.titleChips" class="title-chips"><slot name="titleChips" /></span>
         </span>
       </div>
-      <span v-if="stats.length > 0" class="page-stats row">
+      <!-- Stats dont show on mobile currently (but styling for mobile is provided) -->
+      <span v-if="stats.length > 0" class="gt-xs page-stats row">
         <span v-for="(stat, index) in stats" :key="index" class="column text-center">
           <span class="stat">{{ stat }}</span>
           <span class="stat-label">{{ statLabels[index] || '' }}</span>
@@ -37,8 +38,6 @@
     padding-top: 1rem;
     display: block;
   }
-}
-.tile-container {
 }
 .title {
   font-weight: 700;
