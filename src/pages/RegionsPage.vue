@@ -1,6 +1,10 @@
 <template>
   <div class="page-container">
-    <BasePageCard title="Gebiete">
+    <BasePageCard
+      title="Gebiete"
+      :stats="[regions.length, ascentsPercentage + '%']"
+      :stat-labels="['Gebiete', 'Begangen']"
+    >
       <q-card-section class="bg-offwhite1">
         <q-table
           ref="regionsTable"
@@ -86,6 +90,11 @@ const regions = computed(() =>
     }
   }),
 )
+const ascentsPercentage = computed(() => {
+  const totalRegions = regions.value.length
+  const totalRegionsWithAscents = regions.value.filter((region) => region.ascents > 0).length
+  return totalRegions === 0 ? '0%' : ((totalRegionsWithAscents / totalRegions) * 100).toFixed(1)
+})
 
 onMounted(() => {
   regionsTable.value.sort('ascents')

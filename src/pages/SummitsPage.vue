@@ -2,8 +2,8 @@
   <div class="page-container">
     <BasePageCard
       title="Gipfel"
-      :stats="[summits.length, summitPercentage + '%', ascentCount]"
-      :stat-labels="['Gipfel', 'Begangen', 'Einträge']"
+      :stats="[summits.length, summitPercentage + '%']"
+      :stat-labels="['Gipfel', 'Begangen']"
     >
       <q-card-section class="bg-offwhite1">
         <SummitTable :summits="summits" :defaultSort="['name', 'asc']" />
