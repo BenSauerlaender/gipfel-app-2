@@ -128,7 +128,6 @@ const calcTableHeight = () => {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0
   const headingBottom = document.querySelector('.page-heading')?.getBoundingClientRect().bottom || 0
   let offset = headingBottom + scrollTop
-  console.log('calcTableHeight', offset)
 
   const table = document.querySelector('.q-table__container')
   if (table) {
