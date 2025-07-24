@@ -49,7 +49,7 @@
 
 <script setup>
 import { useDataStore } from 'src/stores/dataStore'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import TimelineTripEntry from 'src/components/TimelineTripEntry.vue'
 import AscentTable from 'src/components/tables/AscentTable.vue'
@@ -79,7 +79,17 @@ const onLoad = (index, done) => {
   done()
 }
 
-onMounted(() => {
+watch(
+  () => activeTab.value,
+  (newTab) => {
+    nextTick(() => {
+      if (newTab === 'timeline') {
+        fixTimelineScrollAndLoading()
+      }
+    })
+  },
+)
+const fixTimelineScrollAndLoading = () => {
   //a hack to fix horizontal scroll on mobile in timeline tab
   const el = document.querySelector('.no-x-scroll')?.parentElement
   if (el) {
@@ -90,6 +100,10 @@ onMounted(() => {
   if (infiniteScrollLoading) {
     infiniteScrollLoading.remove()
   }
+}
+
+onMounted(() => {
+  fixTimelineScrollAndLoading()
 })
 </script>
 
