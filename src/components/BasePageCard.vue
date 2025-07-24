@@ -101,6 +101,10 @@
 </style>
 
 <script setup>
+import { nextTick, onMounted, onUnmounted } from 'vue'
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
+
 defineProps({
   title: {
     type: String,
@@ -118,5 +122,26 @@ defineProps({
     type: Array,
     default: () => [],
   },
+})
+
+const calcTableHeight = () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const headingBottom = document.querySelector('.page-heading')?.getBoundingClientRect().bottom || 0
+  const offset = headingBottom + scrollTop
+  console.log('calcTableHeight', offset)
+
+  const table = document.querySelector('.q-table__container')
+  if (table) {
+    table.style.maxHeight = `calc(100vh - ${offset}px)`
+  }
+}
+onMounted(() => {
+  window.addEventListener('resize', calcTableHeight)
+  nextTick(() => {
+    calcTableHeight()
+  })
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', calcTableHeight)
 })
 </script>

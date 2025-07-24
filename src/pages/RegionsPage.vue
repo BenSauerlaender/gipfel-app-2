@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md page-container">
+  <div class="page-container">
     <BasePageCard title="Gebiete">
       <q-card-section class="bg-offwhite1">
         <q-table

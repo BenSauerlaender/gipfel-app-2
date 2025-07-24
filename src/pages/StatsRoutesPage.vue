@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="q-pa-<script setup> import RouteTable from 'src/components/tables/RouteTable.vue' import BasePageCard from 'src/components/BasePageCard.vue' import { computed } from 'vue'page-container"
-  >
+  <div>
     <BasePageCard>
       <q-card-section>
         <div class="row items-center">

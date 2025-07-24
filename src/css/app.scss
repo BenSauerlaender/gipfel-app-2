@@ -33,12 +33,13 @@ body {
 }
 .q-page-container {
   background-color: $offwhite2;
-  min-height: 100vh;
 }
 .page-container {
   max-width: $breakpoint-sm-max;
-  margin: 0 auto;
-  padding-bottom: 3vh;
+  margin: 0px auto;
+  padding: 16px 0;
+  box-sizing: border-box;
+  min-height: calc(100vh - 100px);
 
   & > .q-card {
     border-radius: 2rem;
@@ -50,7 +51,6 @@ body {
   }
   @media (max-width: $breakpoint-xs-max) {
     padding: 0;
-    height: 100%;
     width: 100%;
     & > .action-buttons {
       background-color: $lightgreen;
@@ -118,15 +118,17 @@ body {
   color: $offblack2;
 }
 
-.q-table th {
-  font-weight: 800;
-  color: $red;
-  font-size: 1rem;
-  border-bottom: 2px solid $red;
-  span {
-    font-weight: 400;
-    font-size: 0.8rem;
+.q-table__container {
+  th {
+    font-weight: 800;
     color: $red;
+    font-size: 1rem;
+    border-bottom: 2px solid $red;
+    span {
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: $red;
+    }
   }
 }
 

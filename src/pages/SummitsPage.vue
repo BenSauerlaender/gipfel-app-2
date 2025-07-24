@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md page-container">
+  <div class="page-container">
     <BasePageCard
       title="Gipfel"
       :stats="[summits.length, summitPercentage + '%', ascentCount]"

@@ -3,7 +3,6 @@
     :rows="summits"
     :columns="columns"
     row-key="_id"
-    style="height: 800px"
     virtual-scroll
     :rows-per-page-options="[0]"
     binary-state-sort

@@ -6,7 +6,7 @@
         <q-tab name="table" icon="table_chart" label="Tabelle" />
       </q-tabs>
 
-      <q-tab-panels v-model="activeTab" animated>
+      <q-tab-panels v-model="activeTab" animated style="height: 100%">
         <q-tab-panel name="timeline" class="no-x-scroll">
           <div class="space"></div>
           <q-timeline color="scss" layout="dense" side="right" class="col-10">
@@ -14,7 +14,7 @@
               <div class="text-h6">Keine Einträge gefunden</div>
             </div>
             <div v-else>
-              <q-infinite-scroll @load="onLoad" :offset="900" style="max-height: 80vh">
+              <q-infinite-scroll @load="onLoad" :offset="900">
                 <template v-slot:loading></template>
                 <TimelineTripEntry
                   v-for="trip in tripItems"

@@ -1,6 +1,6 @@
 <template>
   <BaseStatCard :header-number="props.ascents.length" header-text="Einträge">
-    <Doughnut style="height: 200px" :data="chartData" :options="chartOptions" />
+    <Doughnut style="max-height: 200px" :data="chartData" :options="chartOptions" />
   </BaseStatCard>
 </template>
 

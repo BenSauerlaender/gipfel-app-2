@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md page-container">
+  <div class="page-container">
     <div class="row justify-between items-center action-buttons">
       <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
     </div>
