@@ -6,7 +6,7 @@
         <q-tab name="table" icon="table_chart" label="Tabelle" />
       </q-tabs>
 
-      <q-tab-panels v-model="activeTab" animated style="height: 100%">
+      <q-tab-panels v-model="activeTab" animated>
         <q-tab-panel name="timeline" class="no-x-scroll">
           <div class="space"></div>
           <q-timeline color="scss" layout="dense" side="right" class="col-10">
@@ -110,6 +110,10 @@ onMounted(() => {
 <style scoped lang="scss">
 .space {
   height: 40px;
+}
+
+.q-tab-panels {
+  height: calc(100vh - 150px);
 }
 
 .q-timeline {
