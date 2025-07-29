@@ -3,7 +3,7 @@
     <div class="row items-center action-buttons">
       <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
     </div>
-    <BasePageCard title="Begangene Wege">
+    <BasePageCard title="Begangene Wege" smallTitle="true">
       <q-card-section class="bg-offwhite1">
         <RouteTable
           :routes="routes"

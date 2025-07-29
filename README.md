@@ -44,10 +44,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 # TODO
 
-- Style base page-card for mobile
-  - use ... for to long titles
 - dense tables on mobile
-- Abk. fuer Gebiete und dann in Klammern dahinter
+- add Regions abbr. to tables
 
 ## Design Updates
 
@@ -55,6 +53,7 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - logo aus topbar in drawer ?
 - drawer zwischen top und bottom bar ?
 - status und login/out mit in drawer?
+- remame menu?
 
 ## Features
 
@@ -72,7 +71,9 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 ## BUG
 
 - auf anderen Bildschirmen ist loader der kaputt (immer noch?)
-- ttscore=0 in detailroute heading invisible
+- statcard height on mobile?
+- timeline tabbar hiding on scroll down
+- laggy bottom drawer on mobile using the handle
 
 ## Performance
 

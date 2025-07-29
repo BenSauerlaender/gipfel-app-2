@@ -9,7 +9,7 @@
           <slot name="subtitle">{{ subtitle }}</slot>
         </span>
         <span class="row items-start title-container">
-          <span class="title">{{ title }}</span>
+          <span class="title" :class="smallTitle ? 'small-title' : ''">{{ title }}</span>
           <span v-if="$slots.titleChips" class="title-chips"><slot name="titleChips" /></span>
         </span>
       </div>
@@ -49,21 +49,29 @@
 }
 .title {
   font-weight: 700;
-  font-size: 3.75rem;
-  line-height: 3.75rem;
+  font-size: 3rem;
+  line-height: 3rem;
   @media (max-width: $breakpoint-xs-max) {
-    font-size: 2.5rem;
-    line-height: 2.5rem;
+    font-size: 2rem;
+    line-height: 2rem;
+  }
+}
+.small-title {
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  @media (max-width: $breakpoint-xs-max) {
+    font-size: 1.25rem;
+    line-height: 1.25rem;
   }
 }
 .subtitle {
   font-weight: 300;
-  font-size: 1.75rem;
-  line-height: 1.75rem;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
   color: $lightgreen;
   @media (max-width: $breakpoint-xs-max) {
-    font-size: 1.25rem;
-    line-height: 1.25rem;
+    font-size: 1rem;
+    line-height: 1rem;
   }
 }
 .page-stats {
@@ -72,8 +80,8 @@
   gap: 1rem;
   .stat {
     font-weight: 900;
-    font-size: 2rem;
-    line-height: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
   }
   .stat-label {
     color: $lightgreen;
@@ -120,6 +128,10 @@ defineProps({
   statLabels: {
     type: Array,
     default: () => [],
+  },
+  smallTitle: {
+    type: Boolean,
+    default: false,
   },
 })
 
