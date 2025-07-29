@@ -11,7 +11,7 @@
     ref="summitsTable"
   >
     <template v-slot:top-right>
-      <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+      <q-input borderless dense debounce="300" v-model="filter" placeholder="Suchen">
         <template v-slot:append>
           <q-icon name="search" />
         </template>
@@ -19,13 +19,16 @@
     </template>
     <template v-slot:header-cell-routes="props">
       <q-th :props="props">
-        {{ props.col.label }} <span class="text-grey-6">(% begangen)</span>
+        {{ props.col.label }} <span v-if="!dense" class="text-grey-6">(% begangen)</span>
       </q-th>
     </template>
 
     <template v-slot:body-cell-routes="props">
       <q-td :props="props">
-        {{ props.value }} <span class="text-grey-6">({{ props.row.routePercentage }}%)</span>
+        {{ props.value }}
+        <span class="text-grey-6"
+          >({{ dense ? props.row.routePercentage.slice(0, -2) : props.row.routePercentage }}%)</span
+        >
       </q-td>
     </template>
 
@@ -40,11 +43,13 @@
     </template>
     <template v-slot:body-cell-name="props">
       <q-td :props="props">
-        <router-link
-          style="text-decoration: none; color: inherit"
-          :to="`/summits/${props.row._id}`"
-          >{{ props.value }}</router-link
-        >
+        <router-link style="text-decoration: none; color: inherit" :to="`/summits/${props.row._id}`"
+          >{{ dense ? truncate(props.value, hasRegionColumn ? 15 : 20) : props.value }}
+
+          <span v-if="dense && hasRegionColumn" class="text-grey-6"
+            >({{ props.row.regionAbbr }})</span
+          >
+        </router-link>
       </q-td>
     </template>
   </q-table>
@@ -53,6 +58,10 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
+import { useQuasar } from 'quasar'
+import { useStringUtils } from 'src/composables/stringUtils'
+const { truncate } = useStringUtils()
+const $q = useQuasar()
 
 const props = defineProps({
   summits: {
@@ -72,25 +81,44 @@ const props = defineProps({
 const summitsTable = ref(null)
 const dataStore = useDataStore()
 const filter = ref('')
+const dense = computed(() => {
+  return $q.screen.lt.sm
+})
 
-const columns = [
-  { name: 'name', label: 'Gipfel', field: (row) => row.name, align: 'left', sortable: true },
-  {
-    name: 'region',
-    label: 'Gebiet',
-    field: (row) => row.regionName,
-    align: 'left',
-    sortable: true,
-  },
-  {
-    name: 'routes',
-    label: 'Wege',
-    field: (row) => row.routeCount,
-    align: 'left',
-    sortable: true,
-  },
-  { name: 'ascents', label: 'Einträge', field: 'ascents', align: 'left', sortable: true },
-].filter((column) => props.columns.includes(column.name))
+const columns = computed(() =>
+  [
+    { name: 'name', label: 'Gipfel', field: (row) => row.name, align: 'left', sortable: true },
+    {
+      name: 'region',
+      label: 'Gebiet',
+      field: (row) => row.regionName,
+      align: 'left',
+      sortable: true,
+    },
+    {
+      name: 'routes',
+      label: 'Wege',
+      field: (row) => row.routeCount,
+      align: 'left',
+      sortable: true,
+    },
+    {
+      name: 'ascents',
+      label: dense.value ? 'Eintr.' : 'Einträge',
+      field: 'ascents',
+      align: 'left',
+      sortable: true,
+    },
+  ]
+    .filter((column) => props.columns.includes(column.name))
+    .filter((column) => {
+      if (column.name === 'region' && dense.value == true) {
+        return false
+      }
+      return true
+    }),
+)
+const hasRegionColumn = props.columns.includes('region')
 
 const summits = computed(() => {
   const summits = props.summits.map((summit) => {

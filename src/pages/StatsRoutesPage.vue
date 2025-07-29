@@ -3,7 +3,7 @@
     <div class="row items-center action-buttons">
       <q-btn size="sm" rounded color="darkgreen" outline icon="arrow_back" @click="router.back()" />
     </div>
-    <BasePageCard title="Begangene Wege" smallTitle="true">
+    <BasePageCard title="Begangene Wege" smallTitle>
       <q-card-section class="bg-offwhite1">
         <RouteTable
           :routes="routes"
@@ -43,6 +43,7 @@ const routes = computed(() => {
   })
   return Object.values(routeMap)
 })
+console.log(routes.value)
 </script>
 
 <style scoped></style>

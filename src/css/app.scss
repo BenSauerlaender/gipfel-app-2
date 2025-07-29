@@ -50,6 +50,7 @@ body {
     padding: 10px 16px 10px 10px;
   }
   @media (max-width: $breakpoint-xs-max) {
+    background-color: $offwhite1;
     padding: 0;
     width: 100%;
     & > .action-buttons {
@@ -128,6 +129,13 @@ body {
       font-weight: 400;
       font-size: 0.8rem;
       color: $red;
+    }
+  }
+  th,
+  td {
+    @media (max-width: $breakpoint-xs-max) {
+      padding-left: 4px;
+      padding-right: 4px;
     }
   }
 }

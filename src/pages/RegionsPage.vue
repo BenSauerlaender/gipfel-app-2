@@ -18,7 +18,7 @@
           :rows-per-page-options="[0]"
         >
           <template v-slot:top-right>
-            <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+            <q-input borderless dense debounce="300" v-model="filter" placeholder="Suchen">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
@@ -26,12 +26,17 @@
           </template>
           <template v-slot:header-cell-summits="props">
             <q-th :props="props">
-              {{ props.col.label }} <span class="text-grey-6">(% begangen)</span>
+              {{ props.col.label }} <span v-if="!dense" class="text-grey-6">(% begangen)</span>
             </q-th>
           </template>
           <template v-slot:body-cell-summits="props">
             <q-td :props="props">
-              {{ props.value }} <span class="text-grey-6">({{ props.row.summitPercentage }}%)</span>
+              {{ props.value }}
+              <span class="text-grey-6"
+                >({{
+                  dense ? props.row.summitPercentage.slice(0, -2) : props.row.summitPercentage
+                }}%)</span
+              >
             </q-td>
           </template>
           <template v-slot:body-cell-name="props">
@@ -39,8 +44,9 @@
               <router-link
                 style="text-decoration: none; color: inherit"
                 :to="`/regions/${props.row._id}`"
-                >{{ props.value }}</router-link
-              >
+                >{{ dense ? truncate(props.value, 15) : props.value }}
+                <span class="text-grey-6">({{ props.row.abbr }})</span>
+              </router-link>
             </q-td>
           </template>
         </q-table>
@@ -53,22 +59,30 @@
 import BasePageCard from 'src/components/BasePageCard.vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { computed, ref, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+import { useStringUtils } from 'src/composables/stringUtils'
+const { truncate } = useStringUtils()
+const $q = useQuasar()
 
 const dataStore = useDataStore()
 const regionsTable = ref(null)
 const filter = ref('')
 
-const columns = [
+const dense = computed(() => {
+  return $q.screen.lt.sm
+})
+
+const columns = computed(() => [
   { name: 'name', label: 'Gebiet', field: 'name', align: 'left', sortable: true },
   { name: 'summits', label: 'Gipfel', field: 'summits', align: 'left', sortable: true },
   {
     name: 'ascents',
-    label: 'Einträge',
+    label: dense.value ? 'Eintr.' : 'Einträge',
     field: (row) => (row.ascents > 0 ? row.ascents : '-'),
     align: 'left',
     sortable: true,
   },
-]
+])
 
 const regions = computed(() =>
   dataStore.regions.map((region) => {
