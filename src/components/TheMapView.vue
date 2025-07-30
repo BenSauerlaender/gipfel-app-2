@@ -224,7 +224,6 @@ const initMap = () => {
   mapStyle.sprite = 'sprite://src/assets/sprite'
   mapStyle.center = [14.155593920476328, 50.92857467871431]
   mapStyle.zoom = 11
-  //TODO: add correct attribtution claim
   if (selectedSummit && selectedSummit.gpsPosition?.lat && selectedSummit.gpsPosition?.lng) {
     mapStyle.center = [selectedSummit.gpsPosition.lng, selectedSummit.gpsPosition.lat]
     mapStyle.zoom = 17
@@ -239,6 +238,11 @@ const initMap = () => {
       [13.5, 50.6], // Southwest corner
       [14.8, 51.2], // Northeast corner
     ],
+    attributionControl: {
+      compact: true,
+      customAttribution:
+        '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+    },
   })
   map.value.on('load', () => {
     addSummitLayer()
