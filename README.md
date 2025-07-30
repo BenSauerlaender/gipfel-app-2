@@ -42,11 +42,6 @@ quasar build
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
 
-# TODO
-
-- dense tables on mobile
-- add Regions abbr. to tables
-
 ## Design Updates
 
 - logo rework ?
