@@ -19,7 +19,7 @@
 
 <script setup>
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useDataStore } from 'src/stores/dataStore'
 import { useFilterStore } from 'src/stores/filterStore'
 import { useRouter, useRoute } from 'vue-router'
@@ -292,6 +292,13 @@ const updateSummitLayer = () => {
     src.setData(getSummitsGeoJSON())
   }
 }
+onUnmounted(() => {
+  if (map.value) {
+    map.value.off('click', 'summit-circles')
+    map.value.off('load')
+    map.value.remove()
+  }
+})
 </script>
 <style></style>
 
