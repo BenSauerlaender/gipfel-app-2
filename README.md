@@ -119,7 +119,7 @@ quasar build -m pwa
 
 ```bash
 # Example deployment script
-rsync -avzP --delete -e "ssh" ./dist/pwa/ user@server:/var/www/gipfelapp/pwa/
+rsync -avzP --delete -e "ssh" ./dist/pwa/ stratoAppuser:/var/www/gipfelapp/pwa/
 ```
 
 ## 📄 Additional Documentation
