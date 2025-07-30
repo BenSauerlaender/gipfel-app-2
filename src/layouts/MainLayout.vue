@@ -44,18 +44,18 @@
         <q-btn @click="router.push('/status')" label="Check Status" color="primary" />
       </div>
     </q-page-container>
-    <BottomPanel
+    <TheBottomPanel
       v-if="isMinimumLoaded && !['/status', '/login'].includes(router.currentRoute.value.fullPath)"
     >
       <FilterOptions />
-    </BottomPanel>
+    </TheBottomPanel>
   </q-layout>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
-import BottomPanel from 'components/BottomPanel.vue'
+import TheBottomPanel from 'src/components/TheBottomPanel.vue'
 import FilterOptions from 'components/FilterOptions.vue'
 import { useUserStore } from 'src/stores/user'
 import { useRouter } from 'vue-router'

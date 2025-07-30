@@ -1,7 +1,7 @@
 <template>
-  <MapView />
+  <TheMapView />
 </template>
 
 <script setup>
-import MapView from 'src/components/MapView.vue'
+import TheMapView from 'src/components/TheMapView.vue'
 </script>
