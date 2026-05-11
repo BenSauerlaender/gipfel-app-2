@@ -61,8 +61,15 @@
     <q-input v-model="form.notes" type="text" label="Notizen" outlined dense />
 
     <div class="row q-gutter-sm justify-end">
-      <q-btn type="button" label="Abbrechen" color="grey-7" flat @click="onCancel" />
-      <q-btn type="submit" label="Speichern" color="primary" unelevated />
+      <q-btn
+        type="button"
+        label="Abbrechen"
+        color="grey-7"
+        flat
+        @click="onCancel"
+        :disable="loading"
+      />
+      <q-btn type="submit" label="Speichern" color="primary" unelevated :loading="loading" />
     </div>
   </q-form>
 </template>
@@ -70,9 +77,12 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import { useAscentFormStore } from 'src/stores/ascentFormStore'
 import { useDataStore } from 'src/stores/dataStore'
+import { createAscent } from 'src/api/ascents'
 const router = useRouter()
+const $q = useQuasar()
 const ascentFormStore = useAscentFormStore()
 const dataStore = useDataStore()
 
@@ -100,23 +110,48 @@ const form = ref({
   notes: '',
   climbers: [],
 })
+const loading = ref(false)
 const climberOptions = computed(() =>
   climbers.filter((climber) => !form.value.climbers.map((c) => c.value).includes(climber.value)),
 )
 const displayDate = computed(() => {
+  if (!form.value.date) return ''
   const [year, month, day] = form.value.date.split('-')
   return `${day}.${month}.${year}`
 })
 
-function onSubmit() {
-  ascentFormStore.setLastAscentDate(form.value.date)
-  console.log('Submitting ascent form with values:', {
-    routeID: props.routeID,
-    date: form.value.date,
-    type: form.value.type,
-    notes: form.value.notes,
-    climberIDs: form.value.climbers.map((c) => c.value),
-  })
+async function onSubmit() {
+  try {
+    loading.value = true
+    ascentFormStore.setLastAscentDate(form.value.date)
+
+    const ascentData = {
+      routeID: props.routeID,
+      date: form.value.date,
+      type: form.value.type,
+      notes: form.value.notes,
+      climberIDs: form.value.climbers.map((c) => c.value),
+    }
+
+    await createAscent(ascentData)
+
+    $q.notify({
+      type: 'positive',
+      message: 'Begehung erfolgreich hinzugefügt',
+      position: 'top',
+    })
+
+    router.back()
+  } catch (error) {
+    console.error('Error creating ascent:', error)
+    $q.notify({
+      type: 'negative',
+      message: error.response?.data?.error || 'Fehler beim Hinzufügen der Begehung',
+      position: 'top',
+    })
+  } finally {
+    loading.value = false
+  }
 }
 
 function onCancel() {

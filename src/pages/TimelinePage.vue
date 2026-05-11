@@ -39,6 +39,7 @@
               'climbers',
               'isAborted',
               'notes',
+              'actions',
             ]"
           />
         </q-tab-panel>

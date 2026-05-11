@@ -90,6 +90,19 @@
         <span v-else>-</span>
       </q-td>
     </template>
+    <template v-slot:body-cell-actions="props">
+      <q-td :props="props" class="text-right">
+        <q-btn round flat dense icon="more_vert">
+          <q-menu auto-close anchor="bottom right" self="top right">
+            <q-list style="min-width: 170px">
+              <q-item clickable @click="deleteAscent(props.row._id)">
+                <q-item-section>löschen</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-td>
+    </template>
     <template v-slot:body-cell-unsecure="props">
       <q-td :props="props">
         <RouteUnsecureChip v-if="props.value">-</RouteUnsecureChip>
@@ -105,10 +118,13 @@ import { getRouteGrade, sortGradeInTable } from 'src/helper/route'
 import RouteGradeChip from 'src/components/Chips/RouteGradeChip.vue'
 import RouteStarsChip from 'src/components/Chips/RouteStarsChip.vue'
 import RouteUnsecureChip from 'src/components/Chips/RouteUnsecureChip.vue'
-import { useQuasar } from 'quasar'
+import { deleteAscent as apiDeleteAscent } from 'src/api/ascents'
+import { useUserStore } from 'src/stores/user'
+import { Dialog, useQuasar } from 'quasar'
 import { useStringUtils } from 'src/composables/stringUtils'
 const { truncate } = useStringUtils()
 const $q = useQuasar()
+const userStore = useUserStore()
 
 const props = defineProps({
   ascents: {
@@ -129,6 +145,7 @@ const props = defineProps({
       'climbers',
       'isAborted',
       'notes',
+      'actions',
     ],
   },
   defaultSort: {
@@ -144,6 +161,9 @@ const dense = computed(() => {
 })
 
 const hasRegionColumn = props.columns.includes('region')
+const showActionsColumn = computed(
+  () => userStore.loggedIn === true && userStore.user?.role === 'admin',
+)
 
 const columns = computed(() =>
   [
@@ -224,6 +244,13 @@ const columns = computed(() =>
       align: 'left',
       sortable: true,
     },
+    {
+      name: 'actions',
+      label: '',
+      field: (row) => row._id,
+      align: 'right',
+      sortable: false,
+    },
   ]
     .filter(
       (column) =>
@@ -234,6 +261,12 @@ const columns = computed(() =>
         if (['grade', 'stars', 'unsecure', 'region', 'isAborted'].includes(column.name)) {
           return false
         }
+      }
+      return true
+    })
+    .filter((column) => {
+      if (column.name === 'actions') {
+        return showActionsColumn.value
       }
       return true
     }),
@@ -257,6 +290,27 @@ const ascents = computed(() => {
   })
   return ascents
 })
+
+function deleteAscent(ascentID) {
+  Dialog.create({
+    title: 'Begehung löschen',
+    message: 'Möchtest du diese Begehung wirklich löschen?',
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    try {
+      await apiDeleteAscent(ascentID)
+      $q.notify({ type: 'positive', message: 'Begehung gelöscht', position: 'top' })
+    } catch (error) {
+      console.error('Error deleting ascent:', error)
+      $q.notify({
+        type: 'negative',
+        message: error.response?.data?.error || 'Fehler beim Löschen der Begehung',
+        position: 'top',
+      })
+    }
+  })
+}
 
 onMounted(() => {
   ascentsTable.value.sort(props.defaultSort[0])
