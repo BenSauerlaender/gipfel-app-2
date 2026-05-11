@@ -43,6 +43,13 @@ export default defineRouter(function (/* { store, ssrContext } */) {
         userStore.refreshAccessToken()
       }
     }
+
+    // Protect add-ascent route - only admin role allowed
+    if (to.path.startsWith('/add-ascent')) {
+      if (!userStore.loggedIn || userStore.user?.role !== 'admin') {
+        return '/status'
+      }
+    }
   })
 
   return Router

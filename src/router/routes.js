@@ -28,6 +28,10 @@ const routes = [
       },
       { path: '/routes/:id', component: () => import('src/pages/detailPages/DetailRoutePage.vue') },
       { path: '/map/:id?', component: () => import('pages/MapPage.vue') },
+      {
+        path: '/add-ascent/:id?',
+        component: () => import('src/pages/detailPages/AddAscentPage.vue'),
+      },
     ],
   },
   {
